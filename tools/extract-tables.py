@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-Estrae le tabelle di attacco, dei colpi critici e dei fallimenti dai PDF del compendio
+Estrae le tabelle di attacco, dei colpi critici, dei fallimenti e delle armi dai PDF del compendio
 «Istaro Quettar» (Tabelle_dattacco.pdf e Colpi_Critici.pdf) e scrive js/tabledata.js.
 
-Uso:  python3 tools/extract-tables.py ATTACCO.pdf CRITICI.pdf
+Uso:  python3 tools/extract-tables.py ATTACCO.pdf CRITICI.pdf [ARMI.pdf]
+Con ARMI.pdf (tabella TSC-1) scrive anche js/weapondata.js.
 Richiede: poppler (pdftotext) e pdfplumber.
 I PDF non fanno parte del repository.
 """
@@ -148,8 +149,77 @@ def crit_tables(pdf_path):
     return out
 
 
+GROUPS = [  # (chiave, parola chiave nell'intestazione)
+    ('taglio1', 'Armi da Taglio a Una Mano'), ('contund1', 'Armi Contundenti a Una Mano'), ('asta1', 'Armi ad Asta a Una Mano'),
+    ('asta2', 'Armi ad Asta a Due Mani'), ('due_mani', 'Armi a Due Mani'), ('lancio', 'Armi da Lancio'), ('tiro', 'Armi da Tiro')]
+ROW = re.compile(r'^(?P<n>\S.*?)\s{2,}(?P<cm>\d+)\s+(?P<c1>[A-Z]{2,3}(?:\([TABCDE]\))?)\s+(?P<c2>-|[A-Z]{2,3}(?:\([TABCDE]\))?)\s+(?P<g>-|\d+\*?)\s*(?P<m>.*)$')
+ARM_IDX = {'piastre': [0], 'maglia': [1], 'maglie': [1], 'cuoio rinf.': [2], 'cuoio': [2, 3], 'na': [4]}
+
+
+def crit_code(t):
+    if t == '-':
+        return None
+    m = re.match(r'^([A-Z]+)(?:\(([TABCDE])\))?$', t)
+    return {'type': m.group(1), 'max': m.group(2)}
+
+
+def arm_cond(cond, prev):
+    """Elenco delle colonne di armatura (0 piastre, 1 maglie, 2 cuoio rinf., 3 cuoio grezzo, 4 nessuna) o None se non riconosciuto."""
+    c = cond.strip().lower()
+    c = re.sub(r'^(c\.|contro)\s*', '', c)
+    if c == 'altre o na':
+        return [i for i in range(5) if i not in (prev or [])] if prev else None
+    out = []
+    for tok in re.split(r'/|\so\s', c):
+        tok = tok.strip()
+        if tok not in ARM_IDX:
+            return None
+        out += ARM_IDX[tok]
+    return sorted(set(out))
+
+
+def weapons(pdf_path):
+    text = subprocess.run(['pdftotext', '-layout', pdf_path, '-'], capture_output=True, text=True, check=True).stdout
+    out, grp, atk, seen = [], None, None, {}
+    for line in text.split('\n'):
+        for key, head in GROUPS:
+            if line.startswith(head) and '(' in line:
+                grp = key
+                atk = re.search(r'TA-(\d+)', line)
+                atk = 'TA-' + atk.group(1)
+        m = ROW.match(line.strip()) if grp and not line.startswith('Armi ') else None
+        if not m:
+            continue
+        mods, manual, prev = [], [], None
+        note = m.group('m').strip()
+        for mm in re.finditer(r'([+\-\u2013])\s?(\d+) sulla TA(?!-\d)(?:\s*\(([^)]*)\))?', note):
+            v = int(mm.group(2)) * (1 if mm.group(1) == '+' else -1)
+            cond = mm.group(3)
+            if cond is None:
+                mods.append({'v': v, 'arm': None})
+            else:
+                arm = arm_cond(cond, prev) if re.match(r'^\s*(c\.|contro)', cond) else None
+                if arm is None:
+                    manual.append(mm.group(0))
+                else:
+                    mods.append({'v': v, 'arm': arm})
+                    prev = arm
+        w = {'id': grp + '-' + re.sub(r'[^a-z0-9]+', '-', m.group('n').lower()).strip('-'), 'n': m.group('n').strip(), 'group': grp, 'atk': atk,
+             'cm': int(m.group('cm')), 'c1': crit_code(m.group('c1')), 'c2': crit_code(m.group('c2')),
+             'git': None if m.group('g') == '-' else m.group('g'), 'mods': mods, 'manual': manual, 'note': note}
+        t6 = re.search(r'tabella (TA-\d+), Attacco (Medio|Piccolo|Grande|Enorme|Minuscolo)', note)
+        if t6:
+            w['atk'] = t6.group(1)
+            w['limit'] = {'Medio': 'Medi', 'Piccolo': 'Piccoli', 'Grande': 'Grandi', 'Enorme': 'Enormi', 'Minuscolo': 'Minuscoli'}[t6.group(2)]
+        if w['id'] in seen:
+            raise SystemExit('arma duplicata: ' + w['id'])
+        seen[w['id']] = 1
+        out.append(w)
+    return out
+
+
 def main():
-    if len(sys.argv) != 3:
+    if len(sys.argv) not in (3, 4):
         raise SystemExit(__doc__)
     atk = attack_tables(sys.argv[1])
     crit = crit_tables(sys.argv[2])
@@ -160,6 +230,18 @@ def main():
           "})(typeof window !== 'undefined' ? window : globalThis);\n") % json.dumps({'atk': atk, 'crit': crit}, ensure_ascii=False, separators=(',', ':'))
     with open(os.path.join(root, 'js', 'tabledata.js'), 'w', encoding='utf-8') as f:
         f.write(js)
+    if len(sys.argv) == 4:
+        wp = weapons(sys.argv[3])
+        wjs = ("/* Generato da tools/extract-tables.py (tabella TSC-1 del compendio «Istaro Quettar»). Non modificare a mano. Vedi NOTICE.md. */\n"
+               "(function (root) {\n  var G = root.GIRSA = root.GIRSA || {};\n  G.weapondata = %s;\n"
+               "  if (typeof module !== 'undefined') module.exports = G.weapondata;\n"
+               "})(typeof window !== 'undefined' ? window : globalThis);\n") % json.dumps(wp, ensure_ascii=False, separators=(',', ':'))
+        with open(os.path.join(root, 'js', 'weapondata.js'), 'w', encoding='utf-8') as f:
+            f.write(wjs)
+        print('armi:', len(wp), {g: len([x for x in wp if x['group'] == g]) for g, _ in GROUPS})
+        for x in wp:
+            if x['manual']:
+                print('  da applicare a mano:', x['n'], x['manual'])
     print('attacco:', [(t['id'], len(t['rows']), t['fumble'], len(t['ti']), [l['label'] for l in t['limits']]) for t in atk])
     print('critici:', [(t['id'], len(t['rows'])) for t in crit])
 

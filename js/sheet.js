@@ -93,21 +93,33 @@
     return h + '<button data-act="add" data-list="' + key + '">' + addLabel + '</button></section>';
   }
 
-  /* Armi: tabella di attacco, abilità, colpo maldestro e tipo di critico si scelgono una volta e poi si usano nel combattimento. */
+  var WGROUP = { taglio1: 'Taglio, 1 mano', contund1: 'Contundenti, 1 mano', asta1: 'Asta, 1 mano', asta2: 'Asta, 2 mani', due_mani: 'A 2 mani', lancio: 'Da lancio', tiro: 'Da tiro' };
+
+  /* Armi: si sceglie dal catalogo (tabella TSC-1) oppure si inserisce un'arma personalizzata. */
   function weapons(c) {
+    var cat = U.weaponCat();
+    var catOpts = [['', '(arma personalizzata)']].concat(cat.map(function (w) { return [w.id, WGROUP[w.group] + ' · ' + w.n]; }));
     var atk = [['', '(tabella di attacco)']].concat(U.allAtk().map(function (t) { return [t.id, t.name]; }));
     var ct = [['', '(tabella critici)']].concat(U.allCrit().filter(function (t) { return !/^TTM-/.test(t.id); }).map(function (t) { return [t.id, t.name]; }));
     var sk = [['', '(abilità per il BO)']];
     c.skills.forEach(function (s, i) { if ((s.cat === 'arm' || s.cat === 'ama' || s.cat === 'mag') && s.name) sk.push([String(i), s.name]); });
-    var h = '<section class="card"><h2>Armi</h2><p class="hint">Per ogni arma scegli una volta la tabella di attacco, l\'abilità del BO, il tiro massimo di colpo maldestro (CM) e la tabella dei critici (CC), come sulla scheda dell\'inventario. Poi basta sceglierla nel combattimento.</p>';
+    var h = '<section class="card"><h2>Armi</h2><p class="hint">Scegli l\'arma dal catalogo: tabella di attacco, colpo maldestro, critici e modificatori arrivano da soli (tabella delle armi del compendio). Per ciascuna scegli solo l\'abilità da cui prendere il BO.</p>';
     c.weapons.forEach(function (w, i) {
-      h += '<div class="wp"><div class="li">' + U.inp('data-p', 'weapons.' + i + '.n', w.n, { ph: 'Nome arma', label: 'Nome arma' }) +
+      var cw = null; cat.forEach(function (x) { if (x.id === w.id) cw = x; });
+      h += '<div class="wp"><div class="li">' + U.sel('data-act-change', 'wcat:' + i, w.id || '', catOpts, { label: 'Arma dal catalogo' }) +
         '<button class="mini" data-act="del" data-list="weapons" data-i="' + i + '" aria-label="Elimina arma">✕</button></div><div class="grid g3">' +
-        U.sel('data-p', 'weapons.' + i + '.atk', w.atk, atk, { label: 'Tabella di attacco' }) +
-        U.sel('data-p', 'weapons.' + i + '.skill', w.skill, sk, { label: 'Abilità' }) +
-        U.sel('data-p', 'weapons.' + i + '.ct', w.ct, ct, { label: 'Tabella critici' }) +
-        U.inp('data-p', 'weapons.' + i + '.fumble', w.fumble, { type: 'number', ph: 'CM: tiro max', label: 'Colpo maldestro, tiro massimo' }) +
-        U.inp('data-p', 'weapons.' + i + '.git', w.git, { ph: 'Gittata', label: 'Gittata' }) + '</div></div>';
+        U.inp('data-p', 'weapons.' + i + '.n', w.n, { ph: 'Nome', label: 'Nome arma' }) +
+        U.sel('data-p', 'weapons.' + i + '.skill', w.skill, sk, { label: 'Abilità' });
+      if (cw) {
+        h += '</div><p class="hint">' + esc(cw.atk) + ' · colpo maldestro 01–' + String(cw.cm).padStart(2, '0') + ' · critico ' + esc(cw.c1.type) + (cw.c1.max ? '(' + cw.c1.max + ')' : '') +
+          (cw.c2 ? ' + secondario ' + esc(cw.c2.type) + (cw.c2.max ? '(' + cw.c2.max + ')' : '') : '') + (cw.git ? ' · gittata base ' + esc(cw.git) : '') +
+          (cw.note ? '<br>' + esc(cw.note) : '') + '</p></div>';
+      } else {
+        h += U.sel('data-p', 'weapons.' + i + '.atk', w.atk, atk, { label: 'Tabella di attacco' }) +
+          U.sel('data-p', 'weapons.' + i + '.ct', w.ct, ct, { label: 'Tabella critici' }) +
+          U.inp('data-p', 'weapons.' + i + '.fumble', w.fumble, { type: 'number', ph: 'CM: tiro max', label: 'Colpo maldestro, tiro massimo' }) +
+          U.inp('data-p', 'weapons.' + i + '.git', w.git, { ph: 'Gittata', label: 'Gittata' }) + '</div></div>';
+      }
     });
     return h + '<button data-act="add" data-list="weapons">+ Arma</button></section>';
   }

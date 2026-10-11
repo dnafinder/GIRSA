@@ -53,10 +53,15 @@
       var a = t.getAttribute('data-act-change');
       if (a === 'char') { S.get().cur = t.value; S.save(); render(); }
       if (a === 'weapon') {
-        var f = P.combat.cb(), w = S.cur().weapons[+t.value];
-        f.weapon = t.value; f.limit = ''; f.res = null; f.cres = null; f.fres = null;
-        if (w) { f.atk = w.atk; f.skill = w.skill; f.fumble = w.fumble; f.ct = w.ct; f.armor = ''; }
+        var f = P.combat.cb(), w = S.cur().weapons[+t.value], wi = P.combat.weaponInfo(w);
+        f.weapon = t.value; f.limit = ''; f.res = null; f.cres = null; f.cres2 = null; f.fres = null; f.letter = ''; f.letter2 = ''; f.wi = wi;
+        if (w && wi) { f.atk = wi.atk || ''; f.limit = wi.limit || ''; f.skill = w.skill; f.fumble = wi.cm == null ? '' : String(wi.cm); f.ct = wi.c1 ? wi.c1.ct : ''; f.ct2 = wi.c2 ? wi.c2.ct : ''; f.armor = ''; }
         render();
+      }
+      if (a.indexOf('wcat:') === 0) {
+        var wi2 = +a.slice(5), ww = S.cur().weapons[wi2], cw = null;
+        U.weaponCat().forEach(function (x) { if (x.id === t.value) cw = x; });
+        ww.id = t.value; if (cw && !ww.n) ww.n = cw.n; S.save(); render();
       }
       if (a === 'popolo') { if (R.applyPopolo(S.cur(), t.value)) { S.save(); render(); U.toast('Applicate le modifiche del popolo (TB-3).'); } else { S.cur().popolo = ''; S.save(); } }
     } else if (t.hasAttribute('data-act-file')) {
@@ -103,7 +108,7 @@
     clearroll: function () { S.get().dlog = []; S.save(); render(); },
     add: function (b) {
       var l = b.dataset.list, c = S.cur();
-      c[l].push(l === 'inv' ? { n: '', q: '', note: '' } : l === 'weapons' ? { n: '', atk: '', skill: '', ct: '', fumble: '', git: '' } : { n: '', lvl: '', note: '' }); S.save(); render();
+      c[l].push(l === 'inv' ? { n: '', q: '', note: '' } : l === 'weapons' ? { id: '', n: '', atk: '', skill: '', ct: '', fumble: '', git: '' } : { n: '', lvl: '', note: '' }); S.save(); render();
     },
     del: function (b) {
       var arr = listOf(b.dataset.list); if (!arr) return;
@@ -116,7 +121,11 @@
       if (f.atk && (P.combat.tableById(P.combat.atkList(S.get()), f.atk).limits || []).length && !need(f.limit !== '', 'Scegli taglia o tipo di dardo.')) return;
       var res = P.combat.resolveAttack(f, c, st, dice.open);
       f.res = res;
-      if (res.cell) { f.pf = String(res.cell.pf); f.letter = res.cell.crit || ''; f.cres = null; }
+      if (res.cell) {
+        f.pf = String(res.cell.pf); f.cres = null; f.cres2 = null;
+        f.letter = res.fail ? '' : P.combat.capLetter(res.cell.crit || '', f.wi && f.wi.c1 && f.wi.c1.max);
+        f.letter2 = P.combat.secondaryLetter(f.letter, f.wi && f.wi.c2);
+      }
       var desc = 'Attacco ' + res.total + (res.cell && !res.fail ? ' → ' + res.cell.pf + ' PF' + (res.cell.crit ? ' + critico ' + res.cell.crit : '') : '') + (res.fumble ? ' · FALLIMENTO' : '');
       pushLog(desc); U.showRoll('Attacco', 'tiro ' + res.roll.total + ' ' + R.fmt(res.bo) + ' − ' + res.bd, res.total);
       S.save(); render();
@@ -131,12 +140,13 @@
       var f = P.combat.cb(), c = S.cur();
       f.bd = String(R.defenseTotal(c, 'bd', 'AG', R.ctx(S.get().settings)) + R.num(c.prot.modbd)); render();
     },
-    crit: function () {
-      var f = P.combat.cb(), st = S.get(), raw = f.croll !== '' ? R.num(f.croll) : dice.closed().total;
-      var mod = D.CRIT_MOD[f.letter] || 0, total = raw + mod, tb = P.combat.tableById(P.combat.critList(st), f.ct);
-      f.cres = { raw: raw, mod: mod, letter: f.letter, total: total, row: tb ? T.lookupCrit(tb, total) : null };
-      pushLog('Critico ' + f.letter + ': ' + raw + ' ' + R.fmt(mod) + ' = ' + total + (f.cres.row ? ' — ' + f.cres.row.text : ''));
-      U.showRoll('Critico ' + f.letter, raw + ' ' + R.fmt(mod), total); S.save(); render();
+    crit: function (b) {
+      var k = b.getAttribute('data-k') || '', f = P.combat.cb(), st = S.get(), letter = f['letter' + k], croll = f['croll' + k];
+      var raw = croll !== '' ? R.num(croll) : dice.closed().total;
+      var mod = D.CRIT_MOD[letter] || 0, total = raw + mod, tb = P.combat.tableById(P.combat.critList(st), f['ct' + k]);
+      f['cres' + k] = { raw: raw, mod: mod, letter: letter, total: total, row: tb ? T.lookupCrit(tb, total) : null };
+      pushLog('Critico ' + (k ? 'secondario ' : '') + letter + ': ' + raw + ' ' + R.fmt(mod) + ' = ' + total + (f['cres' + k].row ? ' — ' + f['cres' + k].row.text : ''));
+      U.showRoll('Critico ' + letter, raw + ' ' + R.fmt(mod), total); S.save(); render();
     },
     dmgenemy: function () {
       var f = P.combat.cb(), st = S.get(), e = st.enemies.filter(function (x) { return x.id === f.target; })[0];

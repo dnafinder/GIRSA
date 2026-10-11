@@ -4,11 +4,42 @@
   var G = root.GIRSA = root.GIRSA || {};
   var R = G.rules, D = G.data, U = G.ui, S = G.store, T = G.tables, esc = U.esc;
   var LETTERS = ['', 'T', 'A', 'B', 'C', 'D', 'E'];
+  var ORDER = ['T', 'A', 'B', 'C', 'D', 'E'];
+  var TYPE_TC = { IM: 'TC-1', TA: 'TC-2', PU: 'TC-3', PE: 'TC-4', PR: 'TC-5', CA: 'TC-6', FR: 'TC-7', EL: 'TC-8', IMM: 'TC-9' };
+  var ARMOR_NAMES = ['corazza di piastre', 'corazza di maglie', 'cuoio rinforzato', 'cuoio grezzo', 'nessuna armatura'];
+
+  /* Dati dell'arma scelta: dal catalogo (TSC-1) oppure personalizzati. */
+  function weaponInfo(w) {
+    if (!w) return null;
+    var cw = null; ((G.weapondata) || []).forEach(function (x) { if (x.id === w.id) cw = x; });
+    if (cw) {
+      return { name: cw.n, atk: cw.atk, limit: cw.limit || '', cm: cw.cm, c1: cw.c1 && { ct: TYPE_TC[cw.c1.type] || '', max: cw.c1.max }, c2: cw.c2 && { ct: TYPE_TC[cw.c2.type] || '', max: cw.c2.max },
+        mods: cw.mods, manual: cw.manual, note: cw.note, git: cw.git };
+    }
+    return { name: w.n, atk: w.atk, limit: '', cm: w.fumble === '' ? null : R.num(w.fumble), c1: { ct: w.ct, max: null }, c2: null, mods: [], manual: [], note: '', git: w.git };
+  }
+  /* Lettera del critico limitata al tipo massimo dell'arma (la lettera tra parentesi). */
+  function capLetter(letter, max) {
+    if (!letter || !max) return letter || '';
+    return ORDER.indexOf(letter) > ORDER.indexOf(max) ? max : letter;
+  }
+  /* Secondario: se il primario è maggiore di A, un grado sotto il primario (regola scritta per gli animali, TSC-2; qui estesa alle armi). */
+  function secondaryLetter(primary, c2) {
+    if (!c2 || !primary) return '';
+    var i = ORDER.indexOf(primary); if (i < 2) return '';
+    return capLetter(ORDER[i - 1], c2.max);
+  }
+  /* Somma dei modificatori «sulla TA» dell'arma per l'armatura scelta */
+  function taMod(wi, armor) {
+    var t = 0;
+    if (wi && armor !== '') wi.mods.forEach(function (m) { if (!m.arm || m.arm.indexOf(+armor) >= 0) t += m.v; });
+    return t;
+  }
   /* Tabella di fallimento suggerita in base alla tabella di attacco (scelta mia: il compendio non lo dice esplicitamente) */
   var FUMBLE_DEFAULT = { 'TA-1': 'TTM-1', 'TA-2': 'TTM-1', 'TA-3': 'TTM-1', 'TA-10': 'TTM-1', 'TA-4': 'TTM-2', 'TA-11': 'TTM-6', 'TA-7': 'TTM-3', 'TA-8': 'TTM-3' };
 
   function cb() {
-    if (!U.tmp.cb) U.tmp.cb = { weapon: '', atk: '', armor: '', limit: '', fumble: '', skill: '', bo: '', bd: '', mods: {}, extra: '', roll: '', pf: '', letter: '', ct: '', ft: '', croll: '', cres: null, fres: null, res: null, target: '' };
+    if (!U.tmp.cb) U.tmp.cb = { weapon: '', atk: '', armor: '', limit: '', fumble: '', skill: '', bo: '', bd: '', mods: {}, extra: '', roll: '', pf: '', letter: '', ct: '', ft: '', croll: '', letter2: '', ct2: '', croll2: '', cres2: null, wi: null, cres: null, fres: null, res: null, target: '' };
     return U.tmp.cb;
   }
   function tableById(list, id) { for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i]; return null; }
@@ -26,14 +57,14 @@
     var r = f.roll !== '' ? { first: R.num(f.roll), total: R.num(f.roll), rolls: [R.num(f.roll)], dir: '' } : rollFn(st.settings.dice);
     var bo = f.skill !== '' ? R.skillTotal(c, +f.skill, cx) : R.num(f.bo);
     var bd = R.num(f.bd), ms = modsSum(f, true), extra = R.num(f.extra);
-    var total = r.total + bo - bd + ms + extra;
-    var res = { roll: r, bo: bo, bd: bd, mods: ms, extra: extra, total: total, table: table, cell: null, fumble: false, fail: false, beyond: false, capped: false, ti: false, fumbleMax: null };
+    var total = r.total + bo - bd + ms + extra, tam = taMod(f.wi, f.armor);
+    var res = { ta: tam, wi: f.wi, roll: r, bo: bo, bd: bd, mods: ms, extra: extra, total: total, table: table, cell: null, fumble: false, fail: false, beyond: false, capped: false, ti: false, fumbleMax: null };
     if (table) {
       var fm = f.fumble !== '' ? R.num(f.fumble) : table.fumble;
       res.fumbleMax = fm;
       if (fm != null && r.first <= fm) res.fumble = true;
       if (f.armor !== '') {
-        var a = T.attackCell(table, +f.armor, total, { first: r.first, limit: f.limit });
+        var a = T.attackCell(table, +f.armor, total + tam, { first: r.first, limit: f.limit });
         res.cell = a.cell; res.beyond = a.beyond; res.capped = a.capped; res.ti = a.ti;
         res.fail = !!(a.cell && a.cell.fail);
       }
@@ -83,6 +114,7 @@
   function resultHtml(f, r, st) {
     var s = '<div class="res"><div>Tiro ' + (r.roll.rolls.length > 1 ? r.roll.rolls.join(', ') + ' = ' : '') + '<b>' + r.roll.total + '</b> + BO ' + R.fmt(r.bo) + ' − BD ' + r.bd +
       (r.mods ? ' ' + R.fmt(r.mods) : '') + (r.extra ? ' ' + R.fmt(r.extra) : '') + ' = <b class="big">' + r.total + '</b></div>';
+    if (r.ta) s += '<div class="hint">Modificatore dell\'arma sulla tabella: <b>' + R.fmt(r.ta) + '</b> (' + ARMOR_NAMES[+f.armor] + '), applicato dopo gli altri bonus: si legge la riga ' + (r.total + r.ta) + '.</div>';
     if (r.fumble) s += fumbleBlock(f, r, st);
     if (r.cell && !r.fumble) {
       if (r.fail) s += '<div class="warn"><b>Fallimento dell\'incantesimo</b> (cella «F»): tira sulla tabella dei fallimenti degli incantesimi (TTM-3).</div>';
@@ -95,22 +127,33 @@
     } else if (!r.table) {
       s += '<div class="hint">Nessuna tabella scelta: cerca il risultato <b>' + r.total + '</b> sulla tabella cartacea e inserisci PF e lettera qui sotto.</div>';
     }
+    if (r.wi && (r.wi.note || r.wi.manual.length)) {
+      s += '<div class="hint"><b>' + esc(r.wi.name) + '</b>: ' + esc(r.wi.note) + (r.wi.manual.length ? ' <b>Da applicare a mano:</b> ' + esc(r.wi.manual.join('; ')) : '') + '</div>';
+    }
     return s + '</div>';
   }
 
-  function critHtml(f, st) {
+  function critBlock(f, st, k, title) {
     var cts = [['', '(nessuna: leggo io)']].concat(critList(st).filter(function (t) { return !/^TTM-/.test(t.id); }).map(function (t) { return [t.id, t.name]; }));
-    var h = '<section class="card"><h2>Danno e colpo critico</h2><div class="grid g3">' +
-      U.field('PF inflitti', U.inp('data-t', 'cb.pf', f.pf, { type: 'number' })) +
-      U.field('Lettera critico', U.sel('data-t', 'cb.letter', f.letter, LETTERS.map(function (x) { return [x, x || '–']; }))) +
-      U.field('Tabella critici (dipende dall\'arma)', U.sel('data-t', 'cb.ct', f.ct, cts)) +
-      U.field('Tiro critico già fatto (1–100)', U.inp('data-t', 'cb.croll', f.croll, { type: 'number' })) + '</div>' +
-      '<div class="row"><button data-act="crit" ' + (f.letter ? '' : 'disabled') + '>Tira il critico</button>' +
-      '<button data-act="dmgenemy">PF all\'avversario</button><button data-act="dmgme">PF a me</button></div>';
-    if (f.cres) {
-      h += '<div class="res">Tiro ' + f.cres.raw + ' ' + R.fmt(f.cres.mod) + ' (lettera ' + f.cres.letter + ') = <b class="big">' + f.cres.total + '</b>' +
-        (f.cres.row ? '<div class="hit">' + esc(f.cres.row.text) + '</div>' : '<div class="hint">Cerca ' + f.cres.total + ' sulla tabella dei critici.</div>') + '</div>';
+    var res = f['cres' + k];
+    var h = '<h3>' + title + '</h3><div class="grid g3">' +
+      U.field('Lettera', U.sel('data-t', 'cb.letter' + k, f['letter' + k], LETTERS.map(function (x) { return [x, x || '–']; }))) +
+      U.field('Tabella critici', U.sel('data-t', 'cb.ct' + k, f['ct' + k], cts)) +
+      U.field('Tiro già fatto (1–100)', U.inp('data-t', 'cb.croll' + k, f['croll' + k], { type: 'number' })) + '</div>' +
+      '<div class="row"><button data-act="crit" data-k="' + k + '" ' + (f['letter' + k] ? '' : 'disabled') + '>Tira il critico</button></div>';
+    if (res) {
+      h += '<div class="res">Tiro ' + res.raw + ' ' + R.fmt(res.mod) + ' (lettera ' + res.letter + ') = <b class="big">' + res.total + '</b>' +
+        (res.row ? '<div class="hit">' + esc(res.row.text) + '</div>' : '<div class="hint">Cerca ' + res.total + ' sulla tabella dei critici.</div>') + '</div>';
     }
+    return h;
+  }
+
+  function critHtml(f, st) {
+    var h = '<section class="card"><h2>Danno e colpo critico</h2><div class="grid g3">' +
+      U.field('PF inflitti', U.inp('data-t', 'cb.pf', f.pf, { type: 'number' })) + '</div>' +
+      '<div class="row"><button data-act="dmgenemy">PF all\'avversario</button><button data-act="dmgme">PF a me</button></div>' +
+      critBlock(f, st, '', 'Critico primario');
+    if (f.letter2 || f.ct2 || f.cres2) h += critBlock(f, st, '2', 'Critico secondario');
     return h + '</section>';
   }
 
@@ -138,6 +181,6 @@
     return attackHtml(f, st, c) + critHtml(f, st) + enemies(f, st) + logHtml(st);
   }
 
-  G.pages.combat = { render: render, resolveAttack: resolveAttack, modsSum: modsSum, cb: cb, tableById: tableById, atkList: atkList, critList: critList };
+  G.pages.combat = { weaponInfo: weaponInfo, capLetter: capLetter, secondaryLetter: secondaryLetter, taMod: taMod, TYPE_TC: TYPE_TC, render: render, resolveAttack: resolveAttack, modsSum: modsSum, cb: cb, tableById: tableById, atkList: atkList, critList: critList };
   if (typeof module !== 'undefined') module.exports = G.pages.combat;
 })(typeof window !== 'undefined' ? window : globalThis);

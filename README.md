@@ -19,7 +19,7 @@ nel browser e funziona anche senza rete.
   incantesimi, note. I totali si aggiornano mentre scrivi e ogni voce ha il suo pulsante 🎲.
 - **PF sempre in vista** in alto, con pulsanti −10 −5 −1 +1 +5 +10; l'ultimo tiro resta in basso.
 - **Dadi**: d100 aperto e chiuso, d4–d20, espressioni come `2d6+1`, cronologia.
-- **Combattimento**: attacco (tiro + BO − BD + modificatori) con lettura della tabella di attacco dell'arma,
+- **Combattimento**: attacco (tiro + BO − BD + modificatori) con lettura della tabella di attacco dell'arma scelta dal catalogo,
   colpo maldestro o fallimento con la relativa tabella, colpo critico con il modificatore della lettera,
   elenco avversari con PF, registro.
 - **Diario**: paragrafo attuale, registro delle scelte e segnalini per il librogame.
@@ -29,11 +29,11 @@ nel browser e funziona anche senza rete.
 ## Tabelle incluse
 
 Dai PDF del compendio sono già incorporate le tabelle di attacco **TA-1…TA-8, TA-10, TA-11** (la TA-9 non è nel documento),
-dei colpi critici **TC-1…TC-13** e dei fallimenti **TTM-1…TTM-7**. Nel combattimento scegli la tabella dell'arma e
-l'armatura del bersaglio; per i critici scegli la tabella in base al tipo di danno dell'arma.
+dei colpi critici **TC-1…TC-13**, dei fallimenti **TTM-1…TTM-7** e la **tabella delle armi (TSC-1)** con 56 armi.
 
-Il compendio fornito non contiene la tabella TSC-1 con le statistiche delle armi, quindi due dati li inserisci tu:
-il **tiro massimo di colpo maldestro** e il **tipo di critico** di ciascuna arma: li inserisci una volta sola in Scheda → Armi, insieme alla tabella di attacco e all'abilità, e poi nel combattimento scegli l'arma e tutto si compila da solo.
+In **Scheda → Armi** aggiungi un'arma scegliendola dal catalogo e indichi l'abilità da cui prendere il BO. Nel **Combattimento**
+scegli l'arma: tabella di attacco, colpo maldestro, tabella e tipo massimo dei critici, critico secondario e modificatori
+«sulla TA» si compilano da soli. Resta da indicare l'armatura del bersaglio e il BD.
 
 ## Copia di sicurezza
 
@@ -49,6 +49,12 @@ Dati → Esporta, e Dati → Importa per ripristinare.
 - **Esperienza (TE-5)**: non è chiaro se la soglia sia per raggiungere o per lasciare il livello; l'app la mostra solo come informazione.
 - **Limiti nelle tabelle TA-5/TA-6 e TA-7**: nei PDF le etichette «Risultati Massimi con Attacchi …» e
   «… per i Dardi di …» chiudono il blocco di righe che le precede; l'app limita il risultato al massimo di quel blocco.
+- **Modificatori «sulla TA» delle armi**: il compendio dice che si applicano alla consultazione della tabella dopo tutti gli altri
+  bonus; l'app somma il valore al risultato prima di leggere la riga, in base all'armatura del bersaglio. Quelli che non si possono
+  attribuire a un'armatura con certezza (la Frusta: «−15 sulla TA (e ½ PF c. piastre/maglia)») non si applicano e sono
+  elencati sotto il risultato come «da applicare a mano»; i modificatori «al BO» e le altre note dell'arma sono mostrati ma non applicati.
+- **Critico secondario**: la regola («se il primario è maggiore di A, un grado sotto il primario, con il massimo tra parentesi») è scritta per gli
+  animali (TSC-2); l'app la estende alle armi che hanno un critico secondario.
 - **Fallimenti**: la tabella suggerita per ogni arma (TTM-1 mischia, TTM-2 tiro, TTM-6 lancio, TTM-3 incantesimi) è
   una mia associazione, che puoi cambiare; il d100 dei fallimenti è chiuso come per i critici, il testo non lo precisa.
 - **Risultato oltre l'ultima riga** di una tabella: si usa l'ultima riga, il testo non prevede altro.
@@ -66,9 +72,10 @@ js/rules.js             calcoli
 js/dice.js              dadi
 js/tables.js            consultazione delle tabelle
 js/tabledata.js         tabelle del compendio, generate da tools/extract-tables.py
+js/weapondata.js        catalogo armi (TSC-1), generato dallo stesso script
 js/store.js             salvataggio locale
 tools/build.mjs         crea dist/girsa.html
-tools/extract-tables.py rigenera js/tabledata.js dai PDF (serve poppler e pdfplumber)
+tools/extract-tables.py rigenera tabledata.js e weapondata.js dai PDF (serve poppler e pdfplumber)
 tests/                  test
 ```
 

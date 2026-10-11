@@ -121,3 +121,42 @@ test('resolveAttack con tabella inclusa', () => {
   f.fumble = '50'; f.roll = '3';
   assert.strictEqual(C.resolveAttack(f, c, st, null).fumble, true);
 });
+
+/* ---- catalogo armi (TSC-1) ---- */
+test('armi: struttura e valori di controllo letti dal PDF', () => {
+  const W = require('../js/weapondata.js');
+  assert.strictEqual(W.length, 56);
+  const ids = new Set(W.map(w => w.id)); assert.strictEqual(ids.size, 56);
+  W.forEach(w => { assert.ok(byId(TD.atk, w.atk), w.n); assert.ok(w.cm >= 1 && w.cm <= 8, w.n); });
+  const w = id => W.find(x => x.id === id);
+  const sl = w('taglio1-spada-lunga');
+  assert.strictEqual(sl.cm, 3); assert.deepStrictEqual(sl.mods, [{ v: 5, arm: [0, 1] }, { v: -5, arm: [2, 3, 4] }]);
+  assert.deepStrictEqual(w('taglio1-stocco-spada-da-lato').mods, [{ v: -10, arm: [0, 2] }, { v: 5, arm: [1, 3, 4] }]);
+  assert.deepStrictEqual(w('taglio1-pugnale').c1, { type: 'PU', max: 'D' });
+  assert.deepStrictEqual(w('contund1-mazza-chiodata').c2, { type: 'PU', max: 'B' });
+  assert.strictEqual(w('contund1-rete-da-gladiatore').atk, 'TA-6');
+  assert.strictEqual(w('contund1-rete-da-gladiatore').limit, 'Medi');
+  assert.strictEqual(w('asta2-lancia-da-cavaliere').atk, 'TA-10');
+  assert.strictEqual(w('asta1-lancia').atk, 'TA-1');
+  assert.strictEqual(w('tiro-arco-lungo').git, '33*');
+  assert.strictEqual(w('due_mani-spada-bastarda').cm, 5); assert.strictEqual(w('taglio1-spada-bastarda').cm, 4);
+  assert.deepStrictEqual(w('contund1-frusta').mods, []); assert.strictEqual(w('contund1-frusta').manual.length, 1);
+});
+
+test('armi: modificatore sulla TA, limite e critico secondario', () => {
+  const W = require('../js/weapondata.js'), R = require('../js/rules.js'), S = require('../js/store.js');
+  globalThis.GIRSA.tabledata = TD; globalThis.GIRSA.weapondata = W; require('../js/ui.js');
+  const C = require('../js/combat.js');
+  const wi = C.weaponInfo({ id: 'taglio1-spada-lunga' });
+  assert.strictEqual(C.taMod(wi, '0'), 5); assert.strictEqual(C.taMod(wi, '4'), -5); assert.strictEqual(C.taMod(wi, ''), 0);
+  assert.strictEqual(C.capLetter('E', 'D'), 'D'); assert.strictEqual(C.capLetter('B', 'D'), 'B'); assert.strictEqual(C.capLetter('', 'D'), '');
+  assert.strictEqual(C.secondaryLetter('A', { max: 'B' }), '');
+  assert.strictEqual(C.secondaryLetter('D', { max: 'B' }), 'B');
+  assert.strictEqual(C.secondaryLetter('C', { max: 'E' }), 'B');
+  assert.strictEqual(C.TYPE_TC.PU, 'TC-3');
+  const st = S.blank(), c = st.chars[0];
+  const f = { atk: 'TA-1', armor: '4', limit: '', fumble: '3', skill: '', bo: '0', bd: '0', mods: {}, extra: '', roll: '60', wi };
+  const r = C.resolveAttack(f, c, st, null);
+  assert.strictEqual(r.ta, -5); assert.strictEqual(r.total, 60);
+  assert.deepStrictEqual(r.cell, T.attackCell(byId(TD.atk, 'TA-1'), 4, 55).cell);
+});

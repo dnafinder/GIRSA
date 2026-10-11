@@ -14,7 +14,7 @@ Di conseguenza:
 
 - questo progetto è pensato per **uso personale**: non va venduto né usato commercialmente;
 - si consiglia di tenere il repository **privato**;
-- `js/tabledata.js` contiene le **tabelle di attacco (TA), dei colpi critici (TC) e dei fallimenti (TTM)**, estratte
+- `js/tabledata.js` e `js/weapondata.js` contengono le **tabelle di attacco (TA), dei colpi critici (TC), dei fallimenti (TTM) e delle armi (TSC-1)**, estratte
   senza modifiche dai PDF con `tools/extract-tables.py`: per questo il repository **deve restare privato** e il file non va
   distribuito né pubblicato;
 - le tabelle `TB-1`, `TB-3`, `TB-4`, `TE-5`, `TFC-2` sono state trascritte da immagini: vale la pena
