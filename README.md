@@ -6,12 +6,11 @@ nel browser e funziona anche senza rete.
 
 ## Usarla
 
-Apri **`dist/girsa.html`** nel browser (doppio clic, oppure copialo sul telefono). È un file unico, con le tabelle
-già dentro: non serve installare né configurare niente. Da GitHub: apri il file, poi «Download raw file».
+**Come sito (GitHub Pages)**: con Pages attivo sul ramo `main`, cartella radice, l'app è su
+`https://dnafinder.github.io/GIRSA/`. Dal telefono si può aggiungere alla schermata Home e funziona offline.
 
-Se modifichi il codice, rigenera il file con `npm run build` e committalo insieme alle modifiche.
-
-Alternativa, come sito: servi la cartella con un server statico (`npx serve .`); da http(s) l'app si installa come PWA.
+**Come file unico**: `dist/girsa.html` si apre con un doppio clic nel browser; da GitHub: apri il file, poi
+«Download raw file». Se modifichi il codice, rigenera il file con `npm run build` e committalo.
 
 ## Che cosa fa
 
