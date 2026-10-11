@@ -8,7 +8,7 @@
   var FUMBLE_DEFAULT = { 'TA-1': 'TTM-1', 'TA-2': 'TTM-1', 'TA-3': 'TTM-1', 'TA-10': 'TTM-1', 'TA-4': 'TTM-2', 'TA-11': 'TTM-6', 'TA-7': 'TTM-3', 'TA-8': 'TTM-3' };
 
   function cb() {
-    if (!U.tmp.cb) U.tmp.cb = { atk: '', armor: '', limit: '', fumble: '', skill: '', bo: '', bd: '', mods: {}, extra: '', roll: '', pf: '', letter: '', ct: '', ft: '', croll: '', cres: null, fres: null, res: null, target: '' };
+    if (!U.tmp.cb) U.tmp.cb = { weapon: '', atk: '', armor: '', limit: '', fumble: '', skill: '', bo: '', bd: '', mods: {}, extra: '', roll: '', pf: '', letter: '', ct: '', ft: '', croll: '', cres: null, fres: null, res: null, target: '' };
     return U.tmp.cb;
   }
   function tableById(list, id) { for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i]; return null; }
@@ -47,11 +47,13 @@
     var tables = [['', '(nessuna: leggo io la tabella)']].concat(atkList(st).map(function (t) { return [t.id, t.name]; }));
     var t = tableById(atkList(st), f.atk);
     var armors = t ? [['', '(scegli)']].concat(t.armors.map(function (a, i) { return [String(i), a]; })) : [];
+    var wl = [['', '(nessuna: scelgo a mano)']].concat(c.weapons.map(function (w, i) { return [String(i), w.n || 'Arma ' + (i + 1)]; }));
     var h = '<section class="card"><h2>Attacco</h2><div class="grid g2">' +
+      (c.weapons.length ? U.field('Arma', U.sel('data-act-change', 'weapon', f.weapon, wl)) : '') +
       U.field('Tabella di attacco', U.sel('data-t', 'cb.atk', f.atk, tables, { re: 1 })) +
       (t ? U.field('Armatura del bersaglio', U.sel('data-t', 'cb.armor', f.armor, armors)) : '') +
       (t && t.limits && t.limits.length ? U.field(t.id === 'TA-7' ? 'Tipo di dardo' : 'Taglia dell\'attacco', U.sel('data-t', 'cb.limit', f.limit, [['', '(scegli)']].concat(t.limits.map(function (l) { return [l.label, l.label]; })))) : '') +
-      (t && t.fumble == null ? U.field('Colpo maldestro: tiro massimo dell\'arma', U.inp('data-t', 'cb.fumble', f.fumble, { type: 'number', ph: 'es. 4' })) : '') +
+      (t && t.fumble == null ? U.field('Colpo maldestro: tiro massimo (si imposta in Scheda → Armi)', U.inp('data-t', 'cb.fumble', f.fumble, { type: 'number', ph: 'es. 4' })) : '') +
       U.field('BO dalla scheda', U.sel('data-t', 'cb.skill', f.skill, [['', '(a mano)']].concat(skills), { re: 1 })) +
       (f.skill === '' ? U.field('BO a mano', U.inp('data-t', 'cb.bo', f.bo, { type: 'number' })) : '') +
       U.field('BD del bersaglio', U.inp('data-t', 'cb.bd', f.bd, { type: 'number' })) +

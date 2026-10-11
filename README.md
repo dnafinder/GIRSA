@@ -33,7 +33,7 @@ dei colpi critici **TC-1…TC-13** e dei fallimenti **TTM-1…TTM-7**. Nel comba
 l'armatura del bersaglio; per i critici scegli la tabella in base al tipo di danno dell'arma.
 
 Il compendio fornito non contiene la tabella TSC-1 con le statistiche delle armi, quindi due dati li inserisci tu:
-il **tiro massimo di colpo maldestro** di ciascuna arma (le tabelle TA-5…TA-8 lo hanno già) e il **tipo di critico**.
+il **tiro massimo di colpo maldestro** e il **tipo di critico** di ciascuna arma: li inserisci una volta sola in Scheda → Armi, insieme alla tabella di attacco e all'abilità, e poi nel combattimento scegli l'arma e tutto si compila da solo.
 
 ## Copia di sicurezza
 

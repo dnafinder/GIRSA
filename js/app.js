@@ -52,6 +52,12 @@
     if (t.hasAttribute('data-act-change')) {
       var a = t.getAttribute('data-act-change');
       if (a === 'char') { S.get().cur = t.value; S.save(); render(); }
+      if (a === 'weapon') {
+        var f = P.combat.cb(), w = S.cur().weapons[+t.value];
+        f.weapon = t.value; f.limit = ''; f.res = null; f.cres = null; f.fres = null;
+        if (w) { f.atk = w.atk; f.skill = w.skill; f.fumble = w.fumble; f.ct = w.ct; f.armor = ''; }
+        render();
+      }
       if (a === 'popolo') { if (R.applyPopolo(S.cur(), t.value)) { S.save(); render(); U.toast('Applicate le modifiche del popolo (TB-3).'); } else { S.cur().popolo = ''; S.save(); } }
     } else if (t.hasAttribute('data-act-file')) {
       importFile(t.files && t.files[0]); t.value = '';
@@ -97,7 +103,7 @@
     clearroll: function () { S.get().dlog = []; S.save(); render(); },
     add: function (b) {
       var l = b.dataset.list, c = S.cur();
-      c[l].push(l === 'inv' ? { n: '', q: '', note: '' } : { n: '', lvl: '', note: '' }); S.save(); render();
+      c[l].push(l === 'inv' ? { n: '', q: '', note: '' } : l === 'weapons' ? { n: '', atk: '', skill: '', ct: '', fumble: '', git: '' } : { n: '', lvl: '', note: '' }); S.save(); render();
     },
     del: function (b) {
       var arr = listOf(b.dataset.list); if (!arr) return;

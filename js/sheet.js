@@ -93,9 +93,28 @@
     return h + '<button data-act="add" data-list="' + key + '">' + addLabel + '</button></section>';
   }
 
+  /* Armi: tabella di attacco, abilità, colpo maldestro e tipo di critico si scelgono una volta e poi si usano nel combattimento. */
+  function weapons(c) {
+    var atk = [['', '(tabella di attacco)']].concat(U.allAtk().map(function (t) { return [t.id, t.name]; }));
+    var ct = [['', '(tabella critici)']].concat(U.allCrit().filter(function (t) { return !/^TTM-/.test(t.id); }).map(function (t) { return [t.id, t.name]; }));
+    var sk = [['', '(abilità per il BO)']];
+    c.skills.forEach(function (s, i) { if ((s.cat === 'arm' || s.cat === 'ama' || s.cat === 'mag') && s.name) sk.push([String(i), s.name]); });
+    var h = '<section class="card"><h2>Armi</h2><p class="hint">Per ogni arma scegli una volta la tabella di attacco, l\'abilità del BO, il tiro massimo di colpo maldestro (CM) e la tabella dei critici (CC), come sulla scheda dell\'inventario. Poi basta sceglierla nel combattimento.</p>';
+    c.weapons.forEach(function (w, i) {
+      h += '<div class="wp"><div class="li">' + U.inp('data-p', 'weapons.' + i + '.n', w.n, { ph: 'Nome arma', label: 'Nome arma' }) +
+        '<button class="mini" data-act="del" data-list="weapons" data-i="' + i + '" aria-label="Elimina arma">✕</button></div><div class="grid g3">' +
+        U.sel('data-p', 'weapons.' + i + '.atk', w.atk, atk, { label: 'Tabella di attacco' }) +
+        U.sel('data-p', 'weapons.' + i + '.skill', w.skill, sk, { label: 'Abilità' }) +
+        U.sel('data-p', 'weapons.' + i + '.ct', w.ct, ct, { label: 'Tabella critici' }) +
+        U.inp('data-p', 'weapons.' + i + '.fumble', w.fumble, { type: 'number', ph: 'CM: tiro max', label: 'Colpo maldestro, tiro massimo' }) +
+        U.inp('data-p', 'weapons.' + i + '.git', w.git, { ph: 'Gittata', label: 'Gittata' }) + '</div></div>';
+    });
+    return h + '<button data-act="add" data-list="weapons">+ Arma</button></section>';
+  }
+
   function render() {
     var c = S.cur();
-    return identity(c) + stats(c) + pf(c) + skills(c) + defenses(c) + protection(c) +
+    return identity(c) + stats(c) + pf(c) + skills(c) + defenses(c) + protection(c) + weapons(c) +
       list(c, 'inv', 'Inventario', [['n', 'Oggetto'], ['q', 'Quantità', 'sm'], ['note', 'Note']], '+ Oggetto') +
       list(c, 'spells', 'Incantesimi', [['n', 'Incantesimo'], ['lvl', 'Livello', 'sm'], ['note', 'Note']], '+ Incantesimo') +
       '<section class="card"><h2>Note</h2><textarea data-p="note" rows="5" aria-label="Note">' + esc(c.note) + '</textarea></section>';

@@ -74,6 +74,7 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
 #toast{position:fixed;left:50%;bottom:70px;transform:translate(-50%,20px);background:#222;color:#fff;padding:10px 14px;border-radius:8px;opacity:0;pointer-events:none;transition:.2s;z-index:9;max-width:90vw;text-align:center}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){#toast{transition:none}}
+.wp{border-top:1px solid var(--line);padding:6px 0}
 
 </style>
 </head>
@@ -376,7 +377,7 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
       altezza: '', capelli: '', occhi: '', lingue: '', temperamento: '', segni: '',
       pool: 400, stats: {}, skills: [], ps: {}, defs: {}, pf: { max: '', dmg: 0 },
       prot: { armatura: '', res: '', scudo: '', elmo: '', bracciali: '', schinieri: '', modbd: '', ingombro: '', mov: '' },
-      bonusVari: '', note: '', corruzione: '', spells: [], inv: [], reputazione: '', denaro: '', classi: '',
+      bonusVari: '', note: '', corruzione: '', spells: [], inv: [], weapons: [], reputazione: '', denaro: '', classi: '',
       diary: { book: '', par: '', log: [], flags: [] }
     };
     D.STATS.forEach(function (s) { c.stats[s[0]] = { score: '', bonus: '', razza: '' }; });
@@ -870,9 +871,28 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
     return h + '<button data-act="add" data-list="' + key + '">' + addLabel + '</button></section>';
   }
 
+  /* Armi: tabella di attacco, abilità, colpo maldestro e tipo di critico si scelgono una volta e poi si usano nel combattimento. */
+  function weapons(c) {
+    var atk = [['', '(tabella di attacco)']].concat(U.allAtk().map(function (t) { return [t.id, t.name]; }));
+    var ct = [['', '(tabella critici)']].concat(U.allCrit().filter(function (t) { return !/^TTM-/.test(t.id); }).map(function (t) { return [t.id, t.name]; }));
+    var sk = [['', '(abilità per il BO)']];
+    c.skills.forEach(function (s, i) { if ((s.cat === 'arm' || s.cat === 'ama' || s.cat === 'mag') && s.name) sk.push([String(i), s.name]); });
+    var h = '<section class="card"><h2>Armi</h2><p class="hint">Per ogni arma scegli una volta la tabella di attacco, l\'abilità del BO, il tiro massimo di colpo maldestro (CM) e la tabella dei critici (CC), come sulla scheda dell\'inventario. Poi basta sceglierla nel combattimento.</p>';
+    c.weapons.forEach(function (w, i) {
+      h += '<div class="wp"><div class="li">' + U.inp('data-p', 'weapons.' + i + '.n', w.n, { ph: 'Nome arma', label: 'Nome arma' }) +
+        '<button class="mini" data-act="del" data-list="weapons" data-i="' + i + '" aria-label="Elimina arma">✕</button></div><div class="grid g3">' +
+        U.sel('data-p', 'weapons.' + i + '.atk', w.atk, atk, { label: 'Tabella di attacco' }) +
+        U.sel('data-p', 'weapons.' + i + '.skill', w.skill, sk, { label: 'Abilità' }) +
+        U.sel('data-p', 'weapons.' + i + '.ct', w.ct, ct, { label: 'Tabella critici' }) +
+        U.inp('data-p', 'weapons.' + i + '.fumble', w.fumble, { type: 'number', ph: 'CM: tiro max', label: 'Colpo maldestro, tiro massimo' }) +
+        U.inp('data-p', 'weapons.' + i + '.git', w.git, { ph: 'Gittata', label: 'Gittata' }) + '</div></div>';
+    });
+    return h + '<button data-act="add" data-list="weapons">+ Arma</button></section>';
+  }
+
   function render() {
     var c = S.cur();
-    return identity(c) + stats(c) + pf(c) + skills(c) + defenses(c) + protection(c) +
+    return identity(c) + stats(c) + pf(c) + skills(c) + defenses(c) + protection(c) + weapons(c) +
       list(c, 'inv', 'Inventario', [['n', 'Oggetto'], ['q', 'Quantità', 'sm'], ['note', 'Note']], '+ Oggetto') +
       list(c, 'spells', 'Incantesimi', [['n', 'Incantesimo'], ['lvl', 'Livello', 'sm'], ['note', 'Note']], '+ Incantesimo') +
       '<section class="card"><h2>Note</h2><textarea data-p="note" rows="5" aria-label="Note">' + esc(c.note) + '</textarea></section>';
@@ -923,7 +943,7 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
   var FUMBLE_DEFAULT = { 'TA-1': 'TTM-1', 'TA-2': 'TTM-1', 'TA-3': 'TTM-1', 'TA-10': 'TTM-1', 'TA-4': 'TTM-2', 'TA-11': 'TTM-6', 'TA-7': 'TTM-3', 'TA-8': 'TTM-3' };
 
   function cb() {
-    if (!U.tmp.cb) U.tmp.cb = { atk: '', armor: '', limit: '', fumble: '', skill: '', bo: '', bd: '', mods: {}, extra: '', roll: '', pf: '', letter: '', ct: '', ft: '', croll: '', cres: null, fres: null, res: null, target: '' };
+    if (!U.tmp.cb) U.tmp.cb = { weapon: '', atk: '', armor: '', limit: '', fumble: '', skill: '', bo: '', bd: '', mods: {}, extra: '', roll: '', pf: '', letter: '', ct: '', ft: '', croll: '', cres: null, fres: null, res: null, target: '' };
     return U.tmp.cb;
   }
   function tableById(list, id) { for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i]; return null; }
@@ -962,11 +982,13 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
     var tables = [['', '(nessuna: leggo io la tabella)']].concat(atkList(st).map(function (t) { return [t.id, t.name]; }));
     var t = tableById(atkList(st), f.atk);
     var armors = t ? [['', '(scegli)']].concat(t.armors.map(function (a, i) { return [String(i), a]; })) : [];
+    var wl = [['', '(nessuna: scelgo a mano)']].concat(c.weapons.map(function (w, i) { return [String(i), w.n || 'Arma ' + (i + 1)]; }));
     var h = '<section class="card"><h2>Attacco</h2><div class="grid g2">' +
+      (c.weapons.length ? U.field('Arma', U.sel('data-act-change', 'weapon', f.weapon, wl)) : '') +
       U.field('Tabella di attacco', U.sel('data-t', 'cb.atk', f.atk, tables, { re: 1 })) +
       (t ? U.field('Armatura del bersaglio', U.sel('data-t', 'cb.armor', f.armor, armors)) : '') +
       (t && t.limits && t.limits.length ? U.field(t.id === 'TA-7' ? 'Tipo di dardo' : 'Taglia dell\'attacco', U.sel('data-t', 'cb.limit', f.limit, [['', '(scegli)']].concat(t.limits.map(function (l) { return [l.label, l.label]; })))) : '') +
-      (t && t.fumble == null ? U.field('Colpo maldestro: tiro massimo dell\'arma', U.inp('data-t', 'cb.fumble', f.fumble, { type: 'number', ph: 'es. 4' })) : '') +
+      (t && t.fumble == null ? U.field('Colpo maldestro: tiro massimo (si imposta in Scheda → Armi)', U.inp('data-t', 'cb.fumble', f.fumble, { type: 'number', ph: 'es. 4' })) : '') +
       U.field('BO dalla scheda', U.sel('data-t', 'cb.skill', f.skill, [['', '(a mano)']].concat(skills), { re: 1 })) +
       (f.skill === '' ? U.field('BO a mano', U.inp('data-t', 'cb.bo', f.bo, { type: 'number' })) : '') +
       U.field('BD del bersaglio', U.inp('data-t', 'cb.bd', f.bd, { type: 'number' })) +
@@ -1217,6 +1239,12 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
     if (t.hasAttribute('data-act-change')) {
       var a = t.getAttribute('data-act-change');
       if (a === 'char') { S.get().cur = t.value; S.save(); render(); }
+      if (a === 'weapon') {
+        var f = P.combat.cb(), w = S.cur().weapons[+t.value];
+        f.weapon = t.value; f.limit = ''; f.res = null; f.cres = null; f.fres = null;
+        if (w) { f.atk = w.atk; f.skill = w.skill; f.fumble = w.fumble; f.ct = w.ct; f.armor = ''; }
+        render();
+      }
       if (a === 'popolo') { if (R.applyPopolo(S.cur(), t.value)) { S.save(); render(); U.toast('Applicate le modifiche del popolo (TB-3).'); } else { S.cur().popolo = ''; S.save(); } }
     } else if (t.hasAttribute('data-act-file')) {
       importFile(t.files && t.files[0]); t.value = '';
@@ -1262,7 +1290,7 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
     clearroll: function () { S.get().dlog = []; S.save(); render(); },
     add: function (b) {
       var l = b.dataset.list, c = S.cur();
-      c[l].push(l === 'inv' ? { n: '', q: '', note: '' } : { n: '', lvl: '', note: '' }); S.save(); render();
+      c[l].push(l === 'inv' ? { n: '', q: '', note: '' } : l === 'weapons' ? { n: '', atk: '', skill: '', ct: '', fumble: '', git: '' } : { n: '', lvl: '', note: '' }); S.save(); render();
     },
     del: function (b) {
       var arr = listOf(b.dataset.list); if (!arr) return;
