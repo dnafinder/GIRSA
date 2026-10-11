@@ -1,0 +1,1416 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2f3e2e">
+<meta name="color-scheme" content="light dark">
+<title>GIRSA Companion</title>
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iIzJmM2UyZSIvPgogIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMTUwIiBmaWxsPSJub25lIiBzdHJva2U9IiNkOWI0NGEiIHN0cm9rZS13aWR0aD0iNDQiLz4KICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjE1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZjFkOThhIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1kYXNoYXJyYXk9IjQwIDI0Ii8+Cjwvc3ZnPgo=">
+<style>
+:root{--bg:#f4f1e8;--card:#fffdf7;--ink:#222a20;--dim:#6b7467;--line:#d9d3c0;--acc:#2f3e2e;--accink:#fff;--gold:#a9831f;--bad:#a6321f;--ok:#2e6b3a;--warn:#fff1c9;
+  --f:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--s:Georgia,"Times New Roman",serif}
+@media (prefers-color-scheme:dark){:root{--bg:#161a15;--card:#1f251d;--ink:#e8e6da;--dim:#9aa395;--line:#364032;--acc:#8fb58a;--accink:#10150f;--gold:#e0c066;--bad:#ff8a73;--ok:#8fd49a;--warn:#3d3416}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 var(--f);padding-bottom:64px}
+h2,h3{font-family:var(--s);margin:.2em 0 .5em}h2{font-size:1.2rem}h3{font-size:1rem;color:var(--dim)}
+header#top{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);padding:6px 10px 0;padding-top:max(6px,env(safe-area-inset-top))}
+.bar{display:flex;gap:6px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
+#charsel{flex:1;min-width:0}
+.pfbar{justify-content:space-between}
+#pfstrip{font-weight:700;font-size:.95rem}
+#pfstrip[data-state=morte],.pfbig[data-state=morte]{color:var(--bad)}
+#pfstrip[data-state=sotto],.pfbig[data-state=sotto],#pfstrip[data-state=zero]{color:var(--gold)}
+.pfbtns{display:flex;gap:4px}
+nav#nav{display:flex;gap:2px;overflow-x:auto}
+nav#nav a{flex:1;text-align:center;padding:8px 6px;text-decoration:none;color:var(--dim);border-bottom:3px solid transparent;white-space:nowrap;font-weight:600}
+nav#nav a[aria-current=page]{color:var(--acc);border-color:var(--acc)}
+main{max-width:860px;margin:0 auto;padding:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
+.grid{display:grid;gap:8px}.g2{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.fld{display:flex;flex-direction:column;font-size:.8rem;color:var(--dim);gap:2px}
+.fld>span{font-weight:600}
+input,select,textarea,button{font:inherit;color:inherit}
+input,select,textarea{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:7px 8px;min-width:0;width:100%}
+input.sm,select.sm{width:64px;padding:5px}input.tiny{width:70px;display:inline-block}input.wide{width:100%}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+button,.btn{background:var(--acc);color:var(--accink);border:0;border-radius:8px;padding:9px 14px;font-weight:600;cursor:pointer;min-height:40px;display:inline-flex;align-items:center;justify-content:center}
+button.big{font-size:1.1rem;padding:12px 18px}
+button.mini{padding:4px 9px;min-height:32px;min-width:34px;font-size:.85rem}
+button.heal{background:var(--ok);color:#fff}
+button.ghost,.btn.ghost{background:transparent;color:var(--acc);border:1px solid var(--acc)}
+button.danger{background:var(--bad);color:#fff}
+button:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;margin:8px 0}
+.row label{display:flex;flex-direction:column;font-size:.8rem;color:var(--dim);flex:1;min-width:110px}
+.hint{color:var(--dim);font-size:.85rem;margin:.4em 0}
+.warn{background:var(--warn);border-radius:6px;padding:6px 8px;font-size:.85rem;margin-top:6px}
+.stats{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+.stat{border:1px solid var(--line);border-radius:8px;padding:8px}.stat-h span{color:var(--dim);font-size:.85rem}
+.stat .row{margin:4px 0 0;align-items:flex-end}.stat .row label{min-width:60px;font-size:.7rem}.tt{font-size:.7rem;color:var(--dim);text-align:center}
+.tot{display:block;font-size:1.15rem;color:var(--acc);text-align:center;min-width:46px}.tot.dim{color:var(--dim);font-size:.9rem;font-weight:400}
+.scroll{overflow-x:auto}
+table.sk{width:100%;border-collapse:collapse;font-size:.9rem}
+table.sk th{font-size:.7rem;color:var(--dim);text-align:center;padding:2px}
+table.sk td{padding:3px 2px;text-align:center;border-top:1px solid var(--line)}
+table.sk th.l,table.sk td.l{text-align:left;min-width:140px}
+.nm{font-weight:600}.tag{font-size:.65rem;color:var(--gold);font-style:normal;border:1px solid var(--gold);border-radius:4px;padding:0 3px}
+.dim{color:var(--dim)}
+details{border-top:1px solid var(--line);padding:6px 0}summary{cursor:pointer;font-weight:600;padding:4px 0}
+.li{display:flex;gap:6px;align-items:center;margin:4px 0}.li input{flex:1}.li input.sm{flex:0 0 64px}.li>span{flex:1}
+.en.dead{opacity:.5}.en .rad{display:flex;flex:1;gap:6px;align-items:center}.pfb{min-width:54px;text-align:center;font-weight:700}
+.mods{display:grid;gap:4px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:8px 0}
+.chk{display:flex;gap:6px;align-items:center;font-size:.9rem}.chk input{width:auto}
+.dicebtns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.res{border-left:4px solid var(--gold);padding:6px 10px;margin:10px 0;background:var(--bg);border-radius:0 6px 6px 0}
+.res .big{font-size:1.4rem}.hit{font-weight:700;margin-top:4px;font-size:1.1rem}
+.log{list-style:none;margin:0;padding:0}.log li{padding:5px 0;border-top:1px solid var(--line);font-size:.9rem}.log .t{color:var(--dim);font-size:.75rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid var(--line);border-radius:99px;padding:2px 4px 2px 10px;display:inline-flex;gap:4px;align-items:center}
+textarea{resize:vertical}
+code{background:var(--bg);padding:0 4px;border-radius:4px}
+footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);color:var(--accink);padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));z-index:6;font-size:.95rem;overflow-x:auto;white-space:nowrap}
+.lr-v{font-size:1.35rem;margin-left:6px}.lr-d{opacity:.85}
+#toast{position:fixed;left:50%;bottom:70px;transform:translate(-50%,20px);background:#222;color:#fff;padding:10px 14px;border-radius:8px;opacity:0;pointer-events:none;transition:.2s;z-index:9;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+
+</style>
+</head>
+<body>
+<header id="top">
+  <div class="bar">
+    <select id="charsel" data-act-change="char" aria-label="Personaggio"></select>
+    <button class="mini" data-act="newchar" title="Nuovo personaggio" aria-label="Nuovo personaggio">＋</button>
+    <button class="mini" data-act="dupchar" title="Duplica" aria-label="Duplica personaggio">⧉</button>
+    <button class="mini" data-act="delchar" title="Elimina" aria-label="Elimina personaggio">🗑</button>
+  </div>
+  <div class="bar pfbar">
+    <span id="pfstrip" data-state="nd"></span>
+    <span class="pfbtns">
+      <button class="mini" data-act="pf" data-n="10">−10</button><button class="mini" data-act="pf" data-n="5">−5</button><button class="mini" data-act="pf" data-n="1">−1</button>
+      <button class="mini heal" data-act="pf" data-n="-1">+1</button><button class="mini heal" data-act="pf" data-n="-5">+5</button><button class="mini heal" data-act="pf" data-n="-10">+10</button>
+    </span>
+  </div>
+  <nav id="nav" aria-label="Sezioni"></nav>
+</header>
+<main id="view"></main>
+<footer id="lastbar"><span id="lastroll" aria-live="polite">Nessun tiro</span></footer>
+<div id="toast" role="status"></div>
+<script>
+/*
+ * Parametri di calcolo del regolamento, ricavati dal compendio "Istaro Quettar"
+ * (Filduin), basato su Girsa 2ed/3ed. Vedi NOTICE.md.
+ * Contiene solo i valori necessari ai calcoli. Le tabelle di attacco e dei colpi
+ * critici NON sono incluse: si importano dalla pagina "Dati".
+ */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+
+  var STATS = [['FR', 'Forza'], ['AG', 'Agilità'], ['CO', 'Costituzione'], ['IN', 'Intelligenza'],
+    ['IT', 'Intuizione'], ['PR', 'Prontezza'], ['AS', 'Aspetto']];
+
+  var CATS = [['mov', 'Movimento e manovra'], ['arm', 'Abilità con le armi'], ['gen', 'Abilità generiche'],
+    ['sot', 'Abilità di sotterfugio'], ['mag', 'Abilità magiche'], ['ama', 'Arti marziali'],
+    ['amd', 'Arti marziali, difesa'], ['var', 'Bonus e abilità varie'], ['sec', 'Abilità secondarie']];
+
+  function S(cat, k, name, stat, tag, spec, o) {
+    var x = { cat: cat, k: k, name: name, stat: stat, tag: tag, spec: spec };
+    if (o) for (var p in o) x[p] = o[p];
+    return x;
+  }
+
+  /* Righe della scheda. Flag: noStat/noProf/noObj/noRanks = campi XX della scheda originale;
+     prog = progressione dei gradi (primary di default); maxRanks = limite TB-4 per le manovre in armatura. */
+  var SKILLS = [
+    S('mov', 'nessuna', 'Nessuna armatura', 'AG', 'MM', 0, { noProf: 1, maxRanks: 2 }),
+    S('mov', 'cuoio_g', 'Cuoio grezzo', 'AG', 'MM', -15, { noProf: 1, maxRanks: 3 }),
+    S('mov', 'cuoio_r', 'Cuoio rinforzato', 'AG', 'MM', -30, { noProf: 1, maxRanks: 5 }),
+    S('mov', 'maglie', 'Corazza di maglie', 'FR', 'MM', -45, { noProf: 1, maxRanks: 7 }),
+    S('mov', 'piastre', 'Corazza di piastre', 'FR', 'MM', -60, { noProf: 1, maxRanks: 9 }),
+    S('arm', 'taglio', 'Da taglio, 1 mano', 'FR', 'BO', 0),
+    S('arm', 'contund', 'Contundenti, 1 mano', 'FR', 'BO', 0),
+    S('arm', 'due_mani', 'A 2 mani', 'FR', 'BO', 0),
+    S('arm', 'tiro', 'Da tiro', 'AG', 'BO', 0),
+    S('arm', 'lancio', 'Da lancio', 'AG', 'BO', 0),
+    S('arm', 'asta', 'Ad asta', 'FR', 'BO', 0),
+    S('arm', 'arm_x', '', '', 'BO', 0),
+    S('gen', 'arrampic', 'Arrampicarsi', 'AG', 'MM', 0),
+    S('gen', 'cavalc', 'Cavalcare', 'IT', 'MM', 0),
+    S('gen', 'nuotare', 'Nuotare', 'AG', 'MM', 0),
+    S('gen', 'tracce', 'Seguire tracce', 'IN', 'MS', 0),
+    S('sot', 'spalle', 'Cogliere alle spalle', '', 'AS', 0, { noStat: 1, noProf: 1, noObj: 1, prog: 'spalle' }),
+    S('sot', 'silenz', 'Muoversi silenziosamente', 'AG', 'MM', 0),
+    S('sot', 'nascond', 'Nascondersi', 'PR', 'MS', 0, { link: 'silenz' }),
+    S('sot', 'serrat', 'Scassinare serrature', 'IN', 'MS', 0),
+    S('sot', 'trappole', 'Disattivare trappole', 'IT', 'MS', 0),
+    S('mag', 'rune', 'Lettura delle rune', 'IN', 'MS', 0),
+    S('mag', 'ogg_mag', 'Usare oggetti magici', 'IT', 'MS', 0),
+    S('mag', 'inc_dir', 'Incantesimi diretti', 'AG', 'BO', 0),
+    S('mag', 'inc_base', 'Incantesimi base', '', 'BO', 0, { noStat: 1, noRanks: 1 }),
+    S('ama', 'att_nov', 'Attacco novizio', 'FR', 'BO', 0),
+    S('ama', 'att_std', 'Attacco standard', 'FR', 'BO', 0),
+    S('ama', 'att_esp', 'Attacco esperto', 'FR', 'BO', 0),
+    S('ama', 'pre_nov', 'Presa novizio', 'AG', 'BO', 0),
+    S('ama', 'pre_std', 'Presa standard', 'AG', 'BO', 0),
+    S('ama', 'pre_esp', 'Presa esperto', 'AG', 'BO', 0),
+    S('amd', 'adren', 'Difesa adrenalinica', '', 'AS', 0, { noStat: 1, noProf: 1 }),
+    S('var', 'percez', 'Percezione', 'IT', 'MS', 0),
+    S('var', 'res_fis', 'Resistenza fisica', 'CO', 'AS', 5, { prog: 'manual' })
+  ];
+  var SKILL_BY_KEY = {};
+  SKILLS.forEach(function (s) { SKILL_BY_KEY[s.k] = s; });
+
+  /* Bonus difensivo, leadership e tiri resistenza: [chiave, nome, caratteristica, è un TR con modifica di popolo] */
+  var DEFENSES = [
+    ['lead', 'Leadership e influenza', 'PR', 0], ['bd', 'Bonus difensivo', 'AG', 0],
+    ['ess', 'TR contro Essenza', 'IN', 1], ['fls', 'TR contro Flusso', 'IT', 1],
+    ['men', 'TR contro Mentalismo', 'PR', 1], ['vel', 'TR contro Veleni', 'CO', 1],
+    ['mal', 'TR contro Malattie', 'CO', 1], ['cal', 'TR contro Calore', 'CO', 0],
+    ['fre', 'TR contro Freddo', 'CO', 0], ['pau', 'TR contro Paura', 'PR', 0]
+  ];
+
+  /* TB-1: bonus alle caratteristiche */
+  var TB1 = [
+    { from: 102, to: 102, bonus: 35 }, { from: 101, to: 101, bonus: 30 }, { from: 100, to: 100, bonus: 25 },
+    { from: 98, to: 99, bonus: 20 }, { from: 95, to: 97, bonus: 15 }, { from: 90, to: 94, bonus: 10 },
+    { from: 75, to: 89, bonus: 5 }, { from: 25, to: 74, bonus: 0 }, { from: 10, to: 24, bonus: -5 },
+    { from: 5, to: 9, bonus: -10 }, { from: 3, to: 4, bonus: -15 }, { from: 2, to: 2, bonus: -20 },
+    { from: 1, to: 1, bonus: -25 }
+  ];
+
+  /* TB-4: bonus ai gradi. steps = [grado massimo della fascia, bonus per grado] */
+  var PROG = {
+    primary: { zero: -25, steps: [[10, 5], [20, 2], [30, 1], [Infinity, 0.5]] },
+    spalle: { zero: 0, steps: [[10, 1], [20, 1], [30, 0.5], [Infinity, 0]], cap: 25 }
+  };
+
+  /* TB-3: modifiche speciali per popolo */
+  function P(n, st, tr) {
+    return { n: n, st: { FR: st[0], AG: st[1], CO: st[2], IN: st[3], IT: st[4], PR: st[5] },
+      tr: { ess: tr[0], fls: tr[1], men: tr[2], vel: tr[3], mal: tr[4] } };
+  }
+  var POPOLI = [
+    P('Hobbit', [-20, 15, 15, 0, -5, -5], [50, 20, 40, 30, 15]),
+    P('Umli', [5, 0, 10, 0, -5, -5], [20, 0, 20, 5, 5]),
+    P('Nani', [5, -5, 15, 0, -5, -5], [40, 0, 40, 20, 10]),
+    P('Wose', [0, 0, 5, 0, 5, -5], [20, 0, 0, 0, 0]),
+    P('Uomini', [5, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0]),
+    P('Dùnedain', [10, 0, 10, 0, 0, 5], [0, 0, 0, 5, 15]),
+    P('Mezzelfi', [5, 5, 5, 0, 0, 5], [-5, -5, -5, 5, 50]),
+    P('Elfi Silvani', [0, 10, 0, 0, 5, 5], [-5, -5, -5, 10, 100]),
+    P('Elfi Sindar', [0, 10, 5, 0, 5, 10], [-5, -5, -5, 10, 100]),
+    P('Elfi Noldor', [0, 15, 10, 5, 5, 15], [-5, -5, -5, 10, 100]),
+    P('Mezzorchi', [5, 0, 5, 0, 0, -5], [0, 0, 0, 10, 0]),
+    P('Orchetti', [5, -5, 15, -10, -10, -10], [0, 0, 0, 20, 5]),
+    P('Uruk-hai', [10, 0, 20, 0, -5, -10], [0, 0, 0, 20, 5]),
+    P('Mezzitroll', [10, -5, 10, -5, -5, -5], [0, 0, 0, 15, 5]),
+    P('Troll', [15, -10, 15, -15, -15, -10], [0, 0, 0, 30, 10]),
+    P('Olog-hai', [20, -5, 15, -5, -10, -10], [0, 0, 0, 20, 10])
+  ];
+
+  /* TE-5: punti esperienza per livello (dal 21° in poi, +50.000 per livello) */
+  var XP = [10000, 20000, 30000, 40000, 50000, 70000, 90000, 110000, 130000, 150000,
+    180000, 210000, 240000, 260000, 300000, 340000, 380000, 420000, 460000, 500000];
+
+  /* TFC-2: giorni di guarigione per ferite lievi. Colonne: scottatura, ossa, tessuti, testa, organi, muscoli e tendini.
+     Righe per "tiro + bonus CO": <=-26, -25/15, 16/35, 36/65, 66/90, >=91. Medie x5, gravi x10. */
+  var HEAL_COLS = ['Scottatura', 'Ossa', 'Tessuti', 'Testa', 'Organi', 'Muscoli e tendini'];
+  var HEAL_ROWS = [
+    { max: -26, days: [4, 7, 5, 13, 13, 11] },
+    { max: 15, days: [3, 5, 3, 10, 9, 7] },
+    { max: 35, days: [2, 3, 2, 7, 6, 4] },
+    { max: 65, days: [2, 2, 1, 5, 4, 3] },
+    { max: 90, days: [1, 1, 1, 3, 3, 2] },
+    { max: Infinity, days: [1, 1, 1, 2, 2, 1] }
+  ];
+
+  /* Modificatori al tiro di attacco elencati nei documenti. melee = non si applica ad armi da lancio o da tiro. */
+  var ATK_MODS = [
+    { id: 'fianco', label: 'Attacco sul fianco', v: 15, melee: true },
+    { id: 'dietro', label: 'Attacco da dietro (oltre al fianco)', v: 20, melee: true },
+    { id: 'sorpreso', label: 'Difensore sorpreso', v: 20, melee: true },
+    { id: 'stordito', label: 'Difensore stordito o a terra', v: 20, melee: true },
+    { id: 'sfodera', label: "L'attaccante sfodera un'arma", v: -20 },
+    { id: 'cambia_arma', label: 'Cambia arma o impugna lo scudo', v: -50 },
+    { id: 'cambia_mano', label: "Cambia mano o lascia cadere un'arma o lo scudo", v: -10 },
+    { id: 'meta_pf', label: "L'attaccante ha subito più di metà dei suoi PF", v: -20 },
+    { id: 'mira', label: 'Mira a una parte del corpo (armi da tiro)', v: -30 }
+  ];
+
+  /* Modificatore al tiro del colpo critico secondo la lettera */
+  var CRIT_MOD = { T: -50, A: -20, B: -10, C: 0, D: 10, E: 20 };
+
+  G.data = {
+    STATS: STATS, CATS: CATS, SKILLS: SKILLS, SKILL_BY_KEY: SKILL_BY_KEY, DEFENSES: DEFENSES, TB1: TB1,
+    PROG: PROG, POPOLI: POPOLI, XP: XP, HEAL_COLS: HEAL_COLS, HEAL_ROWS: HEAL_ROWS, ATK_MODS: ATK_MODS, CRIT_MOD: CRIT_MOD
+  };
+  if (typeof module !== 'undefined') module.exports = G.data;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Calcoli del regolamento: funzioni pure, senza accesso al DOM. */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+  var D = G.data || (typeof require !== 'undefined' ? require('./data.js') : null);
+
+  function num(v) { var n = parseFloat(v); return isFinite(n) ? n : 0; }
+  function uid() { return 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+  function round1(n) { return Math.round(n * 10) / 10; }
+  function fmt(n) { n = round1(n); return (n > 0 ? '+' : '') + n; }
+
+  function defaultSettings() {
+    return {
+      dice: { high: 96, low: 5 },
+      tb1: JSON.parse(JSON.stringify(D.TB1)),
+      prog: { zero: -25, r1: 5, r2: 2, r3: 1, r4: 0.5 }
+    };
+  }
+
+  function ctx(settings) { settings = settings || defaultSettings(); return { settings: settings, tb1: settings.tb1 || D.TB1 }; }
+
+  /* ---- caratteristiche ---- */
+  function tableBonus(score, table) {
+    if (score === '' || score == null || isNaN(+score)) return null;
+    var s = +score;
+    for (var i = 0; i < table.length; i++) { if (s >= +table[i].from && s <= +table[i].to) return +table[i].bonus; }
+    return null;
+  }
+  function statBonus(c, k, cx) {
+    if (k === 'AS') k = 'PR';
+    var st = c.stats[k]; if (!st) return 0;
+    if (st.bonus !== '' && st.bonus != null) return num(st.bonus);
+    var a = tableBonus(st.score, cx.tb1); return a == null ? 0 : a;
+  }
+  function statTotal(c, k, cx) { return statBonus(c, k, cx) + (c.stats[k] ? num(c.stats[k].razza) : 0); }
+
+  /* Costo della distribuzione punti: 20-90 pari al valore, oltre 90 + (valore-90)^2. */
+  function pointCost(v) {
+    if (v === '' || v == null) return null;
+    var n = Math.round(num(v));
+    if (n >= 20 && n <= 90) return n;
+    if (n > 90 && n <= 100) return 90 + (n - 90) * (n - 90);
+    return undefined;
+  }
+  function pointsSpent(c) {
+    var sum = 0;
+    D.STATS.forEach(function (s) { if (s[0] === 'AS') return; var v = pointCost(c.stats[s[0]].score); if (v) sum += v; });
+    return sum;
+  }
+
+  /* ---- abilità ---- */
+  function primaryProg(settings) {
+    var p = settings && settings.prog; if (!p) return D.PROG.primary;
+    return { zero: num(p.zero), steps: [[10, num(p.r1)], [20, num(p.r2)], [30, num(p.r3)], [Infinity, num(p.r4)]] };
+  }
+  function rankBonus(n, prog) {
+    n = Math.floor(num(n));
+    if (n <= 0) return prog.zero;
+    var t = 0;
+    for (var k = 1; k <= Math.min(n, 300); k++) {
+      for (var i = 0; i < prog.steps.length; i++) { if (k <= prog.steps[i][0]) { t += prog.steps[i][1]; break; } }
+    }
+    if (prog.cap != null) t = Math.min(t, prog.cap);
+    return t;
+  }
+  function meta(s) { return D.SKILL_BY_KEY[s.k] || {}; }
+  function ranksOf(c, i) {
+    var s = c.skills[i], m = meta(s);
+    if (m.link) { for (var j = 0; j < c.skills.length; j++) { if (c.skills[j].k === m.link) return num(c.skills[j].ranks); } }
+    return num(s.ranks);
+  }
+  function rankPart(c, i, cx) {
+    var s = c.skills[i], m = meta(s);
+    if (m.noRanks) return 0;
+    if (m.prog === 'manual') return num(s.rbm);
+    var prog = m.prog === 'spalle' ? D.PROG.spalle : primaryProg(cx.settings);
+    return rankBonus(ranksOf(c, i), prog);
+  }
+  function skillTotal(c, i, cx) {
+    var s = c.skills[i], m = meta(s);
+    return rankPart(c, i, cx) + (s.stat && !m.noStat ? statTotal(c, s.stat, cx) : 0) +
+      (m.noProf ? 0 : num(s.prof)) + (m.noObj ? 0 : num(s.obj)) + num(s.spec);
+  }
+  function defenseTotal(c, key, stat, cx) {
+    var d = c.defs[key] || {};
+    return statTotal(c, stat, cx) + num(d.mod) + num(d.extra);
+  }
+
+  /* ---- ferite, guarigione, esperienza ---- */
+  function pfInfo(c) {
+    var max = num(c.pf && c.pf.max), dmg = num(c.pf && c.pf.dmg), co = num(c.stats.CO.score);
+    var cur = max - dmg, deathAt = max + co;
+    var state = !max ? 'nd' : dmg >= deathAt ? 'morte' : cur < 0 ? 'sotto' : cur === 0 ? 'zero' : 'ok';
+    return { max: max, dmg: dmg, cur: cur, deathAt: deathAt, state: state };
+  }
+  /* giorni di guarigione: colonna 0..5, gravità 'lieve'|'media'|'grave', total = tiro d100 + bonus CO */
+  function healDays(total, col, severity) {
+    var row = D.HEAL_ROWS[D.HEAL_ROWS.length - 1];
+    for (var i = 0; i < D.HEAL_ROWS.length; i++) { if (total <= D.HEAL_ROWS[i].max) { row = D.HEAL_ROWS[i]; break; } }
+    return row.days[col] * (severity === 'grave' ? 10 : severity === 'media' ? 5 : 1);
+  }
+  /* PF recuperati: 1 ogni 3 ore se attivo; a riposo 1 ogni 5 punti di bonus CO per ora (minimo 1) */
+  function pfPerHourResting(coBonus) { return Math.max(1, Math.floor(num(coBonus) / 5)); }
+  function xpForLevel(level) {
+    level = Math.max(1, Math.floor(num(level)));
+    return level <= 20 ? D.XP[level - 1] : D.XP[19] + (level - 20) * 50000;
+  }
+
+  /* ---- popoli ---- */
+  function applyPopolo(c, name) {
+    var p = null; D.POPOLI.forEach(function (x) { if (x.n === name) p = x; });
+    if (!p) return false;
+    D.STATS.forEach(function (s) { if (p.st[s[0]] != null) c.stats[s[0]].razza = p.st[s[0]]; });
+    ['ess', 'fls', 'men', 'vel', 'mal'].forEach(function (k) { c.defs[k].mod = p.tr[k]; });
+    c.popolo = name; c.razza = name;
+    return true;
+  }
+
+  /* ---- scheda nuova ---- */
+  function newChar(name) {
+    var c = {
+      id: uid(), name: name || 'Nuovo personaggio', prof: '', regno: '', razza: '', popolo: '', livello: '', px: '', pm: '',
+      altezza: '', capelli: '', occhi: '', lingue: '', temperamento: '', segni: '',
+      pool: 400, stats: {}, skills: [], ps: {}, defs: {}, pf: { max: '', dmg: 0 },
+      prot: { armatura: '', res: '', scudo: '', elmo: '', bracciali: '', schinieri: '', modbd: '', ingombro: '', mov: '' },
+      bonusVari: '', note: '', corruzione: '', spells: [], inv: [], reputazione: '', denaro: '', classi: '',
+      diary: { book: '', par: '', log: [], flags: [] }
+    };
+    D.STATS.forEach(function (s) { c.stats[s[0]] = { score: '', bonus: '', razza: '' }; });
+    D.SKILLS.forEach(function (d) {
+      c.skills.push({ cat: d.cat, k: d.k, name: d.name, stat: d.stat, ranks: '', prof: '', obj: '', spec: d.spec === 0 ? '' : d.spec, rbm: '' });
+    });
+    for (var i = 0; i < 6; i++) c.skills.push({ cat: 'sec', k: 'sec' + i, name: '', stat: '', ranks: '', prof: '', obj: '', spec: '', rbm: '' });
+    D.DEFENSES.forEach(function (d) { c.defs[d[0]] = { mod: '', extra: '' }; });
+    return c;
+  }
+
+  var R = {
+    num: num, uid: uid, fmt: fmt, round1: round1, defaultSettings: defaultSettings, ctx: ctx, tableBonus: tableBonus,
+    statBonus: statBonus, statTotal: statTotal, pointCost: pointCost, pointsSpent: pointsSpent, rankBonus: rankBonus,
+    primaryProg: primaryProg, ranksOf: ranksOf, rankPart: rankPart, skillTotal: skillTotal, defenseTotal: defenseTotal,
+    pfInfo: pfInfo, healDays: healDays, pfPerHourResting: pfPerHourResting, xpForLevel: xpForLevel,
+    applyPopolo: applyPopolo, newChar: newChar, meta: meta
+  };
+  G.rules = R;
+  if (typeof module !== 'undefined') module.exports = R;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/*
+ * Dadi. Il tiro "aperto" del d100: i PDF dicono solo "1d100 aperto" senza definirlo.
+ * Si usa la convenzione MERP/Rolemaster, con soglie modificabili dalla pagina Dati:
+ *  - primo tiro >= alta (96): si tira ancora e si somma, finché esce >= alta;
+ *  - primo tiro <= bassa (5): si tira ancora e si sottrae, finché esce >= alta.
+ */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+
+  function makeDice(rand) {
+    rand = rand || Math.random;
+    function d(n) { return Math.floor(rand() * n) + 1; }
+    function d100() { return d(100); }
+
+    function open(cfg) {
+      cfg = cfg || {};
+      var hi = cfg.high == null ? 96 : cfg.high, lo = cfg.low == null ? 5 : cfg.low;
+      var first = d100(), rolls = [first], total = first, dir = '', r;
+      if (first >= hi) {
+        dir = 'alto';
+        do { r = d100(); rolls.push(r); total += r; } while (r >= hi && rolls.length < 50);
+      } else if (first <= lo) {
+        dir = 'basso';
+        do { r = d100(); rolls.push(r); total -= r; } while (r >= hi && rolls.length < 50);
+      }
+      return { first: first, rolls: rolls, total: total, dir: dir };
+    }
+    function closed() { var v = d100(); return { first: v, rolls: [v], total: v, dir: '' }; }
+
+    /* NdM+K, ad esempio 2d6+1 */
+    function expr(text) {
+      var m = String(text).replace(/\s+/g, '').match(/^(\d*)d(\d+)([+-]\d+)?$/i);
+      if (!m) return null;
+      var n = m[1] === '' ? 1 : +m[1], sides = +m[2], mod = m[3] ? +m[3] : 0;
+      if (n < 1 || n > 100 || sides < 2 || sides > 1000) return null;
+      var rolls = [], total = mod;
+      for (var i = 0; i < n; i++) { var v = d(sides); rolls.push(v); total += v; }
+      return { rolls: rolls, total: total, n: n, sides: sides, mod: mod };
+    }
+    return { d: d, d100: d100, open: open, closed: closed, expr: expr };
+  }
+
+  var api = { makeDice: makeDice, dice: makeDice() };
+  G.dice = api;
+  if (typeof module !== 'undefined') module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/*
+ * Tabelle di attacco e dei colpi critici: importazione e consultazione.
+ * Le tabelle non sono incluse nel progetto. Si incollano dalla pagina Dati,
+ * copiandole dal PDF, oppure si importa un file JSON (vedi data/README.md).
+ */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+  var D = G.data || (typeof require !== 'undefined' ? require('./data.js') : null);
+
+  function norm(line) { return line.replace(/[–−—]/g, '-').trim(); }
+
+  function parseCell(s) {
+    if (/^F$/i.test(s)) return { pf: 0, crit: null, fail: true };
+    var m = s.match(/^(\d+)([A-Ea-eTt])?$/);
+    if (!m) throw new Error('Cella non valida: "' + s + '"');
+    return { pf: +m[1], crit: m[2] ? m[2].toUpperCase() : null };
+  }
+
+  /* Riga attesa: "36-40 0 0 0 0 0", "xx-35 0 0 0 0 0", "96-100 6 9 10B 13B 13C" */
+  function parseAttackText(text, nCols) {
+    var rows = [];
+    String(text).split(/\r?\n/).forEach(function (raw) {
+      var line = norm(raw); if (!line) return;
+      var m = line.match(/^(xx|\d+)\s*-\s*(\d+)\s+(.+)$/i);
+      if (!m) return;
+      var cells = m[3].trim().split(/\s+/);
+      if (cells.length !== nCols) throw new Error('Riga "' + line + '": attese ' + nCols + ' colonne, trovate ' + cells.length);
+      rows.push({ min: /^xx$/i.test(m[1]) ? null : +m[1], max: +m[2], cells: cells.map(parseCell) });
+    });
+    validateAttackRows(rows);
+    return rows;
+  }
+
+  function validateAttackRows(rows) {
+    if (!rows.length) throw new Error('Nessuna riga riconosciuta');
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i];
+      if (r.max < (r.min == null ? -Infinity : r.min)) throw new Error('Intervallo non valido alla riga ' + (i + 1));
+      if (i > 0) {
+        var prev = rows[i - 1];
+        if (r.min == null || r.min !== prev.max + 1) throw new Error('Gli intervalli non sono contigui tra le righe ' + i + ' e ' + (i + 1));
+      }
+    }
+  }
+
+  /* Riga della tabella per un risultato; sotto la prima riga si usa la prima, sopra l'ultima si usa l'ultima. */
+  function lookupAttack(table, result) {
+    var rows = table.rows, last = rows.length - 1;
+    for (var i = 0; i <= last; i++) {
+      var r = rows[i];
+      if ((r.min == null || result >= r.min) && result <= r.max) return { row: r, beyond: false };
+    }
+    return result < rows[0].min ? { row: rows[0], beyond: false } : { row: rows[last], beyond: true };
+  }
+  /*
+   * Cella della tabella.
+   * opts.first: tiro non modificato (per le righe «TI», tiro invariato);
+   * opts.limit: etichetta del limite scelto (taglia della creatura o tipo di dardo): il risultato non supera il massimo di quel limite.
+   */
+  function attackCell(table, armorIndex, result, opts) {
+    opts = opts || {};
+    var ti = table.ti || [], i, lim = null;
+    if (opts.limit) { (table.limits || []).forEach(function (l) { if (l.label === opts.limit) lim = l; }); }
+    if (opts.first != null) {
+      for (i = 0; i < ti.length; i++) {
+        var e = ti[i];
+        if (opts.first >= e.min && opts.first <= e.max && (e.limit == null || e.limit === opts.limit)) {
+          return { cell: e.cells[armorIndex], beyond: false, row: e, ti: true, capped: false };
+        }
+      }
+    }
+    var capped = false;
+    if (lim && result > lim.max) { result = lim.max; capped = true; }
+    var f = lookupAttack(table, result);
+    return { cell: f.row.cells[armorIndex], beyond: f.beyond, row: f.row, ti: false, capped: capped };
+  }
+
+  /* Tabella critici: righe come "06-16 testo...", "80 testo", "-(49)-05 testo"; le righe senza intervallo continuano la precedente. */
+  function parseCritText(text) {
+    var rows = [], cur = null;
+    String(text).split(/\r?\n/).forEach(function (raw) {
+      var line = norm(raw); if (!line) return;
+      var m = line.match(/^(-\(\d+\)-\d+|\d+-\d+|\d+)\s+(.*)$/);
+      if (m) {
+        var t = m[1], min, max;
+        if (t.charAt(0) === '-') { min = null; max = +t.split('-').pop(); }
+        else if (t.indexOf('-') > 0) { var p = t.split('-'); min = +p[0]; max = +p[1]; }
+        else { min = max = +t; }
+        cur = { min: min, max: max, text: m[2].trim() }; rows.push(cur);
+      } else if (cur) { cur.text += ' ' + line; }
+    });
+    if (!rows.length) throw new Error('Nessuna riga riconosciuta');
+    return rows;
+  }
+  function lookupCrit(table, roll) {
+    var rows = table.rows;
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i];
+      if ((r.min == null || roll >= r.min) && roll <= r.max) return r;
+    }
+    return roll > rows[rows.length - 1].max ? rows[rows.length - 1] : rows[0];
+  }
+  /* Tiro del critico: d100 chiuso più il modificatore della lettera */
+  function critRoll(raw, letter) { return raw + (D.CRIT_MOD[letter] || 0); }
+
+  /* Armatura dell'avversario: indice colonna a partire dal nome */
+  function armorIndex(table, name) { return table.armors.indexOf(name); }
+
+  var T = {
+    parseAttackText: parseAttackText, validateAttackRows: validateAttackRows, lookupAttack: lookupAttack, attackCell: attackCell,
+    parseCritText: parseCritText, lookupCrit: lookupCrit, critRoll: critRoll, armorIndex: armorIndex
+  };
+  G.tables = T;
+  if (typeof module !== 'undefined') module.exports = T;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Generato da tools/extract-tables.py dal compendio «Istaro Quettar» (Filduin). Non modificare a mano. Vedi NOTICE.md. */
+(function (root) {
+  var G = root.GIRSA = root.GIRSA || {};
+  G.tabledata = {"atk":[{"type":"attack","id":"TA-1","name":"TA-1 Armi da Taglio a una Mano","armors":["Corazza di piastre","Corazza di maglie","Cuoio rinforzato","Cuoio grezzo","Nessuna armatura"],"fumble":null,"rows":[{"min":null,"max":35,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":36,"max":40,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":41,"max":45,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":46,"max":50,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":51,"max":55,"cells":[{"pf":1,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":56,"max":60,"cells":[{"pf":2,"crit":null},{"pf":1,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":61,"max":65,"cells":[{"pf":2,"crit":null},{"pf":2,"crit":null},{"pf":0,"crit":null},{"pf":3,"crit":null},{"pf":0,"crit":null}]},{"min":66,"max":70,"cells":[{"pf":3,"crit":null},{"pf":3,"crit":null},{"pf":2,"crit":null},{"pf":4,"crit":null},{"pf":0,"crit":null}]},{"min":71,"max":75,"cells":[{"pf":3,"crit":null},{"pf":4,"crit":null},{"pf":3,"crit":null},{"pf":5,"crit":null},{"pf":0,"crit":null}]},{"min":76,"max":80,"cells":[{"pf":4,"crit":null},{"pf":5,"crit":null},{"pf":5,"crit":null},{"pf":7,"crit":"A"},{"pf":7,"crit":null}]},{"min":81,"max":85,"cells":[{"pf":5,"crit":null},{"pf":6,"crit":null},{"pf":6,"crit":null},{"pf":9,"crit":"A"},{"pf":9,"crit":"A"}]},{"min":86,"max":90,"cells":[{"pf":5,"crit":null},{"pf":7,"crit":null},{"pf":7,"crit":"A"},{"pf":10,"crit":"B"},{"pf":10,"crit":"A"}]},{"min":91,"max":95,"cells":[{"pf":6,"crit":null},{"pf":8,"crit":null},{"pf":9,"crit":"A"},{"pf":12,"crit":"B"},{"pf":11,"crit":"B"}]},{"min":96,"max":100,"cells":[{"pf":6,"crit":null},{"pf":9,"crit":null},{"pf":10,"crit":"B"},{"pf":13,"crit":"B"},{"pf":13,"crit":"C"}]},{"min":101,"max":105,"cells":[{"pf":7,"crit":null},{"pf":10,"crit":"A"},{"pf":11,"crit":"B"},{"pf":14,"crit":"C"},{"pf":15,"crit":"C"}]},{"min":106,"max":110,"cells":[{"pf":8,"crit":null},{"pf":11,"crit":"A"},{"pf":12,"crit":"B"},{"pf":15,"crit":"C"},{"pf":17,"crit":"D"}]},{"min":111,"max":115,"cells":[{"pf":8,"crit":"A"},{"pf":12,"crit":"B"},{"pf":13,"crit":"C"},{"pf":17,"crit":"C"},{"pf":19,"crit":"D"}]},{"min":116,"max":120,"cells":[{"pf":9,"crit":"A"},{"pf":13,"crit":"B"},{"pf":15,"crit":"C"},{"pf":18,"crit":"D"},{"pf":20,"crit":"D"}]},{"min":121,"max":125,"cells":[{"pf":9,"crit":"A"},{"pf":13,"crit":"C"},{"pf":16,"crit":"C"},{"pf":19,"crit":"D"},{"pf":21,"crit":"E"}]},{"min":126,"max":130,"cells":[{"pf":10,"crit":"B"},{"pf":14,"crit":"C"},{"pf":17,"crit":"D"},{"pf":20,"crit":"D"},{"pf":23,"crit":"E"}]},{"min":131,"max":135,"cells":[{"pf":11,"crit":"B"},{"pf":15,"crit":"C"},{"pf":18,"crit":"D"},{"pf":22,"crit":"D"},{"pf":25,"crit":"E"}]},{"min":136,"max":140,"cells":[{"pf":11,"crit":"C"},{"pf":16,"crit":"D"},{"pf":20,"crit":"D"},{"pf":24,"crit":"E"},{"pf":27,"crit":"E"}]},{"min":141,"max":145,"cells":[{"pf":12,"crit":"D"},{"pf":17,"crit":"D"},{"pf":21,"crit":"E"},{"pf":26,"crit":"E"},{"pf":28,"crit":"E"}]},{"min":146,"max":150,"cells":[{"pf":14,"crit":"E"},{"pf":18,"crit":"E"},{"pf":22,"crit":"E"},{"pf":28,"crit":"E"},{"pf":30,"crit":"E"}]}],"ti":[],"limits":[]},{"type":"attack","id":"TA-2","name":"TA-2 Armi Contundenti una Mano","armors":["Corazza di piastre","Corazza di maglie","Cuoio rinforzato","Cuoio grezzo","Nessuna armatura"],"fumble":null,"rows":[{"min":null,"max":35,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":36,"max":40,"cells":[{"pf":1,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":41,"max":45,"cells":[{"pf":1,"crit":null},{"pf":1,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":46,"max":50,"cells":[{"pf":2,"crit":null},{"pf":2,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":51,"max":55,"cells":[{"pf":3,"crit":null},{"pf":3,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":56,"max":60,"cells":[{"pf":3,"crit":null},{"pf":4,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":61,"max":65,"cells":[{"pf":4,"crit":null},{"pf":5,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":66,"max":70,"cells":[{"pf":5,"crit":null},{"pf":6,"crit":null},{"pf":2,"crit":null},{"pf":3,"crit":null},{"pf":0,"crit":null}]},{"min":71,"max":75,"cells":[{"pf":5,"crit":null},{"pf":7,"crit":null},{"pf":3,"crit":null},{"pf":5,"crit":null},{"pf":0,"crit":null}]},{"min":76,"max":80,"cells":[{"pf":6,"crit":null},{"pf":8,"crit":null},{"pf":4,"crit":null},{"pf":6,"crit":null},{"pf":0,"crit":null}]},{"min":81,"max":85,"cells":[{"pf":7,"crit":null},{"pf":9,"crit":null},{"pf":6,"crit":null},{"pf":7,"crit":"A"},{"pf":0,"crit":null}]},{"min":86,"max":90,"cells":[{"pf":8,"crit":null},{"pf":10,"crit":null},{"pf":7,"crit":"A"},{"pf":8,"crit":"A"},{"pf":8,"crit":null}]},{"min":91,"max":95,"cells":[{"pf":8,"crit":null},{"pf":11,"crit":null},{"pf":8,"crit":"A"},{"pf":9,"crit":"A"},{"pf":9,"crit":"A"}]},{"min":96,"max":100,"cells":[{"pf":9,"crit":null},{"pf":12,"crit":"A"},{"pf":9,"crit":"B"},{"pf":10,"crit":"B"},{"pf":10,"crit":"B"}]},{"min":101,"max":105,"cells":[{"pf":10,"crit":null},{"pf":13,"crit":"A"},{"pf":10,"crit":"B"},{"pf":11,"crit":"B"},{"pf":12,"crit":"B"}]},{"min":106,"max":110,"cells":[{"pf":10,"crit":"A"},{"pf":14,"crit":"B"},{"pf":11,"crit":"B"},{"pf":12,"crit":"B"},{"pf":13,"crit":"C"}]},{"min":111,"max":115,"cells":[{"pf":11,"crit":"A"},{"pf":15,"crit":"B"},{"pf":12,"crit":"C"},{"pf":13,"crit":"C"},{"pf":14,"crit":"D"}]},{"min":116,"max":120,"cells":[{"pf":12,"crit":"B"},{"pf":16,"crit":"C"},{"pf":13,"crit":"C"},{"pf":14,"crit":"C"},{"pf":15,"crit":"D"}]},{"min":121,"max":125,"cells":[{"pf":13,"crit":"B"},{"pf":17,"crit":"C"},{"pf":15,"crit":"C"},{"pf":15,"crit":"C"},{"pf":17,"crit":"D"}]},{"min":126,"max":130,"cells":[{"pf":13,"crit":"C"},{"pf":18,"crit":"C"},{"pf":16,"crit":"C"},{"pf":16,"crit":"D"},{"pf":18,"crit":"E"}]},{"min":131,"max":135,"cells":[{"pf":14,"crit":"C"},{"pf":19,"crit":"D"},{"pf":17,"crit":"D"},{"pf":17,"crit":"D"},{"pf":19,"crit":"E"}]},{"min":136,"max":140,"cells":[{"pf":15,"crit":"D"},{"pf":20,"crit":"D"},{"pf":18,"crit":"D"},{"pf":19,"crit":"E"},{"pf":21,"crit":"E"}]},{"min":141,"max":145,"cells":[{"pf":16,"crit":"D"},{"pf":21,"crit":"E"},{"pf":19,"crit":"E"},{"pf":21,"crit":"E"},{"pf":22,"crit":"E"}]},{"min":146,"max":150,"cells":[{"pf":18,"crit":"E"},{"pf":22,"crit":"E"},{"pf":20,"crit":"E"},{"pf":23,"crit":"E"},{"pf":23,"crit":"E"}]}],"ti":[],"limits":[]},{"type":"attack","id":"TA-3","name":"TA-3 Armi a Due Mani","armors":["Corazza di piastre","Corazza di maglie","Cuoio rinforzato","Cuoio grezzo","Nessuna armatura"],"fumble":null,"rows":[{"min":null,"max":55,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":56,"max":60,"cells":[{"pf":2,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":61,"max":65,"cells":[{"pf":3,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":66,"max":70,"cells":[{"pf":4,"crit":null},{"pf":3,"crit":null},{"pf":0,"crit":null},{"pf":6,"crit":null},{"pf":0,"crit":null}]},{"min":71,"max":75,"cells":[{"pf":5,"crit":null},{"pf":5,"crit":null},{"pf":2,"crit":null},{"pf":8,"crit":"A"},{"pf":0,"crit":null}]},{"min":76,"max":80,"cells":[{"pf":6,"crit":null},{"pf":7,"crit":null},{"pf":4,"crit":"A"},{"pf":10,"crit":"A"},{"pf":0,"crit":null}]},{"min":81,"max":85,"cells":[{"pf":7,"crit":null},{"pf":9,"crit":null},{"pf":7,"crit":"A"},{"pf":13,"crit":"B"},{"pf":10,"crit":"A"}]},{"min":86,"max":90,"cells":[{"pf":8,"crit":null},{"pf":11,"crit":null},{"pf":9,"crit":"B"},{"pf":15,"crit":"B"},{"pf":13,"crit":"B"}]},{"min":91,"max":95,"cells":[{"pf":9,"crit":null},{"pf":12,"crit":"A"},{"pf":12,"crit":"B"},{"pf":17,"crit":"C"},{"pf":16,"crit":"C"}]},{"min":96,"max":100,"cells":[{"pf":11,"crit":null},{"pf":14,"crit":"A"},{"pf":14,"crit":"C"},{"pf":20,"crit":"C"},{"pf":19,"crit":"D"}]},{"min":101,"max":105,"cells":[{"pf":12,"crit":"A"},{"pf":16,"crit":"B"},{"pf":17,"crit":"C"},{"pf":22,"crit":"C"},{"pf":22,"crit":"D"}]},{"min":106,"max":110,"cells":[{"pf":13,"crit":"A"},{"pf":18,"crit":"B"},{"pf":19,"crit":"C"},{"pf":24,"crit":"C"},{"pf":25,"crit":"D"}]},{"min":111,"max":115,"cells":[{"pf":14,"crit":"B"},{"pf":20,"crit":"C"},{"pf":22,"crit":"C"},{"pf":27,"crit":"D"},{"pf":28,"crit":"E"}]},{"min":116,"max":120,"cells":[{"pf":15,"crit":"B"},{"pf":22,"crit":"C"},{"pf":24,"crit":"D"},{"pf":29,"crit":"D"},{"pf":31,"crit":"E"}]},{"min":121,"max":125,"cells":[{"pf":16,"crit":"C"},{"pf":24,"crit":"C"},{"pf":27,"crit":"D"},{"pf":31,"crit":"D"},{"pf":33,"crit":"E"}]},{"min":126,"max":130,"cells":[{"pf":17,"crit":"C"},{"pf":26,"crit":"D"},{"pf":29,"crit":"D"},{"pf":33,"crit":"E"},{"pf":36,"crit":"E"}]},{"min":131,"max":135,"cells":[{"pf":19,"crit":"D"},{"pf":28,"crit":"D"},{"pf":32,"crit":"E"},{"pf":36,"crit":"E"},{"pf":39,"crit":"E"}]},{"min":136,"max":140,"cells":[{"pf":20,"crit":"D"},{"pf":30,"crit":"E"},{"pf":34,"crit":"E"},{"pf":38,"crit":"E"},{"pf":42,"crit":"E"}]},{"min":141,"max":145,"cells":[{"pf":22,"crit":"E"},{"pf":33,"crit":"E"},{"pf":37,"crit":"E"},{"pf":40,"crit":"E"},{"pf":44,"crit":"E"}]},{"min":146,"max":150,"cells":[{"pf":24,"crit":"E"},{"pf":36,"crit":"E"},{"pf":40,"crit":"E"},{"pf":42,"crit":"E"},{"pf":46,"crit":"E"}]}],"ti":[],"limits":[]},{"type":"attack","id":"TA-4","name":"TA-4 Armi da Tiro","armors":["Corazza di piastre","Corazza di maglie","Cuoio rinforzato","Cuoio grezzo","Nessuna armatura"],"fumble":null,"rows":[{"min":null,"max":55,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":56,"max":60,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":61,"max":65,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":66,"max":70,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":71,"max":75,"cells":[{"pf":1,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":76,"max":80,"cells":[{"pf":2,"crit":null},{"pf":2,"crit":null},{"pf":0,"crit":null},{"pf":4,"crit":null},{"pf":0,"crit":null}]},{"min":81,"max":85,"cells":[{"pf":3,"crit":null},{"pf":4,"crit":null},{"pf":3,"crit":null},{"pf":6,"crit":null},{"pf":0,"crit":null}]},{"min":86,"max":90,"cells":[{"pf":4,"crit":null},{"pf":6,"crit":null},{"pf":5,"crit":null},{"pf":8,"crit":"A"},{"pf":0,"crit":null}]},{"min":91,"max":95,"cells":[{"pf":5,"crit":null},{"pf":7,"crit":null},{"pf":7,"crit":"A"},{"pf":10,"crit":"A"},{"pf":8,"crit":"A"}]},{"min":96,"max":100,"cells":[{"pf":6,"crit":null},{"pf":8,"crit":"A"},{"pf":9,"crit":"A"},{"pf":12,"crit":"B"},{"pf":10,"crit":"B"}]},{"min":101,"max":105,"cells":[{"pf":7,"crit":null},{"pf":10,"crit":"A"},{"pf":10,"crit":"B"},{"pf":13,"crit":"B"},{"pf":11,"crit":"C"}]},{"min":106,"max":110,"cells":[{"pf":8,"crit":"A"},{"pf":13,"crit":"B"},{"pf":12,"crit":"B"},{"pf":14,"crit":"B"},{"pf":13,"crit":"C"}]},{"min":111,"max":115,"cells":[{"pf":9,"crit":"A"},{"pf":14,"crit":"B"},{"pf":13,"crit":"B"},{"pf":16,"crit":"C"},{"pf":15,"crit":"C"}]},{"min":116,"max":120,"cells":[{"pf":10,"crit":"A"},{"pf":16,"crit":"B"},{"pf":15,"crit":"C"},{"pf":17,"crit":"C"},{"pf":16,"crit":"D"}]},{"min":121,"max":125,"cells":[{"pf":11,"crit":"B"},{"pf":17,"crit":"C"},{"pf":17,"crit":"C"},{"pf":19,"crit":"D"},{"pf":18,"crit":"D"}]},{"min":126,"max":130,"cells":[{"pf":12,"crit":"C"},{"pf":19,"crit":"C"},{"pf":19,"crit":"D"},{"pf":20,"crit":"D"},{"pf":20,"crit":"D"}]},{"min":131,"max":135,"cells":[{"pf":13,"crit":"C"},{"pf":20,"crit":"D"},{"pf":21,"crit":"D"},{"pf":22,"crit":"D"},{"pf":22,"crit":"E"}]},{"min":136,"max":140,"cells":[{"pf":14,"crit":"D"},{"pf":22,"crit":"D"},{"pf":23,"crit":"D"},{"pf":25,"crit":"E"},{"pf":23,"crit":"E"}]},{"min":141,"max":145,"cells":[{"pf":16,"crit":"D"},{"pf":23,"crit":"E"},{"pf":25,"crit":"E"},{"pf":27,"crit":"E"},{"pf":25,"crit":"E"}]},{"min":146,"max":150,"cells":[{"pf":18,"crit":"E"},{"pf":25,"crit":"E"},{"pf":27,"crit":"E"},{"pf":30,"crit":"E"},{"pf":28,"crit":"E"}]}],"ti":[],"limits":[]},{"type":"attack","id":"TA-5","name":"TA-5 Zanne e Artigli","armors":["Corazza di piastre","Corazza di maglie","Cuoio rinforzato","Cuoio grezzo","Nessuna armatura"],"fumble":2,"rows":[{"min":3,"max":45,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":46,"max":50,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":1,"crit":null},{"pf":1,"crit":null}]},{"min":51,"max":55,"cells":[{"pf":1,"crit":null},{"pf":0,"crit":null},{"pf":1,"crit":null},{"pf":1,"crit":null},{"pf":2,"crit":null}]},{"min":56,"max":60,"cells":[{"pf":1,"crit":null},{"pf":1,"crit":null},{"pf":1,"crit":null},{"pf":2,"crit":null},{"pf":4,"crit":null}]},{"min":61,"max":65,"cells":[{"pf":2,"crit":null},{"pf":1,"crit":null},{"pf":2,"crit":null},{"pf":3,"crit":null},{"pf":5,"crit":null}]},{"min":66,"max":70,"cells":[{"pf":2,"crit":null},{"pf":2,"crit":null},{"pf":3,"crit":null},{"pf":4,"crit":null},{"pf":6,"crit":"T"}]},{"min":71,"max":75,"cells":[{"pf":3,"crit":null},{"pf":3,"crit":null},{"pf":4,"crit":null},{"pf":5,"crit":null},{"pf":8,"crit":"T"}]},{"min":76,"max":80,"cells":[{"pf":4,"crit":null},{"pf":4,"crit":null},{"pf":5,"crit":null},{"pf":6,"crit":"T"},{"pf":9,"crit":"T"}]},{"min":81,"max":85,"cells":[{"pf":5,"crit":null},{"pf":5,"crit":null},{"pf":6,"crit":"T"},{"pf":7,"crit":"T"},{"pf":10,"crit":"T"}]},{"min":86,"max":90,"cells":[{"pf":6,"crit":null},{"pf":6,"crit":"T"},{"pf":7,"crit":"T"},{"pf":9,"crit":"A"},{"pf":10,"crit":"A"}]},{"min":91,"max":95,"cells":[{"pf":7,"crit":"T"},{"pf":7,"crit":"T"},{"pf":8,"crit":"A"},{"pf":10,"crit":"A"},{"pf":12,"crit":"B"}]},{"min":96,"max":100,"cells":[{"pf":8,"crit":"A"},{"pf":8,"crit":"A"},{"pf":9,"crit":"A"},{"pf":11,"crit":"B"},{"pf":14,"crit":"B"}]},{"min":101,"max":105,"cells":[{"pf":9,"crit":"A"},{"pf":10,"crit":"B"},{"pf":11,"crit":"B"},{"pf":13,"crit":"B"},{"pf":15,"crit":"B"}]},{"min":106,"max":110,"cells":[{"pf":10,"crit":"A"},{"pf":11,"crit":"B"},{"pf":12,"crit":"B"},{"pf":14,"crit":"C"},{"pf":16,"crit":"C"}]},{"min":111,"max":115,"cells":[{"pf":11,"crit":"B"},{"pf":12,"crit":"C"},{"pf":13,"crit":"C"},{"pf":15,"crit":"C"},{"pf":17,"crit":"D"}]},{"min":116,"max":120,"cells":[{"pf":12,"crit":"B"},{"pf":13,"crit":"C"},{"pf":14,"crit":"C"},{"pf":16,"crit":"D"},{"pf":18,"crit":"D"}]},{"min":121,"max":125,"cells":[{"pf":13,"crit":"C"},{"pf":14,"crit":"D"},{"pf":15,"crit":"D"},{"pf":17,"crit":"D"},{"pf":19,"crit":"E"}]},{"min":126,"max":130,"cells":[{"pf":14,"crit":"C"},{"pf":15,"crit":"D"},{"pf":16,"crit":"D"},{"pf":18,"crit":"D"},{"pf":20,"crit":"E"}]},{"min":131,"max":135,"cells":[{"pf":15,"crit":"D"},{"pf":16,"crit":"D"},{"pf":17,"crit":"D"},{"pf":19,"crit":"E"},{"pf":21,"crit":"E"}]},{"min":136,"max":140,"cells":[{"pf":16,"crit":"D"},{"pf":17,"crit":"E"},{"pf":18,"crit":"E"},{"pf":21,"crit":"E"},{"pf":22,"crit":"E"}]},{"min":141,"max":145,"cells":[{"pf":17,"crit":"E"},{"pf":18,"crit":"E"},{"pf":19,"crit":"E"},{"pf":22,"crit":"E"},{"pf":23,"crit":"E"}]},{"min":146,"max":150,"cells":[{"pf":18,"crit":"E"},{"pf":19,"crit":"E"},{"pf":20,"crit":"E"},{"pf":23,"crit":"E"},{"pf":24,"crit":"E"}]}],"ti":[],"limits":[{"label":"Minuscoli","max":85},{"label":"Piccoli","max":105},{"label":"Medi","max":120},{"label":"Grandi","max":135},{"label":"Enormi","max":150}]},{"type":"attack","id":"TA-6","name":"TA-6 Immobilizzazione/Sbilanciamento","armors":["Corazza di piastre","Corazza di maglie","Cuoio rinforzato","Cuoio grezzo","Nessuna armatura"],"fumble":2,"rows":[{"min":3,"max":45,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":46,"max":50,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":1,"crit":null},{"pf":1,"crit":null},{"pf":1,"crit":null}]},{"min":51,"max":55,"cells":[{"pf":1,"crit":null},{"pf":0,"crit":null},{"pf":1,"crit":null},{"pf":1,"crit":null},{"pf":1,"crit":null}]},{"min":56,"max":60,"cells":[{"pf":2,"crit":null},{"pf":1,"crit":null},{"pf":2,"crit":null},{"pf":2,"crit":null},{"pf":2,"crit":null}]},{"min":61,"max":65,"cells":[{"pf":3,"crit":null},{"pf":2,"crit":null},{"pf":2,"crit":null},{"pf":2,"crit":null},{"pf":3,"crit":null}]},{"min":66,"max":70,"cells":[{"pf":3,"crit":"T"},{"pf":3,"crit":null},{"pf":3,"crit":null},{"pf":3,"crit":null},{"pf":4,"crit":null}]},{"min":71,"max":75,"cells":[{"pf":4,"crit":"A"},{"pf":3,"crit":"T"},{"pf":4,"crit":null},{"pf":4,"crit":null},{"pf":5,"crit":null}]},{"min":76,"max":80,"cells":[{"pf":5,"crit":"A"},{"pf":4,"crit":"T"},{"pf":5,"crit":"T"},{"pf":5,"crit":"T"},{"pf":6,"crit":null}]},{"min":81,"max":85,"cells":[{"pf":6,"crit":"A"},{"pf":5,"crit":"A"},{"pf":6,"crit":"A"},{"pf":6,"crit":"T"},{"pf":7,"crit":null}]},{"min":86,"max":90,"cells":[{"pf":7,"crit":"A"},{"pf":6,"crit":"A"},{"pf":7,"crit":"A"},{"pf":7,"crit":"T"},{"pf":8,"crit":"T"}]},{"min":91,"max":95,"cells":[{"pf":8,"crit":"A"},{"pf":7,"crit":"A"},{"pf":8,"crit":"A"},{"pf":8,"crit":"A"},{"pf":9,"crit":"T"}]},{"min":96,"max":100,"cells":[{"pf":9,"crit":"A"},{"pf":8,"crit":"A"},{"pf":9,"crit":"A"},{"pf":9,"crit":"A"},{"pf":10,"crit":"A"}]},{"min":101,"max":105,"cells":[{"pf":9,"crit":"B"},{"pf":9,"crit":"A"},{"pf":10,"crit":"A"},{"pf":10,"crit":"A"},{"pf":11,"crit":"A"}]},{"min":106,"max":110,"cells":[{"pf":10,"crit":"B"},{"pf":10,"crit":"B"},{"pf":10,"crit":"B"},{"pf":11,"crit":"B"},{"pf":12,"crit":"A"}]},{"min":111,"max":115,"cells":[{"pf":11,"crit":"C"},{"pf":11,"crit":"C"},{"pf":11,"crit":"B"},{"pf":12,"crit":"B"},{"pf":13,"crit":"A"}]},{"min":116,"max":120,"cells":[{"pf":12,"crit":"C"},{"pf":12,"crit":"C"},{"pf":12,"crit":"C"},{"pf":13,"crit":"C"},{"pf":14,"crit":"B"}]},{"min":121,"max":125,"cells":[{"pf":12,"crit":"D"},{"pf":13,"crit":"C"},{"pf":13,"crit":"C"},{"pf":14,"crit":"C"},{"pf":14,"crit":"C"}]},{"min":126,"max":130,"cells":[{"pf":13,"crit":"D"},{"pf":14,"crit":"D"},{"pf":14,"crit":"D"},{"pf":15,"crit":"D"},{"pf":16,"crit":"D"}]},{"min":131,"max":135,"cells":[{"pf":14,"crit":"D"},{"pf":15,"crit":"D"},{"pf":15,"crit":"D"},{"pf":16,"crit":"D"},{"pf":17,"crit":"D"}]},{"min":136,"max":140,"cells":[{"pf":15,"crit":"E"},{"pf":16,"crit":"D"},{"pf":16,"crit":"D"},{"pf":16,"crit":"E"},{"pf":18,"crit":"E"}]},{"min":141,"max":145,"cells":[{"pf":16,"crit":"E"},{"pf":17,"crit":"E"},{"pf":17,"crit":"E"},{"pf":18,"crit":"E"},{"pf":19,"crit":"E"}]},{"min":146,"max":150,"cells":[{"pf":17,"crit":"E"},{"pf":18,"crit":"E"},{"pf":18,"crit":"E"},{"pf":19,"crit":"E"},{"pf":20,"crit":"E"}]}],"ti":[],"limits":[{"label":"Minuscoli","max":85},{"label":"Piccoli","max":105},{"label":"Medi","max":120},{"label":"Grandi","max":135},{"label":"Enormi","max":150}]},{"type":"attack","id":"TA-7","name":"TA-7 Incantesimi Dardo","armors":["Corazza di piastre","Corazza di maglie","Cuoio rinforzato","Cuoio grezzo","Nessuna armatura"],"fumble":2,"rows":[{"min":3,"max":10,"cells":[{"pf":0,"crit":null,"fail":true},{"pf":0,"crit":null,"fail":true},{"pf":0,"crit":null,"fail":true},{"pf":0,"crit":null,"fail":true},{"pf":0,"crit":null,"fail":true}]},{"min":11,"max":20,"cells":[{"pf":0,"crit":null,"fail":true},{"pf":0,"crit":null,"fail":true},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":21,"max":35,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":36,"max":40,"cells":[{"pf":1,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":41,"max":45,"cells":[{"pf":2,"crit":null},{"pf":1,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":46,"max":50,"cells":[{"pf":3,"crit":null},{"pf":1,"crit":null},{"pf":0,"crit":null},{"pf":1,"crit":null},{"pf":0,"crit":null}]},{"min":51,"max":55,"cells":[{"pf":4,"crit":null},{"pf":2,"crit":null},{"pf":1,"crit":null},{"pf":1,"crit":null},{"pf":0,"crit":null}]},{"min":56,"max":60,"cells":[{"pf":5,"crit":null},{"pf":2,"crit":null},{"pf":2,"crit":null},{"pf":2,"crit":null},{"pf":0,"crit":null}]},{"min":61,"max":65,"cells":[{"pf":6,"crit":null},{"pf":3,"crit":null},{"pf":4,"crit":null},{"pf":3,"crit":null},{"pf":8,"crit":"A"}]},{"min":66,"max":70,"cells":[{"pf":7,"crit":"A"},{"pf":4,"crit":null},{"pf":5,"crit":null},{"pf":4,"crit":"A"},{"pf":10,"crit":"A"}]},{"min":71,"max":75,"cells":[{"pf":7,"crit":"A"},{"pf":5,"crit":"A"},{"pf":6,"crit":null},{"pf":5,"crit":"A"},{"pf":11,"crit":"B"}]},{"min":76,"max":80,"cells":[{"pf":8,"crit":"A"},{"pf":6,"crit":"A"},{"pf":7,"crit":"A"},{"pf":6,"crit":"B"},{"pf":12,"crit":"B"}]},{"min":81,"max":85,"cells":[{"pf":8,"crit":"A"},{"pf":7,"crit":"A"},{"pf":8,"crit":"A"},{"pf":7,"crit":"B"},{"pf":13,"crit":"B"}]},{"min":86,"max":90,"cells":[{"pf":9,"crit":"A"},{"pf":8,"crit":"A"},{"pf":9,"crit":"B"},{"pf":8,"crit":"B"},{"pf":14,"crit":"B"}]},{"min":91,"max":95,"cells":[{"pf":9,"crit":"A"},{"pf":9,"crit":"B"},{"pf":10,"crit":"B"},{"pf":10,"crit":"B"},{"pf":15,"crit":"C"}]},{"min":96,"max":100,"cells":[{"pf":10,"crit":"A"},{"pf":10,"crit":"B"},{"pf":11,"crit":"B"},{"pf":12,"crit":"C"},{"pf":16,"crit":"C"}]},{"min":101,"max":105,"cells":[{"pf":10,"crit":"B"},{"pf":11,"crit":"B"},{"pf":12,"crit":"C"},{"pf":14,"crit":"C"},{"pf":18,"crit":"C"}]},{"min":106,"max":110,"cells":[{"pf":11,"crit":"B"},{"pf":12,"crit":"C"},{"pf":13,"crit":"C"},{"pf":16,"crit":"C"},{"pf":20,"crit":"C"}]},{"min":111,"max":115,"cells":[{"pf":14,"crit":"C"},{"pf":14,"crit":"D"},{"pf":17,"crit":"D"},{"pf":20,"crit":"D"},{"pf":24,"crit":"D"}]},{"min":116,"max":120,"cells":[{"pf":15,"crit":"D"},{"pf":16,"crit":"D"},{"pf":19,"crit":"E"},{"pf":22,"crit":"E"},{"pf":26,"crit":"E"}]},{"min":121,"max":125,"cells":[{"pf":17,"crit":"D"},{"pf":19,"crit":"D"},{"pf":20,"crit":"E"},{"pf":24,"crit":"E"},{"pf":28,"crit":"E"}]},{"min":126,"max":130,"cells":[{"pf":18,"crit":"E"},{"pf":22,"crit":"E"},{"pf":21,"crit":"E"},{"pf":26,"crit":"E"},{"pf":30,"crit":"E"}]},{"min":131,"max":135,"cells":[{"pf":21,"crit":"E"},{"pf":24,"crit":"E"},{"pf":25,"crit":"E"},{"pf":28,"crit":"E"},{"pf":32,"crit":"E"}]},{"min":136,"max":140,"cells":[{"pf":23,"crit":"E"},{"pf":25,"crit":"E"},{"pf":26,"crit":"E"},{"pf":30,"crit":"E"},{"pf":34,"crit":"E"}]},{"min":141,"max":145,"cells":[{"pf":25,"crit":"E"},{"pf":26,"crit":"E"},{"pf":27,"crit":"E"},{"pf":32,"crit":"E"},{"pf":36,"crit":"E"}]},{"min":146,"max":150,"cells":[{"pf":26,"crit":"E"},{"pf":27,"crit":"E"},{"pf":28,"crit":"E"},{"pf":34,"crit":"E"},{"pf":38,"crit":"E"}]}],"ti":[{"min":100,"max":100,"limit":"Energia","cells":[{"pf":18,"crit":"D"},{"pf":18,"crit":"D"},{"pf":16,"crit":"C"},{"pf":17,"crit":"C"},{"pf":18,"crit":"C"}]},{"min":100,"max":100,"limit":"Acqua","cells":[{"pf":17,"crit":"E"},{"pf":20,"crit":"E"},{"pf":20,"crit":"E"},{"pf":28,"crit":"E"},{"pf":30,"crit":"E"}]},{"min":100,"max":100,"limit":"Ghiaccio","cells":[{"pf":22,"crit":"E"},{"pf":26,"crit":"E"},{"pf":26,"crit":"E"},{"pf":38,"crit":"E"},{"pf":42,"crit":"E"}]},{"min":100,"max":100,"limit":"Elettrici e di Fuoco","cells":[{"pf":32,"crit":"E"},{"pf":32,"crit":"E"},{"pf":33,"crit":"E"},{"pf":38,"crit":"E"},{"pf":45,"crit":"E"}]}],"limits":[{"label":"Energia","max":90},{"label":"Acqua","max":110},{"label":"Ghiaccio","max":130},{"label":"Elettrici e di Fuoco","max":150}]},{"type":"attack","id":"TA-8","name":"TA-8 Incantesimi Sfera","armors":["Corazza di piastre","Corazza di maglie","Cuoio rinforzato","Cuoio grezzo","Nessuna armatura"],"fumble":4,"rows":[{"min":5,"max":8,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":1,"crit":null}]},{"min":9,"max":12,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":1,"crit":null},{"pf":2,"crit":null}]},{"min":13,"max":16,"cells":[{"pf":1,"crit":null},{"pf":1,"crit":null},{"pf":1,"crit":null},{"pf":1,"crit":null},{"pf":3,"crit":"A"}]},{"min":17,"max":20,"cells":[{"pf":1,"crit":null},{"pf":1,"crit":null},{"pf":1,"crit":null},{"pf":1,"crit":null},{"pf":4,"crit":"A"}]},{"min":21,"max":24,"cells":[{"pf":2,"crit":null},{"pf":2,"crit":null},{"pf":2,"crit":null},{"pf":2,"crit":null},{"pf":5,"crit":"A"}]},{"min":25,"max":28,"cells":[{"pf":3,"crit":null},{"pf":3,"crit":null},{"pf":4,"crit":null},{"pf":3,"crit":null},{"pf":6,"crit":"A"}]},{"min":29,"max":32,"cells":[{"pf":4,"crit":"A"},{"pf":4,"crit":"A"},{"pf":5,"crit":"A"},{"pf":4,"crit":"A"},{"pf":7,"crit":"A"}]},{"min":33,"max":36,"cells":[{"pf":5,"crit":"A"},{"pf":5,"crit":"A"},{"pf":6,"crit":"A"},{"pf":5,"crit":"A"},{"pf":8,"crit":"A"}]},{"min":37,"max":40,"cells":[{"pf":6,"crit":"A"},{"pf":6,"crit":"A"},{"pf":7,"crit":"A"},{"pf":6,"crit":"A"},{"pf":9,"crit":"A"}]},{"min":41,"max":44,"cells":[{"pf":7,"crit":"A"},{"pf":7,"crit":"A"},{"pf":8,"crit":"A"},{"pf":7,"crit":"A"},{"pf":10,"crit":"B"}]},{"min":45,"max":48,"cells":[{"pf":8,"crit":"A"},{"pf":8,"crit":"A"},{"pf":9,"crit":"A"},{"pf":8,"crit":"A"},{"pf":11,"crit":"B"}]},{"min":49,"max":52,"cells":[{"pf":9,"crit":"A"},{"pf":9,"crit":"A"},{"pf":10,"crit":"A"},{"pf":9,"crit":"B"},{"pf":12,"crit":"B"}]},{"min":53,"max":56,"cells":[{"pf":10,"crit":"B"},{"pf":10,"crit":"B"},{"pf":11,"crit":"B"},{"pf":10,"crit":"B"},{"pf":13,"crit":"B"}]},{"min":57,"max":60,"cells":[{"pf":11,"crit":"B"},{"pf":11,"crit":"B"},{"pf":12,"crit":"B"},{"pf":11,"crit":"B"},{"pf":14,"crit":"C"}]},{"min":61,"max":64,"cells":[{"pf":12,"crit":"B"},{"pf":12,"crit":"B"},{"pf":13,"crit":"B"},{"pf":12,"crit":"B"},{"pf":15,"crit":"C"}]},{"min":65,"max":68,"cells":[{"pf":12,"crit":"B"},{"pf":13,"crit":"B"},{"pf":14,"crit":"B"},{"pf":13,"crit":"B"},{"pf":16,"crit":"C"}]},{"min":69,"max":72,"cells":[{"pf":13,"crit":"B"},{"pf":14,"crit":"B"},{"pf":15,"crit":"B"},{"pf":14,"crit":"C"},{"pf":17,"crit":"C"}]},{"min":73,"max":76,"cells":[{"pf":14,"crit":"B"},{"pf":14,"crit":"C"},{"pf":15,"crit":"C"},{"pf":15,"crit":"C"},{"pf":18,"crit":"C"}]},{"min":77,"max":80,"cells":[{"pf":14,"crit":"C"},{"pf":15,"crit":"C"},{"pf":16,"crit":"C"},{"pf":16,"crit":"C"},{"pf":19,"crit":"C"}]},{"min":81,"max":84,"cells":[{"pf":15,"crit":"C"},{"pf":16,"crit":"C"},{"pf":16,"crit":"C"},{"pf":17,"crit":"C"},{"pf":20,"crit":"C"}]},{"min":85,"max":88,"cells":[{"pf":16,"crit":"C"},{"pf":17,"crit":"C"},{"pf":17,"crit":"C"},{"pf":18,"crit":"C"},{"pf":21,"crit":"C"}]},{"min":89,"max":92,"cells":[{"pf":17,"crit":"C"},{"pf":18,"crit":"C"},{"pf":18,"crit":"C"},{"pf":19,"crit":"C"},{"pf":22,"crit":"C"}]},{"min":93,"max":95,"cells":[{"pf":18,"crit":"C"},{"pf":19,"crit":"C"},{"pf":19,"crit":"D"},{"pf":20,"crit":"C"},{"pf":22,"crit":"D"}]}],"ti":[{"min":96,"max":97,"limit":null,"cells":[{"pf":19,"crit":"D"},{"pf":20,"crit":"D"},{"pf":21,"crit":"E"},{"pf":24,"crit":"D"},{"pf":26,"crit":"E"}]},{"min":98,"max":99,"limit":null,"cells":[{"pf":20,"crit":"E"},{"pf":21,"crit":"E"},{"pf":24,"crit":"E"},{"pf":27,"crit":"E"},{"pf":29,"crit":"E"}]},{"min":100,"max":100,"limit":null,"cells":[{"pf":22,"crit":"E"},{"pf":23,"crit":"E"},{"pf":27,"crit":"E"},{"pf":30,"crit":"E"},{"pf":32,"crit":"E"}]}],"limits":[]},{"type":"attack","id":"TA-10","name":"TA-10 Armi ad Asta","armors":["Corazza di piastre","Corazza di maglie","Cuoio rinforzato","Cuoio grezzo","Nessuna armatura"],"fumble":null,"rows":[{"min":null,"max":55,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":56,"max":60,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":61,"max":65,"cells":[{"pf":1,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":66,"max":70,"cells":[{"pf":2,"crit":null},{"pf":2,"crit":null},{"pf":0,"crit":null},{"pf":5,"crit":null},{"pf":0,"crit":null}]},{"min":71,"max":75,"cells":[{"pf":3,"crit":null},{"pf":4,"crit":null},{"pf":0,"crit":null},{"pf":6,"crit":"A"},{"pf":0,"crit":null}]},{"min":76,"max":80,"cells":[{"pf":4,"crit":null},{"pf":6,"crit":null},{"pf":3,"crit":null},{"pf":8,"crit":"A"},{"pf":0,"crit":null}]},{"min":81,"max":85,"cells":[{"pf":5,"crit":null},{"pf":8,"crit":null},{"pf":6,"crit":"A"},{"pf":10,"crit":"A"},{"pf":10,"crit":"A"}]},{"min":86,"max":90,"cells":[{"pf":6,"crit":null},{"pf":10,"crit":null},{"pf":8,"crit":"A"},{"pf":12,"crit":"B"},{"pf":12,"crit":"B"}]},{"min":91,"max":95,"cells":[{"pf":8,"crit":null},{"pf":12,"crit":"A"},{"pf":10,"crit":"B"},{"pf":14,"crit":"B"},{"pf":14,"crit":"C"}]},{"min":96,"max":100,"cells":[{"pf":10,"crit":null},{"pf":14,"crit":"A"},{"pf":12,"crit":"B"},{"pf":16,"crit":"C"},{"pf":16,"crit":"C"}]},{"min":101,"max":105,"cells":[{"pf":11,"crit":"A"},{"pf":16,"crit":"B"},{"pf":14,"crit":"C"},{"pf":18,"crit":"C"},{"pf":18,"crit":"C"}]},{"min":106,"max":110,"cells":[{"pf":12,"crit":"A"},{"pf":18,"crit":"B"},{"pf":16,"crit":"C"},{"pf":20,"crit":"C"},{"pf":20,"crit":"D"}]},{"min":111,"max":115,"cells":[{"pf":13,"crit":"B"},{"pf":20,"crit":"C"},{"pf":18,"crit":"C"},{"pf":22,"crit":"D"},{"pf":22,"crit":"D"}]},{"min":116,"max":120,"cells":[{"pf":14,"crit":"B"},{"pf":21,"crit":"C"},{"pf":20,"crit":"D"},{"pf":24,"crit":"D"},{"pf":24,"crit":"D"}]},{"min":121,"max":125,"cells":[{"pf":15,"crit":"B"},{"pf":22,"crit":"C"},{"pf":22,"crit":"D"},{"pf":26,"crit":"D"},{"pf":27,"crit":"E"}]},{"min":126,"max":130,"cells":[{"pf":16,"crit":"C"},{"pf":23,"crit":"D"},{"pf":24,"crit":"D"},{"pf":28,"crit":"D"},{"pf":30,"crit":"E"}]},{"min":131,"max":135,"cells":[{"pf":17,"crit":"C"},{"pf":24,"crit":"D"},{"pf":26,"crit":"D"},{"pf":30,"crit":"E"},{"pf":32,"crit":"E"}]},{"min":136,"max":140,"cells":[{"pf":18,"crit":"D"},{"pf":25,"crit":"D"},{"pf":28,"crit":"E"},{"pf":32,"crit":"E"},{"pf":34,"crit":"E"}]},{"min":141,"max":145,"cells":[{"pf":20,"crit":"D"},{"pf":27,"crit":"E"},{"pf":30,"crit":"E"},{"pf":34,"crit":"E"},{"pf":37,"crit":"E"}]},{"min":146,"max":150,"cells":[{"pf":21,"crit":"E"},{"pf":28,"crit":"E"},{"pf":32,"crit":"E"},{"pf":36,"crit":"E"},{"pf":40,"crit":"E"}]}],"ti":[],"limits":[]},{"type":"attack","id":"TA-11","name":"TA-11 Armi da Lancio","armors":["Corazza di piastre","Corazza di maglie","Cuoio rinforzato","Cuoio grezzo","Nessuna armatura"],"fumble":null,"rows":[{"min":null,"max":55,"cells":[{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":56,"max":60,"cells":[{"pf":1,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null},{"pf":0,"crit":null}]},{"min":61,"max":65,"cells":[{"pf":2,"crit":null},{"pf":1,"crit":null},{"pf":0,"crit":null},{"pf":3,"crit":null},{"pf":0,"crit":null}]},{"min":66,"max":70,"cells":[{"pf":3,"crit":null},{"pf":2,"crit":null},{"pf":0,"crit":null},{"pf":4,"crit":null},{"pf":0,"crit":null}]},{"min":71,"max":75,"cells":[{"pf":3,"crit":null},{"pf":3,"crit":null},{"pf":0,"crit":null},{"pf":5,"crit":null},{"pf":7,"crit":null}]},{"min":76,"max":80,"cells":[{"pf":4,"crit":null},{"pf":4,"crit":null},{"pf":2,"crit":null},{"pf":6,"crit":null},{"pf":8,"crit":null}]},{"min":81,"max":85,"cells":[{"pf":4,"crit":null},{"pf":5,"crit":null},{"pf":3,"crit":null},{"pf":7,"crit":"A"},{"pf":8,"crit":null}]},{"min":86,"max":90,"cells":[{"pf":5,"crit":null},{"pf":6,"crit":null},{"pf":5,"crit":"A"},{"pf":8,"crit":"A"},{"pf":9,"crit":null}]},{"min":91,"max":95,"cells":[{"pf":6,"crit":null},{"pf":7,"crit":null},{"pf":7,"crit":"A"},{"pf":8,"crit":"B"},{"pf":10,"crit":"A"}]},{"min":96,"max":100,"cells":[{"pf":7,"crit":null},{"pf":8,"crit":null},{"pf":9,"crit":"B"},{"pf":9,"crit":"B"},{"pf":11,"crit":"B"}]},{"min":101,"max":105,"cells":[{"pf":7,"crit":null},{"pf":9,"crit":"A"},{"pf":10,"crit":"B"},{"pf":10,"crit":"C"},{"pf":12,"crit":"C"}]},{"min":106,"max":110,"cells":[{"pf":8,"crit":null},{"pf":10,"crit":"A"},{"pf":11,"crit":"B"},{"pf":11,"crit":"C"},{"pf":13,"crit":"D"}]},{"min":111,"max":115,"cells":[{"pf":8,"crit":null},{"pf":11,"crit":"A"},{"pf":12,"crit":"C"},{"pf":12,"crit":"C"},{"pf":14,"crit":"D"}]},{"min":116,"max":120,"cells":[{"pf":9,"crit":"A"},{"pf":12,"crit":"B"},{"pf":14,"crit":"C"},{"pf":12,"crit":"D"},{"pf":15,"crit":"D"}]},{"min":121,"max":125,"cells":[{"pf":10,"crit":"A"},{"pf":14,"crit":"B"},{"pf":15,"crit":"C"},{"pf":13,"crit":"D"},{"pf":16,"crit":"D"}]},{"min":126,"max":130,"cells":[{"pf":11,"crit":"A"},{"pf":15,"crit":"C"},{"pf":17,"crit":"D"},{"pf":14,"crit":"D"},{"pf":16,"crit":"E"}]},{"min":131,"max":135,"cells":[{"pf":12,"crit":"B"},{"pf":16,"crit":"D"},{"pf":18,"crit":"D"},{"pf":15,"crit":"D"},{"pf":17,"crit":"E"}]},{"min":136,"max":140,"cells":[{"pf":13,"crit":"C"},{"pf":17,"crit":"D"},{"pf":20,"crit":"D"},{"pf":16,"crit":"E"},{"pf":18,"crit":"E"}]},{"min":141,"max":145,"cells":[{"pf":13,"crit":"D"},{"pf":17,"crit":"D"},{"pf":21,"crit":"E"},{"pf":17,"crit":"E"},{"pf":19,"crit":"E"}]},{"min":146,"max":150,"cells":[{"pf":14,"crit":"E"},{"pf":18,"crit":"E"},{"pf":22,"crit":"E"},{"pf":18,"crit":"E"},{"pf":20,"crit":"E"}]}],"ti":[],"limits":[]}],"crit":[{"type":"crit","id":"TC-1","name":"TC-1 Colpi Critici da Impatto","rows":[{"min":null,"max":5,"text":"Colpo vibrato debolmente. Nessun danno addizionale."},{"min":6,"max":16,"text":"Costole incrinate. +5 PF. -5 alle attività."},{"min":17,"max":27,"text":"Colpo al fianco. +4 PF. -40 alle attività per 1 r."},{"min":28,"max":38,"text":"Colpo all’avambraccio. +5 PF. Stordito per 1 r. Se non indossa bracciali +5 PF."},{"min":39,"max":49,"text":"Colpo alla spalla sinistra, +10PF. Il bersaglio lascia cadere ciò che ha in mano, scudo compreso. Se non è protetta, spalla rotta e braccio inutilizzabile, +5 PF."},{"min":50,"max":60,"text":"Il colpo investe le gambe: +12 PF, stordito per 1 r. Se non indossa schinieri, tibia spezzata: -40 alle attività. Stordito per 2 r."},{"min":61,"max":70,"text":"Colpo alla fronte: +10 PF, stordito per 2 r. Se il bersaglio non indossa un elmo, +8 PF, -10 alle attività e stordito per 6 r."},{"min":71,"max":79,"text":"Distorsione al gomito che regge l’arma, -10 alle attività. Se non è protetto: +10 PF, -30 alle attività e stordito per 2 r."},{"min":80,"max":80,"text":"Colpo alla fronte: +30 PF. Un occhio distrutto; stordito per 24 r. Se il bersaglio non porta l’elmo, entra in coma per un mese."},{"min":81,"max":86,"text":"Il colpo rompe il braccio che regge l’arma. Braccio inutilizzabile. Danno ai tendini: +8 PF. Stordito per 2 r."},{"min":87,"max":89,"text":"Ginocchio fratturato: +9 PF; -60 alle attività. Gettato a terra e stordito per 3 r."},{"min":90,"max":90,"text":"Un colpo nella regione cervicale paralizza il bersaglio dalle spalle in giù. +25 PF. Bersaglio stordito per il resto del combattimento."},{"min":91,"max":96,"text":"Bersaglio svenuto per 4 ore a causa di un colpo alla tempia. Se il bersaglio non porta un elmo, cranio fratturato. +20 PF."},{"min":97,"max":99,"text":"Per un violento colpo alla cassa toracica le costole perforano i polmoni. Il bersaglio si accascia e muore in 6 r. Brutto affare."},{"min":100,"max":100,"text":"Colpo alla mascella che rientrando perfora il cervello. Morte istantanea."},{"min":101,"max":106,"text":"Il colpo rompe l’anca: +15 PF. -75 alle attività. Il bersaglio è gettato a terra e stordito per 3 r."},{"min":107,"max":109,"text":"Un colpo al collo spezza la gola del bersaglio. Respirazione impossibile. Stordito per 12 r prima di morire."},{"min":110,"max":110,"text":"Anca frantumata. +35 PF. Stordito per 2 r. Il bersaglio è attivo per i 4 r seguenti, ma poi muore a causa dei danni ricevuti al sistema nervoso."},{"min":111,"max":116,"text":"Il gomito del braccio che regge l’arma va in frantumi. Braccio inutilizzabile. Stordito per 5 r."},{"min":117,"max":119,"text":"Un colpo al fianco distrugge la gabbia toracica. Il bersaglio si accascia e muore in 3 r."},{"min":120,"max":120,"text":"Colpo violento al petto. Cuore spappolato. Il bersaglio muore immediatamente: +25 PF. Bel colpo!"}]},{"type":"crit","id":"TC-2","name":"TC-2 Colpi Critici da Taglio","rows":[{"min":null,"max":5,"text":"Colpo vibrato debolmente. Nessun danno addizionale."},{"min":6,"max":16,"text":"Ferita cutanea leggera. +1 PF per r."},{"min":17,"max":27,"text":"Colpo alla coscia. +5 PF. Se non è protetta: +3 PF e +2 PF per r."},{"min":28,"max":38,"text":"Ferita leggera al torace: +3 PF; +1 PF per r. -5 alle attività. Se non indossa armatura +5 PF, stordito 1 r."},{"min":39,"max":49,"text":"Ferita leggera all’avambraccio: +4 PF. +2 PF per r. Stordito per 1 r. Se non indossa bracciali +2 PF e +1 PF per r."},{"min":50,"max":60,"text":"Ferita alla gamba: +6 PF, +1 PF per r. -10 alle attività. Stordito per 2 r. Se non indossa schinieri +5 PF"},{"min":61,"max":70,"text":"Colpo al fianco: +10 PF e stordito 1 r. Se non indossa armatura -10 alle attività e +2 PF per r."},{"min":71,"max":79,"text":"Colpo di striscio alla testa: 12 PF e stordito 2 r. Se non indossa l’elmo +3 PF per r, -10 alle attività"},{"min":80,"max":80,"text":"Un colpo di taglio al collo trancia la carotide. Il bersaglio muore dopo un r di intensa agonia."},{"min":81,"max":86,"text":"Colpo al braccio che regge l’arma. +10 PF. +1 PF per r. Se il braccio non ha protezioni: danni ai muscoli e ai tendini. Braccio inutilizzabile."},{"min":87,"max":89,"text":"Occhio distrutto; +10 PF. Bersaglio stordito per 30 r."},{"min":90,"max":90,"text":"Bersaglio sventrato. Morte istantanea. 25% che l’arma resti intrappolata per 2 r."},{"min":91,"max":96,"text":"Bersaglio K.O. per 6 ore causa colpo alla tempia: +15 PF. Se il bersaglio non ha un elmo, la morte è istantanea."},{"min":97,"max":99,"text":"La parte inferiore della gamba viene tranciate dal colpo: +20 PF per r. Il bersaglio si accascia e sviene."},{"min":100,"max":100,"text":"Colpo di taglio al fianco. Il bersaglio crolla svenuto e muore in 3 r a causa del grave danno agli organi interni"},{"min":101,"max":106,"text":"Grave ferita addominale: +10 PF, +8 PF per r. -10 alle attività. Stordito per 4 r."},{"min":107,"max":109,"text":"Il braccio che regge l’arma viene amputato: +15 PF per r. Il bersaglio crolla a terra privo di sensi."},{"min":110,"max":110,"text":"Bersaglio trapassato all’altezza del cuore. Cuore distrutto. Morte istantanea. 25% che la tua arma resti imprigionata per 3 r."},{"min":111,"max":116,"text":"Mano amputata. +12 PF per r. Gettato a terra e stordito per 6 r."},{"min":117,"max":119,"text":"Colonna vertebrale tranciata. Il bersaglio cade a terra immediatamente. Paralizzato permanentemente dal collo in giù. +20 PF."},{"min":120,"max":120,"text":"Un forte colpo alla testa distrugge il cervello e rende la vita difficile per il poverino. Morte immediata."}]},{"type":"crit","id":"TC-3","name":"TC-3 Colpi Critici da Punta","rows":[{"min":null,"max":5,"text":"Colpo di striscio. Nessun danno addizionale."},{"min":6,"max":16,"text":"Colpo di striscio al fianco: +3 PF."},{"min":17,"max":27,"text":"Colpo alla coscia: +3 PF. Se la gamba non è protetta: +3 PF per r."},{"min":28,"max":38,"text":"Ferita leggera all’avambraccio: +2 PF. Stordito per 1 r. Se non indossa bracciali +3 PF"},{"min":39,"max":49,"text":"Colpo di striscio alla cassa toracica: +1 PF per r. Stordito per 1 r. Se non indossa un’armatura +2 PF per r"},{"min":50,"max":60,"text":"Colpo sotto il ginocchio, +2 PF, -10 alle attività. Se non è protetto tendini distorti: +3 PF. -25 alle attività. Stordito per 1 r."},{"min":61,"max":70,"text":"Colpo di striscio alla spalla, +5 PF +2 PF per r, -10 alle attività. Se non è protetta +3 PF, stordito 1 r."},{"min":71,"max":79,"text":"Ferita leggera alla testa: +8 PF, stordito per 2 r, +2 PF per r. Se non indossa un elmo, KO per 4 ore."},{"min":80,"max":80,"text":"Colpo al collo. Nervi e vasi sanguigni tranciati. La morte sopravviene a causa di un grave collasso cardiaco."},{"min":81,"max":86,"text":"Colpo al braccio che regge l’arma. Osso spezzato: +10 PF. Stordito per 3 r."},{"min":87,"max":89,"text":"Colpo alla gamba sotto il ginocchio. Muscolo tranciato. -50 alle attività. Stordito per 3 r."},{"min":90,"max":90,"text":"Il colpo perfora entrambi i polmoni. Il bersaglio si accascia. La morte sopravviene in 6 r."},{"min":91,"max":96,"text":"Colpo alla tempia. Bersaglio KO per 6 ore, +10 PF. Se il bersaglio non indossa un elmo, la morte è istantanea."},{"min":97,"max":99,"text":"Un preciso colpo attraverso la gola rompe l’osso del collo e trancia la colonna vertebrale. Bersaglio paralizzato permanentemente dal collo in giù."},{"min":100,"max":100,"text":"Il colpo trapassa l’occhio ed entra nel cervello. Morte istantanea."},{"min":101,"max":106,"text":"Grave ferita addominale: +10 PF, +6 PF per r. -20 alle attività. Stordito per 4 r."},{"min":107,"max":109,"text":"Bersaglio perforato nel fondoschiena. Si accascia e sviene. Muore per emorragia interna in 6 r."},{"min":110,"max":110,"text":"Colpo al cuore. Il bersaglio rotola per 3 metri in cerca di un buon posto per morire. L’arma è intrappolata nella vittima per almeno 3 r."},{"min":111,"max":116,"text":"Perforata la gamba. Arteria tranciata. Il bersaglio si accascia e perde i sensi. +12 PF per r."},{"min":117,"max":119,"text":"Il colpo trapassa i reni: +9 PF. Il bersaglio cade a terra e muore dopo 6 r di tremenda agonia. Triste a vedersi."},{"min":120,"max":120,"text":"Il colpo trapassa entrambe le orecchie. Udito danneggiato e bersaglio morto. Un colpo veramente impressionante."}]},{"type":"crit","id":"TC-4","name":"TC-4 C. C. da Perdita d’Equilibrio","rows":[{"min":null,"max":5,"text":"Colpo troppo debole: Nessun danno addizionale."},{"min":6,"max":16,"text":"Colpo al braccio: +2 PF. -5 alle attività per 2 r."},{"min":17,"max":27,"text":"Colpo alla gamba: +4 PF. Se non è protetta: +7 PF e stordito per 1 r."},{"min":28,"max":38,"text":"Colpo al torace. Bersaglio costretto a retrocedere di 1 metro. +5 PF. -10 alle attività per 2 r."},{"min":39,"max":49,"text":"Colpo al braccio: +5 PF. Scudo strappato via. Se il bersaglio non ha uno scudo: +8 PF e stordito 2 r."},{"min":50,"max":60,"text":"Colpo al gomito. Avambraccio intorpidito: +3 PF. L’arma cade a terra. -10 alle attività per 10 r. Se non è protetto +5 PF."},{"min":61,"max":70,"text":"Colpo alla testa: stordito per 2 r. Se non indossa un elmo +5PF e stordito per 5 r"},{"min":71,"max":79,"text":"Duro colpo al petto: +6 PF, stordito per 3 r. Se non indossa un’armatura +10 PF e -20 alle attività"},{"min":80,"max":80,"text":"Brutale colpo all’anca. Bersaglio gettato a terra. Tendini distorti e articolazione fratturata. Gamba inutilizzabile, -80 alle attività."},{"min":81,"max":86,"text":"Colpo al fianco. Bersaglio gettato 2 metri lateralmente. Lascia cadere qualsiasi cosa tenga in mano. Stordito per 3 r"},{"min":87,"max":89,"text":"Duro colpo al fianco. Il bersaglio inciampa goffamente e si ritrova in un’imbarazzante posizione prona. Stordito per 6 r."},{"min":90,"max":90,"text":"Gran colpo alla schiena. Il bersaglio vola nell’aria per 3 metri e cade di faccia. Danni ai nervi e al sistema nervoso. Paralizzato dalla vita in giù."},{"min":91,"max":96,"text":"Duro colpo alla testa. Bersaglio gettato indietro di 3 metri e stordito per 6 r. Se il bersaglio non porta l’elmo, resta privo di sensi per 24 ore."},{"min":97,"max":99,"text":"Mazzata impressionante. Il bersaglio si trova in ginocchio. Se impugna un’arma a una mano, questa viene scagliata all’indietro di 3 metri. Stordito 15 r."},{"min":100,"max":100,"text":"Violento colpo al torace. Il bersaglio viene gettato a terra 3 metri di lato e subisce la frattura delle braccia. In coma per 2 mesi."},{"min":101,"max":106,"text":"Il colpo spacca una gamba: +12 PF. -50 alle attività. Stordito per 1 r."},{"min":107,"max":109,"text":"Colpo alla testa. Bersaglio gettato all’indietro di 3 metri: +9 PF. Stordito 6 r. Se il bersaglio non indossa un elmo entra in coma per 4 settimane."},{"min":110,"max":110,"text":"Brutale colpo alla testa. Bersaglio gettato a terra. Muore in 12 r per emorragia interna."},{"min":111,"max":116,"text":"Impressionante colpo laterale. Bersaglio scagliato a terra e lateralmente di 2 metri. Tibia fratturata. Stordito per 7 r. -40 alle attività."},{"min":117,"max":119,"text":"Colpo alla spalla. Stordito per 9 r. -20 alle attività. Se il bersaglio non ha uno scudo, sviene e subisce una frattura alla parte superiore del braccio."},{"min":120,"max":120,"text":"Colpo spaventoso alla tempia. Gettato indietro di 6 metri. Morte istantanea. Raccapricciante!"}]},{"type":"crit","id":"TC-5","name":"TC-5 Colpi Critici da Presa","rows":[{"min":null,"max":5,"text":"Un’opportunità perduta."},{"min":6,"max":16,"text":"Colpo di striscio: +2 PF."},{"min":17,"max":27,"text":"Attacco schivato: +3 PF. Se l’armatura copre il braccio: stordito per 1 r."},{"min":28,"max":38,"text":"Attacco alla coscia. Strattonato, ma si libera dalla presa. Stordito per 1 r."},{"min":39,"max":49,"text":"Afferrato il braccio dello scudo. -50 alle attività per 1 r. Se non ha lo scudo: -50 alle attività finché non sfugge alla presa."},{"min":50,"max":60,"text":"Afferrato il braccio dell’arma. Disarmato e distorsione al polso. Stordito per 2 r. -25 alle attività."},{"min":61,"max":70,"text":"Afferrato al collo. Stordito per 2 r. -40 alle attività finché non sfugge alla presa"},{"min":71,"max":79,"text":"Afferrata una gamba. +3 PF, -60 alle attività finché non sfugge alla presa."},{"min":80,"max":80,"text":"Afferrate entrambe le gambe. Cade a terra. +9 PF. -80 alle attività."},{"min":81,"max":86,"text":"Afferrato il braccio dell’arma. Legamenti distorti e muscoli stirati. Disarmato e stordito per 3 r. - 40 alle attività."},{"min":87,"max":89,"text":"Completamente afferrato ed immobilizzato. Steso a terra, ma ancora cosciente. Nessuna attività. (-100 alle attività)."},{"min":90,"max":90,"text":"Violenta stretta al collo. Cade a terra. -60 alle attività."},{"min":91,"max":96,"text":"Afferrata la testa. Stordito per 9 r. Se non indossa l’elmo: teschio fratturato, cade in coma."},{"min":97,"max":99,"text":"Afferrate entrambe le braccia e strette contro il torace. Finché non si libera dalla presa non si può muovere. -75 alle attività."},{"min":100,"max":100,"text":"Afferrato al collo. Se il collo è protetto da armatura: -60 alle attività e stordito per 3 r. Altrimenti, muore all’istante, strangolato."},{"min":101,"max":106,"text":"Stretta al torace, costola fratturata. Stordito per 5 r. -10 alle attività."},{"min":107,"max":109,"text":"Gambe afferrate e completamente immobilizzate. Cade e si spezza il braccio che porta l’arma. Disarmato e fuori combattimento, +20 PF."},{"min":110,"max":110,"text":"Afferrato il collo. Se il collo è protetto da armatura: disarmato e stordito per 5 r. Altrimenti muore nel giro di 6 r."},{"min":111,"max":116,"text":"Presa ai piedi. Inciampa, cade, rompe l’arma nell’impatto e resta stordito per 2 r. Se il torace non è protetto da armatura: subisce un Critico da Impatto di tipo D."},{"min":117,"max":119,"text":"Afferrate entrambe le gambe. Cade a terra e si frattura l’anca ed un braccio. -80 alle attività, +20 PF."},{"min":120,"max":120,"text":"Spezzata la trachea. Muore all’istante per il terribile shock soffocando orribilmente."}]},{"type":"crit","id":"TC-6","name":"TC-6 Colpi Critici da Calore","rows":[{"min":null,"max":5,"text":"L’aria intorno al bersaglio è riscaldata dal colpo."},{"min":6,"max":16,"text":"Un notevole calore investe il bersaglio, ma con pochi effetti: +3 PF."},{"min":17,"max":27,"text":"Leggere bruciature: +8 PF; +1 PF per r."},{"min":28,"max":38,"text":"Il bersaglio è temporaneamente accecato dal fumo rovente prodotto dall’attacco: +12 PF. Stordito per 1 r."},{"min":39,"max":49,"text":"Gli abiti del bersaglio prendono fuoco: +12 PF. Ci vogliono 2 r per spengerli: +8 PF per ogni r di fuoco."},{"min":50,"max":60,"text":"Bersaglio scagliato a terra dalla terribile vampata. Distrutto il materiale organico che copre piedi e polpacci: + 10 PF."},{"min":61,"max":70,"text":"Grande vampata: +15 PF e stordito per 3 r."},{"min":71,"max":79,"text":"Il colpo investe la gamba: +7 PF; +2 PF per r. Se non indossa schinieri, grave danno ai tessuti, stordito 2 r, -40 alle attività"},{"min":80,"max":80,"text":"Vampata alla testa. Faccia orrendamente ustionata. Bersaglio scagliato a terra: +15 PF, +5 PF per r. Se la vittima non ha un elmo cade in coma per 1 mese."},{"min":81,"max":86,"text":"Il fuoco avviluppa la schiena del bersaglio. Distrutto tutto il materiale organico portato sulla schiena, il bersaglio è a terra: 2 PF per r. Stordito per 1 r."},{"min":87,"max":89,"text":"Colpo di striscio alla testa. Bersaglio accecato per 6 r. Distrutto il materiale organico che ricopre la testa. Se il bersaglio non porte l’elmo: bruciati tutti i capelli."},{"min":90,"max":90,"text":"La testa del bersaglio È ridotta ad un moncherino carbonizzato. Condizioni di vita inaccettabili e una morte realmente molto triste."},{"min":91,"max":96,"text":"Il braccio che regge lo scudo viene gravemente ustionato. Scudo distrutto, come la mano che lo regge. Se il bersaglio non ha uno scudo, perde il braccio."},{"min":97,"max":99,"text":"Ustioni all’altezza della coscia. I tessuti del bersaglio sono distrutti e perde l’uso della gamba. +3 PF per r. -60 alle attività. Stordito per 6 r."},{"min":100,"max":100,"text":"La vampata colpisce il collo e fonde le vertebre cervicali, unendo pelle e vestiti. Paralizzato permanentemente: +25 PF."},{"min":101,"max":106,"text":"Il colpo infuocato investe la gamba. 2 PF per r. -20 alle attività. Se la gamba non ha protezioni, il bersaglio subisce un grave danno ai tessuti: -70 alle attività."},{"min":107,"max":109,"text":"Colpo violento alla testa. Se il bersaglio indossa un elmo resta accecato per 2 settimane, se no muore in 6 r a causa dello shock e del grave danno ai tessuti cerebrali."},{"min":110,"max":110,"text":"Vaporizzato il basso ventre del bersaglio! Viene tagliato letteralmente a metà e muore. Distrutti gli abiti, l’armatura ed ogni altro oggetto."},{"min":111,"max":116,"text":"La vampata di calore avvolge il petto del bersaglio distruggendone l’armatura: +12 PF. Stordito per 3 r. Se il torace non è protetto da armatura: cade a terra e subisce 6 PF per r."},{"min":117,"max":119,"text":"Le fiamme avviluppano il corpo del bersaglio e distruggono tutto il materiale organico all’esterno del corpo. Il bersaglio muore in 6 r a causa dello shock e del grave danno subito dai tessuti. +2 PF."},{"min":120,"max":120,"text":"Del bersaglio resta solo un mucchietto fumante di ossa e denti."}]},{"type":"crit","id":"TC-7","name":"TC-7 Colpi Critici da Freddo","rows":[{"min":null,"max":5,"text":"Fresco venticello."},{"min":6,"max":16,"text":"Ventata gelida: +3 PF. Se il bersaglio non indossa né mantello né armatura: stordito per 1 r."},{"min":17,"max":27,"text":"Ustione causata dal gelo: +7 PF. +1 PF per r."},{"min":28,"max":38,"text":"Principio di congelamento: +5 PF. +2 PF per r, -10 alle attività."},{"min":39,"max":49,"text":"Colpo gelido alla schiena: +9 PF. +2 PF per r. Bersaglio stordito per 2 r. Ogni oggetto di legno portato all’altezza della schiena diventa fragile ed inutilizzabile."},{"min":50,"max":60,"text":"Un’onda di gelo investe la parte inferiore del corpo. Il bersaglio è stordito per 1 r. Distrutta qualsiasi copertura dei piedi. Se i piedi sono privi di copertura: congelamento, -30 alle attività."},{"min":61,"max":70,"text":"Una mano viene quasi congelata: +10 PF, -10 alle attività per un’ora"},{"min":71,"max":79,"text":"Colpito il braccio dell’arma: +13 PF, stordito per 3 r. Non può usare il braccio per 1 ora. Se non è protetto, grave danno ai tessuti e braccio inutilizzabile."},{"min":80,"max":80,"text":"Una gelida ventata avvolge la testa del bersaglio. Cade in coma per 1 mese in seguito al congelamento ed allo shock, perde il naso."},{"min":81,"max":86,"text":"Il bersaglio è colpito alla gamba. Cade a terra. Stordito per 3 r. Se le gambe non sono protette da armatura: congelamento, polpacci fuori uso e -40 alle attività."},{"min":87,"max":89,"text":"Violento colpo all’area cervicale. Il bersaglio cade a terra e perde la parte interna dell’orecchio. Se la zona d’impatto non è protetta da armatura: collo congelato e morte dopo 9 r di totale inattività."},{"min":90,"max":90,"text":"Un’ondata gelida congela la testa. Il bersaglio muore in 2 r. Il teschio ed il cervello sono completamente disseccati e privi di vita."},{"min":91,"max":96,"text":"Coscia congelata e femore rotto. +5 PF per r. -30 alle attività. Stordito per 4 r."},{"min":97,"max":99,"text":"Un colpo al fianco congela e frantuma le ossa del bacino del bersaglio. Muore in 12 r a causa dello shock e dei danni al sistema nervoso."},{"min":100,"max":100,"text":"Colpo alla testa, occhi congelati. Il bersaglio cade in coma per 3 settimane. Paralizzato dal collo in giù."},{"min":101,"max":106,"text":"Congelate entrambe le mani. Il bersaglio perde l’uso delle braccia per un’ora. +6 PF per r. Stordito per 5 r."},{"min":107,"max":109,"text":"Il cuore ed i polmoni si congelano all’improvviso. Muore a causa dello shock e per asfissia dopo 6 r di totale inattività."},{"min":110,"max":110,"text":"Un violento colpo al petto fracassa la gabbia toracica e congela preziosi fluidi organici. Il bersaglio muore in 3 r."},{"min":111,"max":116,"text":"Colpo di ghiaccio alla parte superiore del torace del bersaglio. Cade a terra, fuori combattimento: il cuore diventa di ghiaccio e il personaggio muore in 10 r."},{"min":117,"max":119,"text":"Il freddo riduce la vittima ad una statua priva di vita; senza dubbio ben conservata, ma irrimediabilmente defunta."},{"min":120,"max":120,"text":"Diventa un blocco di ghiaccio. Poi cade a terra e si frantuma in migliaia di cristalli microscopici."}]},{"type":"crit","id":"TC-8","name":"TC-8 Colpi Critici da Elettricità","rows":[{"min":null,"max":5,"text":"I capelli del bersaglio si rizzano sul capo."},{"min":6,"max":16,"text":"Poco più che una leggera scossa: +3 PF. Se il bersaglio indossa un’armatura metallica è stordito per 1 r."},{"min":17,"max":27,"text":"Esplosione di luce. La vittima è stordita per 1 r."},{"min":28,"max":38,"text":"Scarica media: +6 PF. -5 alle attività. Se il bersaglio indossa un’armatura di metallo: stordito per 2 r."},{"min":39,"max":49,"text":"Una forte scarica: +9 PF. -10 alle attività. Stordito per 1 r. Se il bersaglio indossa un’armatura di metallo: stordito per 3 r."},{"min":50,"max":60,"text":"Colpo al braccio che regge lo scudo: +12 PF. -20 alle attività. Se il bersaglio indossa un’armatura di metallo e non regge uno scudo: fuori combattimento per 1 giorno."},{"min":61,"max":70,"text":"Violenta scarica distrugge lo scudo e colpisce il torace: +10 PF e stordito 1 r. Se non ha lo scudo o se indossa armature metalliche: stordito 5 r."},{"min":71,"max":79,"text":"Colpo alle braccia: +15 PF. Qualsiasi cosa tiene in mano cade. Se indossa bracciali di metallo: +10 PF e stordito per 3 r."},{"min":80,"max":80,"text":"Una scarica di energia colpisce il sistema nervoso, procurando al bersaglio un grave shock. La vittima cade in coma per un mese."},{"min":81,"max":86,"text":"Colpo al braccio che regge l’arma; maciulla il muscolo e le cartilagini. Braccio fuori uso. +2 PF per r. Stordito per 6 r."},{"min":87,"max":89,"text":"Il sistema nervoso del bersaglio, sovraccarico di elettricità, viene totalmente sconvolto. La vittima cade in terra in stato di shock per 12 r prima di morire."},{"min":90,"max":90,"text":"Scarica alla testa. Se il bersaglio indossa un elmo di cuoio: elmo distrutto e 2 settimane di coma. Altrimenti muore subito per la distruzione dei tessuti cerebrali."},{"min":91,"max":96,"text":"Scarica al torace. Se il bersaglio indossa un’armatura di metallo questa si fonde e lo immobilizza. Altrimenti il bersaglio resta fuori combattimento per 6 ore."},{"min":97,"max":99,"text":"Esperienza elettrizzante! Il cervello è vittima di un grave shock e di ustioni superficiali. Il bersaglio resta fuori combattimento e muore dopo 6 r."},{"min":100,"max":100,"text":"Il sistema nervoso del bersaglio agisce da superconduttore. La vittima muore all’istante in uno sfavillio di luci."},{"min":101,"max":106,"text":"Violenta scarica al volto. Il bersaglio perde il naso. Stordito per 8 r e accecato per 2 settimane. Se non indossa un elmo è in ogni caso fuori combattimento."},{"min":107,"max":109,"text":"Violenta scarica al petto, che distrugge cuore e polmoni. Se indossa un’armatura di metallo, questa si fonde e muore in 6 r. Altrimenti: muore all’istante."},{"min":110,"max":110,"text":"La testa del bersaglio non è più utilizzabile. Il corpo senza vita giace a terra circondato da fumo e ozono."},{"min":111,"max":116,"text":"Violenta scarica all’addome. Il bersaglio è stordito per 7 r. 6 PF per r. Se l’addome non è protetto da armatura: muore in seguito allo shock e per dissanguamento nel giro di 12 r."},{"min":117,"max":119,"text":"Violentissima scarica al petto che distrugge i polmoni. Il bersaglio viene letteralmente tagliato a metà. La scarica prosegue per altri 3 metri in linea retta, infliggendo un Colpo Critico di tipo A a chi si trova sul suo percorso."},{"min":120,"max":120,"text":"La scarica distrugge la struttura cellulare del bersaglio. L’intero corpo si riduce in polvere."}]},{"type":"crit","id":"TC-9","name":"TC-9 Colpi Critici da Impatto Magico","rows":[{"min":null,"max":5,"text":"Nemmeno una scalfittura."},{"min":6,"max":16,"text":"Colpo di striscio: +5 PF."},{"min":17,"max":27,"text":"Colpo al fianco. Il bersaglio barcolla e resta stordito per 1 r: +10 PF."},{"min":28,"max":38,"text":"Colpo alle spalle. Il bersaglio viene scagliato indietro di 3 metri: +12 PF. Se senza l’armatura resta stordito per 2 r."},{"min":39,"max":49,"text":"Il bersaglio è colpito ad una gamba e gettato a terra: +8 PF. Se la gamba non ha alcuna protezione: stordito per 2 r."},{"min":50,"max":60,"text":"Violento colpo al braccio che regge lo scudo: +10 PF. Scudo spezzato e fuori uso. Se il bersaglio non ha lo scudo: braccio fratturato e PG stordito per 3 r."},{"min":61,"max":70,"text":"Colpo alla testa: +8 PF e stordito per 2 r. Se non indossa un elmo stordito per 5 r e -20 alle attività per un’ora"},{"min":71,"max":79,"text":"Colpito il braccio dell’arma, +12 PF. L’arma viene scagliata a 6 metri. Se non indossa bracciali: grave distorsione al gomito, -25 alle attività e stordito per 2 r."},{"min":80,"max":80,"text":"Impatto alla testa. Elmo in frantumi: +12 PF. Il bersaglio cade ed è fuori combattimento. Se non indossa l’elmo: cranio fratturato, muore in 3 r."},{"min":81,"max":86,"text":"Il bersaglio è colpito alla coscia. Muscoli strappati: +15 PF. -10 alle attività. Se la coscia non è protetta da armatura: -20 alle attività e stordito per 3 r."},{"min":87,"max":89,"text":"Colpo all’altezza del collo: +12 PF. Il bersaglio è stordito per 5 r. Non può parlare per una settimana. Se il collo non è protetto da armatura, la perdita della favella è permanente."},{"min":90,"max":90,"text":"Violento colpo nella regione cervicale. Il bersaglio è paralizzato dal collo in giù: +20 PF. Un umore melanconico scende sulla vittima."},{"min":91,"max":96,"text":"Colpo al ginocchio, che viene lussato. La cartilagine ed i tendini vengono frantumati: +15 PF. -50 alle attività. Stordito per 9 r."},{"min":97,"max":99,"text":"Violento colpo all’addome: +18 PF. Il bersaglio è stordito per 12 r. Se l’addome non è protetto da armatura, il bersaglio muore dopo 6 r per danni agli organi interni."},{"min":100,"max":100,"text":"Violento colpo alla testa: cranio fratturato. Cade in coma per 3 settimane. Se il bersaglio non indossa un elmo, muore."},{"min":101,"max":106,"text":"Duro colpo alla mascella. Osso fratturato. Fin quando non guarisce il bersaglio non può parlare né ingerire cibi solidi: +15 PF. -10 alle attività. Bersaglio stordito per 7 r."},{"min":107,"max":109,"text":"Duro colpo al fianco. Una costola perfora il rene. Muore in 6 r."},{"min":110,"max":110,"text":"Uno spettacolare colpo in pieno petto fa esplodere cuore e polmoni. Il bersaglio muore istantaneamente."},{"min":111,"max":116,"text":"Il bersaglio rotea su sé stesso, cade e si frattura entrambe le braccia: -60 alle attività. Stordito per 3 r."},{"min":117,"max":119,"text":"L’impatto frattura il teschio del bersaglio in mille pezzi. Morte istantanea e spettacolare."},{"min":120,"max":120,"text":"Con l’intero scheletro annichilito dall’impatto, il bersaglio può essere raccolto solo con la paletta."}]},{"type":"crit","id":"TC-10","name":"TC-10 C.C. Fisici degli esseri Grandi","rows":[{"min":null,"max":5,"text":"+10 PF. Se l’arma non è magica ha il 20% di possibilità di rompersi, se è magica effettua un fallimento critico."},{"min":6,"max":16,"text":"+6 PF."},{"min":17,"max":27,"text":"+12 PF."},{"min":28,"max":38,"text":"+18 PF."},{"min":39,"max":49,"text":"Colpo fortissimo: barcolla. +20 PF. -10 alle attività."},{"min":50,"max":60,"text":"Colpo al braccio: +15 PF, -30 alle attività."},{"min":61,"max":70,"text":"Colpo alla schiena, +26 PF, +4 PF per r. Il mostro è stordito per 2 r."},{"min":71,"max":79,"text":"Bel colpo alle gambe: +18 PF; +5 PF per r. -20 alle attività. Vittima stordita per 3 r."},{"min":80,"max":80,"text":"Colpo ben piazzato al collo: la vena giugulare viene recisa di netto. +15 PF. Il nemico muore dopo 6 r, ma nel frattempo può agire con -60 alle attività."},{"min":81,"max":86,"text":"Colpo duro: +25 PF; +5 PF per r a causa di una leggera ferita. -10 alle attività. Stordito per 2 r."},{"min":87,"max":89,"text":"Il colpo recide un’arteria della gamba. Il bersaglio può agire con -30 alle attività per 4 r, poi cade a terra e muore dopo altri 6 r."},{"min":90,"max":90,"text":"Il colpo recide una vena dell’avambraccio: +20 PF. Il mostro è stordito per 6 r; poi cade a terra e muore."},{"min":91,"max":96,"text":"Colpo alle gambe: +15 PF, -20 alle attività. +2 PF per r. Stordito per 3 r."},{"min":97,"max":99,"text":"Colpo alla testa: fratturato il cranio, +30 PF. Fuori combattimento: bel colpo."},{"min":100,"max":100,"text":"Colpo al cuore. Il bersaglio muore subito. L’arma rimane nel corpo e intrappolata sotto il cadavere. Le probabilità che si rompa, se non è magica sono del 10%"},{"min":101,"max":106,"text":"Colpo alla spalla: +15 PF. Il braccio è quasi fuori uso. Stordito per 3 r."},{"min":107,"max":109,"text":"Tremendo colpo incrociato. Accecato, il bruto resta stordito per 3 r, e dopo può soltanto brancolare."},{"min":110,"max":110,"text":"Colpo attraverso la guancia. Muore immediatamente. L’arma si conficca nel cranio e vi resta per 2 r."},{"min":111,"max":116,"text":"Colpo al mento. Mascella fratturata. Fuori combattimento. +60 PF e 1 mese di coma."},{"min":117,"max":119,"text":"Colpo in mezzo agli occhi. Il bersaglio muore all’istante e crolla sull’attaccante, che subisce 20 PF e resta bloccato per 6 r."},{"min":120,"max":120,"text":"Colpo nell’orecchio, che distrugge il cervello. Toglie tutto il cerume dalle orecchie, ma contemporaneamente il mostro muore sul colpo."}]},{"type":"crit","id":"TC-11","name":"TC-11 C.C. Magici degli esseri Grandi","rows":[{"min":null,"max":5,"text":"Le dimensioni della creatura vi incutono timore."},{"min":6,"max":16,"text":"+5 PF."},{"min":17,"max":27,"text":"+8 PF."},{"min":28,"max":38,"text":"+10 PF."},{"min":39,"max":49,"text":"+12 PF."},{"min":50,"max":60,"text":"+15 PF."},{"min":61,"max":70,"text":"+18 PF"},{"min":71,"max":79,"text":"Bel colpo! +22 PF e +1 PF per r."},{"min":80,"max":80,"text":"Sbilanciato dal colpo: +15 PF. Stordito per 2 r."},{"min":81,"max":86,"text":"Barcolla sotto il violento colpo: +20 PF. Stordito per 1 r."},{"min":87,"max":89,"text":"Colpo alle gambe: +15 PF. -20 alle attività. Stordito per 2 r."},{"min":90,"max":90,"text":"Colpo alla bocca. Fuori combattimento e +30 PF. Resta in coma per 1 mese."},{"min":91,"max":96,"text":"Il colpo lo fa roteare su sé stesso e lo sbilancia. +18 PF. -10 alle attività. Stordito per 1 r."},{"min":97,"max":99,"text":"Colpo laterale: +25 PF. -20 alle attività per le costole rotte. Stordito per 3 r."},{"min":100,"max":100,"text":"Colpo al basso ventre. Vescica distrutta. Morto in 4 r, ma fino ad allora pienamente attivo."},{"min":101,"max":106,"text":"Colpo alla testa. Momentaneamente confuso: +20 PF. Stordito per 2 r."},{"min":107,"max":109,"text":"Il colpo stritola le gambe. +25 PF. Muore dopo 5 r per lo shock, ma fino ad allora resta pienamente attivo."},{"min":110,"max":110,"text":"Colpo terribile. Spezza il collo e recide la spina dorsale. Cade a terra e muore in 3 r."},{"min":111,"max":116,"text":"Colpo agli occhi; accecato per 2 r. +15 PF. -20 alle attività."},{"min":117,"max":119,"text":"Colpo al corpo che distrugge molti organi interni. Il mostro muore in 3 r, ma fino ad allora è pienamente attivo."},{"min":120,"max":120,"text":"Colpo superbo: le costole si spezzano e trafiggono il cuore. Cade in terra e muore dopo 6 r di atroce agonia."}]},{"type":"crit","id":"TC-12","name":"TC-12 C.C. Fisici degli esseri Enormi","rows":[{"min":null,"max":5,"text":"Se l’arma non è magica si spezza, altrimenti ti cade di mano e devi impiegare 2 r per recuperarla."},{"min":6,"max":16,"text":"Infliggete +10 PF ma l’arma ha il 20% di possibilità di rompersi."},{"min":17,"max":27,"text":"+4 PF"},{"min":28,"max":38,"text":"+6 PF"},{"min":39,"max":49,"text":"+8 PF"},{"min":50,"max":60,"text":"+10 PF"},{"min":61,"max":70,"text":"+15 PF"},{"min":71,"max":79,"text":"Barcolla +20 PF."},{"min":80,"max":80,"text":"Colpo fortissimo al braccio +18 PF, +8 PF per r, stordito per 3 r, -40 alle attività."},{"min":81,"max":86,"text":"Colpo fortissimo +25 PF e stordito per 1 r."},{"min":87,"max":89,"text":"Il colpo apre una profonda ferita. +10 PF e +6 PF per r."},{"min":90,"max":90,"text":"Un violento colpo alla gamba trafigge un’arteria. Il mostro muore in 8 r per emorragia ma fino ad allora è pienamente attivo. +30 PF."},{"min":91,"max":96,"text":"Colpo al torace, +12 PF, -20 alle attività. Stordito per 1 r."},{"min":97,"max":99,"text":"Fortissimo colpo alla testa. +30 PF e stordito per 4 r."},{"min":100,"max":100,"text":"Violentissimo colpo al petto. Il mostro muore in 3 r per il grave danno agli organi. Può agire con -50 alle attività. Le probabilità che l’arma si rompa sono del 30% o del 5% se è magica."},{"min":101,"max":106,"text":"Colpita la gamba e messa quasi fuori uso. +9 PF, -40 alle attività."},{"min":107,"max":109,"text":"Il colpo ferisce gli occhi e annebbia la vista del mostro. Stordito per 2 r e -40 alle attività."},{"min":110,"max":110,"text":"Colpo devastante alla testa. Cranio distrutto. Il mostro crolla sugli attaccanti provocando 30 PF e un critico da Impatto di tipo A (Manovra difficilissima per evitarlo)."},{"min":111,"max":116,"text":"Il colpo acceca il mostro. +35 PF"},{"min":117,"max":119,"text":"Il colpo trafigge il collo. Il poverino muore dopo 3 r di tremende convulsioni. Gli attaccanti (5 metri di raggio) possono venir colpiti (50%)"},{"min":120,"max":120,"text":"Spaventoso colpo al cuore. Il mostro urla e crolla a terra con fragore"}]},{"type":"crit","id":"TC-13","name":"TC-13 C.C. Magici degli esseri Enormi","rows":[{"min":null,"max":5,"text":"Le dimensioni della creatura vi spaventano. Rimanete storditi per 1 r"},{"min":6,"max":16,"text":"Nessun danno addizionale. E’ troppo grosso!"},{"min":17,"max":27,"text":"+3 PF"},{"min":28,"max":38,"text":"+5 PF"},{"min":39,"max":49,"text":"+7 PF"},{"min":50,"max":60,"text":"+9 PF"},{"min":61,"max":70,"text":"+12 PF"},{"min":71,"max":79,"text":"Colpo alla testa, +10 PF e stordito per 1 r."},{"min":80,"max":80,"text":"Colpo molto forte. Il mostro retrocede di 2 metri. +20 PF, stordito per 1 r."},{"min":81,"max":86,"text":"Colpo di lato, il mostro barcolla. +15 PF e -20 alle attività per 2 r."},{"min":87,"max":89,"text":"Colpito un braccio. +12 PF, -15 alle attività."},{"min":90,"max":90,"text":"Fortissimo colpo al petto. +18 PF e +3 PF per r. Stordito per 3 r, – 30 alle attività."},{"min":91,"max":96,"text":"Colpo al petto. Sbilancia il mostro e gli toglie il fiato. +15 PF, -50 alle attività per 2 r."},{"min":97,"max":99,"text":"Colpita la spalla. +22 PF e ossa contuse. -20 alle attività."},{"min":100,"max":100,"text":"Il colpo distrugge gli occhi. +40 PF e -70 alle attività. Stordito per 9 r."},{"min":101,"max":106,"text":"Colpito un braccio e messo quasi fuori uso. +12 PF e -25 alle attività."},{"min":107,"max":109,"text":"Il colpo recide una mano. +18 PF e +8 PF per r. -20 alle attività."},{"min":110,"max":110,"text":"Colpo fatale al cuore. Il mostro muore all’istante ma a causa dell’enorme sforzo l’usufruitore resta privo di sensi per 6 ore e perde tutti i PM (se è un oggetto questo si rompe: 70%-LV)."},{"min":111,"max":116,"text":"Colpito alla testa e accecato per 1 r. +20 PF e 5 PF per r."},{"min":117,"max":119,"text":"Colpo in pieno volto. +50 PF e stordito per 5 r."},{"min":120,"max":120,"text":"L’esplosione entra negli occhi del mostro e la sua testa esplode. La carcassa crolla a terra."}]},{"type":"crit","id":"TTM-1","name":"TTM-1 C.M. con Armi da Mischia","rows":[{"min":null,"max":5,"text":"Perdi la presa, non puoi seguire altre azioni nel r."},{"min":6,"max":20,"text":"Scivoli. Se stai impugnando un’arma non magica, questa si rompe."},{"min":21,"max":35,"text":"Cattiva esecuzione. Perdi l’opportunità di colpire e ti trafiggi da solo, 2 PF."},{"min":36,"max":50,"text":"L’arma ti cade di mano. Ci vogliono 2 r per raccoglierla o puoi estrarne un’altra il prossimo round."},{"min":51,"max":65,"text":"Sbagli malamente il colpo e resti senza fiato. Hai bisogno di riposo. -40 alle attività per 2 r."},{"min":66,"max":79,"text":"Inciampi e resti stordito per 2 r. Con un po’ di fortuna potrai sopravvivere."},{"min":80,"max":80,"text":"Mossa incredibilmente sbagliata! Ti procuri da solo un C.C. da Impatto di tipo B. Invece se il tuo avversario usa un’arma da Taglio, la tua arma si rompe."},{"min":81,"max":86,"text":"Nella foga della lotta ti mordi la lingua. Stordito 2 r."},{"min":87,"max":89,"text":"Perdi la presa, non solo con l’arma ma anche con la realtà! Resti stordito 3 r."},{"min":90,"max":90,"text":"Cattivo gusto e scarsa l’esecuzione. Quasi riesci a mutilarti mentre la tua arma si rompe! Ti infliggi un C.C. di tipo B da Taglio."},{"min":91,"max":96,"text":"Errore incredibile! Infliggi un C.C. da Impatto di tipo B ad un tuo amico che combatte vicino a te."},{"min":97,"max":99,"text":"Inciampi su un’immaginaria tartaruga morta. Sei molto confuso e resti stordito per 3 r."},{"min":100,"max":100,"text":"La peggior cosa vista da anni! Ti dai una botta al basso ventre: -60 alle attività. Il tuo avversario può restare stordito per 2 r dal ridere."},{"min":101,"max":106,"text":"Barcolli e cadi, in un apparente tentativo di suicidio. Resti stordito per 3 r. Se usi un’arma ad asta, l’asta va in frantumi."},{"min":107,"max":109,"text":"Mossa veramente da incapaci! L’arma si rompe e resti stordito per 4 r."},{"min":110,"max":110,"text":"Inciampi e infilzi la punta della tua arma nel terreno. Vieni sbalzato a terra e picchi la testa. Stordito e a terra per 4 r."},{"min":111,"max":116,"text":"Perdi la presa sulla tua arma che viene sbalzata lontano. Ci vogliono 6 r per recuperarla."},{"min":117,"max":119,"text":"Non riesci a coordinare i movimenti e quasi ti sloghi una spalla provocandoti una leggera ferita. -30 alle attività e stordito per 3 r."},{"min":120,"max":120,"text":"La tua arma si spezza e una parte ti colpisce. Subisci un C.C. di tipo C da Impatto."}]},{"type":"crit","id":"TTM-2","name":"TTM-2 C.M. con Armi da Tiro","rows":[{"min":null,"max":5,"text":"Perdi la presa, non puoi seguire altre azioni nel r."},{"min":6,"max":20,"text":"Ti si sono intrecciate le dita! Non riesci a ricaricare e perdi il r."},{"min":21,"max":35,"text":"Fai “cilecca” e perdi il r. -50 alle attività nel r successivo."},{"min":36,"max":50,"text":"Rompi il dardo e perdi la calma. -30 alle attività per i prossimi 3 r."},{"min":51,"max":65,"text":"Ti cade il dardo. Resti stordito per questo r ed il successivo mentre pensi se raccoglierlo."},{"min":66,"max":79,"text":"Tiro davvero brutto! Per lo stupore resti stordito 2 r."},{"min":80,"max":80,"text":"Hai misurato male: 5 PF per te! Se non stai usando una balestra, la freccia ti sfugge di mano e ti taglia un orecchio: subisci 2 PF per r."},{"min":81,"max":86,"text":"Si rompe la corda dell’arco. Ci vogliono 6 r per aggiustarlo o 2 per estrarre un’altra arma."},{"min":87,"max":89,"text":"Mentre stai ricaricando l’arma, le munizioni ti sfuggono dalle mani, spargendosi in un raggio di 3 metri."},{"min":90,"max":90,"text":"L’arma si rompe. Resti stordito per 4 r. Buona fortuna, amico!"},{"min":91,"max":96,"text":"Fai partire la freccia troppo presto ed il tuo tiro risulta corto di ben 6 metri. -30 alle attività per 3 r."},{"min":97,"max":99,"text":"Sembra che tu pensi che l’arco sia un bastone! Ti scivola di mano e, per cercare di recuperarlo, ti sfugge di 2 metri più avanti."},{"min":100,"max":100,"text":"Il dardo scivola mentre fai partire il colpo e ti trapassa la mano sinistra. Mano fuori uso, +8 PF e 2 PF per r."},{"min":101,"max":106,"text":"Scivoli e cadi a terra. Il colpo ne risulta deviato e resti stordito per 5 r."},{"min":107,"max":109,"text":"Mentre tiri la freccia, le alette ti feriscono ad un occhio. +5 PF, -20 alle attività e resti stordito per 2 r."},{"min":110,"max":110,"text":"La punta della freccia si incastra nell’oggetto più vicino. L’oggetto subisce un C.C., se applicabile, da Punta di tipo A."},{"min":111,"max":116,"text":"Mentre sollevi l’arma, ti parte un colpo. Effettua un attacco (senza modifiche) contro il combattente più vicino, amico o nemico."},{"min":117,"max":119,"text":"Stai proprio dormendo ad occhi aperti! Metti la mano davanti all’arma mentre parte il colpo. Perdi un dito e subisci 4 PF e 2 PF per r."},{"min":120,"max":120,"text":"Perdi l’equilibrio e il dardo ti inchioda un piede a terra. +10 PF. 2 PF per r. -30 alle attività. Stordito 3 r."}]},{"type":"crit","id":"TTM-3","name":"TTM-3 Fallimento degli Incantesimi","rows":[{"min":null,"max":5,"text":"Perdi la concentrazione. Sprechi l’incantesimo, non perdi i PM."},{"min":6,"max":20,"text":"Stai pensando ad altro. Non riesci a lanciare né a preparare incantesimi nel prossimo r."},{"min":21,"max":35,"text":"Resti indeciso per un lapsus improvviso. L’incantesimo viene ritardato 1 r."},{"min":36,"max":50,"text":"Grave lapsus mentale. Perdi l’incantesimo ma non i PM. -30 alle attività per 3 r."},{"min":51,"max":65,"text":"Sforzo moderato ma serio. Perdi l’incantesimo e i PM. Resti stordito per 1 r."},{"min":66,"max":79,"text":"Ti sorge un inspiegabile timore. Perdi l’incantesimo e i PM. Resti stordito per 2 r."},{"min":80,"max":80,"text":"L’incantesimo non riesce a sfogarsi all’esterno. Subisci 15 PF e cadi a terra. Resti stordito per un’ora. +1 PC."},{"min":81,"max":86,"text":"Grave sforzo. Perdi l’incantesimo, ma non i PM. Resti stordito 3 r."},{"min":87,"max":89,"text":"L’incantesimo non trova sfogo all’esterno. Per lo shock accusi 20 PF. Resti cieco e sordo per 10 minuti. +1 PC."},{"min":90,"max":90,"text":"Lo sforzo ti procura un attacco cardiaco e subisci 20 PF. Resti privo di sensi per 12 ore. +3 PC."},{"min":91,"max":96,"text":"Lo sforzo è eccessivo e l’incantesimo fa “cilecca”. Subisci 5 PF e resti stordito per 3 r. +1 PC."},{"min":97,"max":99,"text":"La forza magica del bersaglio ritorce contro di te gli effetti dell’incantesimo. Applicali invertendo i ruoli tra bersaglio e chi lancia. +2 PC."},{"min":100,"max":100,"text":"Crisi d’identità. Perdi la capacità di lanciare incantesimi per 2 settimane. +5 PC."},{"min":101,"max":106,"text":"L’incantesimo fa “cilecca” per l’enorme pressione mentale. Cadi a terra e subisci 10 PF. Resti stordito per 6 r. +4 PC."},{"min":107,"max":109,"text":"L’incantesimo non trova sfogo all’esterno. Subisci 25 PF e non lanci incantesimi per 3 settimane. Svenuto per 3 ore. +8 PC."},{"min":110,"max":110,"text":"Lo sforzo ti procura un grave attacco cardiaco. Resti paralizzato dalla cintola in giù. +15 PC."},{"min":111,"max":116,"text":"L’incantesimo devia e colpisce un punto 6 metri a destra del bersaglio. +6 PC."},{"min":117,"max":119,"text":"Come sopra, l’incantesimo colpisce un punto 6 metri a sinistra del bersaglio. +10 PC."},{"min":120,"max":120,"text":"Collasso mentale. L’incantesimo viene lanciato dalla parte opposta. Non lanci incantesimi per 3 mesi. +20 PC."}]},{"type":"crit","id":"TTM-4","name":"TTM-4 Fallimento delle Manovre in Movimento","rows":[{"min":null,"max":5,"text":"Esiti troppo a lungo e non agisci."},{"min":6,"max":20,"text":"Qualcosa ti distrae e decidi di aspettare il prossimo r."},{"min":21,"max":35,"text":"Scivoli (30% di probabilità di cadere). -20 ad ogni manovra per 2 r."},{"min":36,"max":50,"text":"Incespichi (45% di probabilità di cadere). -30 ad ogni manovra per 2 r."},{"min":51,"max":65,"text":"Ti pesti un piede (60% di probabilità di cadere). Subisci 3 PF. -10 alle attività."},{"min":66,"max":79,"text":"Scivoli (75% di probabilità di cadere). Resti stordito per 2 r."},{"min":80,"max":80,"text":"Prendi una storta ad una caviglia e subisci 5 PF. -10 alle attività."},{"min":81,"max":86,"text":"Cadi a terra e subisci 3 PF. -20 alle attività per 3 r."},{"min":87,"max":89,"text":"Prendi una storta ad una caviglia e ti procuri uno stiramento ad un tendine. Subisci 7 PF. -20 alle attività. Stordito per 1 r."},{"min":90,"max":90,"text":"Cadi e ti spezzi una gamba. Subisci 8 PF. -30 alle attività. Resti stordito per 1 r."},{"min":91,"max":96,"text":"Cadi e ti rompi un polso. Subisci 12 PF. -20 alle attività. Resti stordito per 2 r."},{"min":97,"max":99,"text":"Cadi sopra il tuo braccio e lo spezzi. Subisci 14 PF. -30 alle attività. Resti stordito per 4 r."},{"min":100,"max":100,"text":"Cercando di attutire la caduta ti spezzi le due braccia. Subisci 15 PF, -50 alle attività. Resti stordito per 3 r."},{"min":101,"max":106,"text":"Cadi sopra la tua gamba e la spezzi. Subisci 15 PF e resti stordito per 3 r. -50 alle attività."},{"min":107,"max":109,"text":"Prendi una ginocchiata e ti rompi il ginocchio. Subisci 10 PF e resti stordito per 4 r. -80 alle attività."},{"min":110,"max":110,"text":"Prendi una botta terribile e resti in coma per un anno."},{"min":111,"max":116,"text":"Cadi a terra e ti rompi l’osso sacro. Subisci 30 PF e resti paralizzato dalla cintola in giù."},{"min":117,"max":119,"text":"Cadi e resti paralizzato dal collo in giù. Subisci 20 PF."},{"min":120,"max":120,"text":"La tua caduta è davvero rovinosa! Ti spacchi la testa e passi a miglior vita."}]},{"type":"crit","id":"TTM-5","name":"TTM-5 C.M. in Combattimento a Cavallo","rows":[{"min":null,"max":5,"text":"La tua cavalcatura esita e perdi l’opportunità di attaccare."},{"min":6,"max":20,"text":"Perdi l’opportunità di attaccare, non puoi compiere altre azioni nel r."},{"min":21,"max":35,"text":"Non riesci a trovare l’angolo giusto, Non attacchi per due r, ma puoi parare"},{"min":36,"max":50,"text":"Ti scivola il piede dalla staffa, resti stordito 1 r."},{"min":51,"max":65,"text":"La tua cavalcatura schiva un nemico invisibile. Rimani stordito 2 r."},{"min":66,"max":79,"text":"La tua cavalcatura è nervosa e si agita. Perdi 3 r per calmarla. Puoi parare nel frattempo."},{"min":80,"max":80,"text":"Perdi la presa sull’arma e ti cade a terra. Dovrai smontare dalla cavalcatura per riprenderla, ma rimani stordito 1 r."},{"min":81,"max":86,"text":"Colpisci il tuo nemico su una parte resistente. Ti procuri 4 PF. -30 alle attività per 2 r."},{"min":87,"max":89,"text":"La tua cavalcatura è nervosa. -20 alle attività per il resto del combattimento."},{"min":90,"max":90,"text":"Colpisci per sbaglio la tua stessa cavalcatura. Subisce un C.C di tipo C da Impatto."},{"min":91,"max":96,"text":"La tua cavalcatura si spaventa e inizia a galoppare in una direzione casuale. Puoi tentare di calmarla non prima di 2 r."},{"min":97,"max":99,"text":"La tua cavalcatura sobbalza e ti ferisci da solo. Ti provochi 8 PF. Se hai un’arma da taglio +2 PF per r."},{"min":100,"max":100,"text":"La tua cavalcatura mette un piede in fallo. Cadete entrambi, subisci un C.C. di tipo C da Perdita di Equilibrio."},{"min":101,"max":106,"text":"Ti sbilanci combattendo. Ti cade qualsiasi cosa stessi tenendo in mano e perdi le redini. Non puoi parare ne compiere altre azioni che non siano il tentare di rimanere in sella per 3 r."},{"min":107,"max":109,"text":"La tua sella si danneggia e rischia di farti cadere. Resti stordito 3 round e ogni manovra in sella subirà una penalità di -40 finché non viene riparata."},{"min":110,"max":110,"text":"La tua cavalcatura si impenna. Cadi all’indietro. Subisci 20 PF e rimani stordito per 6 r."},{"min":111,"max":116,"text":"La tua arma si spezza dopo che l’hai piantata nel terreno. Una parte ti colpisce alla tesa. Rimani stordito per 3 r."},{"min":117,"max":119,"text":"La tua arma si pianta nel terreno e vieni sbalzato via. Cadi a sei metri di distanza provocandoti 15 PF e rimanendo stordito per 5 r."},{"min":120,"max":120,"text":"Non riesci a stare in sella, cadi e subisci un C.C. di tipo D da Impatto."}]},{"type":"crit","id":"TTM-6","name":"TTM-6 C.M. con Armi da Lancio","rows":[{"min":null,"max":5,"text":"Perdi la presa e l’opportunità di attaccare. Puoi eseguire altri attacchi"},{"min":6,"max":20,"text":"Ti si sono intrecciate le dita! Non riesci a lanciare e perdi il r."},{"min":21,"max":35,"text":"Manchi completamente il bersaglio e perdi la concentrazione. -30 alle attività per 2 r."},{"min":36,"max":50,"text":"Ti scivola l’arma a terra e la calpesti. Perdi un round per raccoglierla. -20 alle attività per i prossimi 3 r."},{"min":51,"max":65,"text":"Ti cade l’arma. Resti stordito per questo r ed il successivo mentre pensi se raccoglierla."},{"min":66,"max":79,"text":"Tiro davvero brutto! Per lo stupore resti stordito 2 r."},{"min":80,"max":80,"text":"Hai misurato male e il lancio ti procura una piccola ferita alla spalla: 6 PF per te!"},{"min":81,"max":86,"text":"Manchi completamente il bersaglio e colpisci qualcosa di resistente. L’arma si rompe."},{"min":87,"max":89,"text":"Mentre stai lanciando l’arma si impiglia in qualcosa. Stordito e -20 alle attività per 2 r."},{"min":90,"max":90,"text":"L’arma ti sfugge di mano e rimani stordito per 4 r mentre incespichi."},{"min":91,"max":96,"text":"Lanci senza coordinarti e resti senza fiato: -40 alle attività per 2 r."},{"min":97,"max":99,"text":"L’arma ti scivola di mano e, per cercare di recuperarlo, ti sfugge di 2 metri più avanti."},{"min":100,"max":100,"text":"Ti ferisci la mano mentre lanci. +6 PF e 2 PF per r. -20 all’attività per la ferita."},{"min":101,"max":106,"text":"Scivoli e cadi a terra. Il colpo ne risulta deviato e resti stordito per 5 r."},{"min":107,"max":109,"text":"Mentre lanci ti ferisci il braccio. +10 PF e resti stordito per 2 r. Se stai usando le Bolas ti si avviluppano addosso, -30 alle attività per 5 r."},{"min":110,"max":110,"text":"L’arma si incastra nell’oggetto più vicino. L’oggetto subisce un C.C., se applicabile da Impatto di tipo A."},{"min":111,"max":116,"text":"Ti sbilanci e lanci dalla parte sbagliata. Effettua un attacco (senza modifiche) contro il combattente più vicino, amico o nemico."},{"min":117,"max":119,"text":"Stai proprio dormendo ad occhi aperti! Ti cade l’arma sul piede. Ti rompi un dito e subisci 8 PF, -30 alle attività."},{"min":120,"max":120,"text":"Lancio completamente sbagliato. Ti colpisci da solo. Subisci un C.C. ti tipo C da Impatto."}]},{"type":"crit","id":"TTM-7","name":"TTM-7 Arti Marziali","rows":[{"min":null,"max":5,"text":"Manchi completamente il bersaglio ma puoi eseguire altri attacchi."},{"min":6,"max":20,"text":"Attacco fallito, non puoi eseguire altre azioni nel round."},{"min":21,"max":35,"text":"Il tuo attacco è debole e impreciso. Perdi il round"},{"min":36,"max":50,"text":"Ti sbilanci attaccando -20 alle attività per 2 r."},{"min":51,"max":65,"text":"Sbagli malamente il colpo. Stordito 1 r."},{"min":66,"max":79,"text":"Inciampi e resti stordito per 2 r."},{"min":80,"max":80,"text":"Attacco completamente sbagliato. Ti procuri da solo un C.C di tipo B da Perdita di Equilibrio"},{"min":81,"max":86,"text":"Colpisci qualcosa di duro! +5 PF."},{"min":87,"max":89,"text":"Perdi la presa o ti sbilanci. Stordito 3 r."},{"min":90,"max":90,"text":"Cadi a terra mentre cerchi di eseguire il colpo. Stordito per 4 r."},{"min":91,"max":96,"text":"Mentre attacchi ti sbilanci e roteando colpisci un altro bersaglio vicino, alleato o nemico, provocandogli un C.C di tipo A da Perdita di Equilibrio"},{"min":97,"max":99,"text":"Inciampi e rimani confuso e stordito per 3 r. Per 1 r non puoi parare."},{"min":100,"max":100,"text":"Barcolli e cadi a terra. Resti stordito per 3 r e non puoi parare."},{"min":101,"max":106,"text":"Ti colpisci da solo. +5 PF, -20 alle attività."},{"min":107,"max":109,"text":"Ti provochi una storta alla caviglia. -30 alle attività."},{"min":110,"max":110,"text":"Ricevi un contraccolpo violento alla testa. Rimani stordito per 6 r e non puoi parare."},{"min":111,"max":116,"text":"Il tuo attacco fallisce e rimani completamente scoperto. Qualsiasi attacco contro di te questo r ha un bonus di +30."},{"min":117,"max":119,"text":"Manchi il bersaglio cadendo a terra e rompendoti un braccio cercando di attutire la caduta. +10 PF e -40 alle attività."},{"min":120,"max":120,"text":"Colpisci malamente facendoti male da solo. Ricevi un C.C. di tipo C da Impatto."}]}]};
+  if (typeof module !== 'undefined') module.exports = G.tabledata;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Archivio locale: stato dell'app in localStorage, con copia in memoria se il browser lo impedisce. */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+  var R = G.rules || (typeof require !== 'undefined' ? require('./rules.js') : null);
+  var KEY = 'girsa:v1';
+  var state = null, saveOk = true, timer = null;
+
+  function blank() {
+    var c = R.newChar('Personaggio 1');
+    return { v: 1, cur: c.id, chars: [c], settings: R.defaultSettings(), atk: [], crit: [], enemies: [], clog: [], dlog: [] };
+  }
+
+  /* Completa uno stato letto da disco o importato, senza toccare i dati presenti. */
+  function migrate(o) {
+    var b = blank();
+    if (!o || typeof o !== 'object' || !Array.isArray(o.chars) || !o.chars.length) return b;
+    ['atk', 'crit', 'enemies', 'clog', 'dlog'].forEach(function (k) { if (!Array.isArray(o[k])) o[k] = []; });
+    o.settings = o.settings || b.settings;
+    o.settings.dice = o.settings.dice || b.settings.dice;
+    o.settings.tb1 = o.settings.tb1 || b.settings.tb1;
+    o.settings.prog = o.settings.prog || b.settings.prog;
+    o.chars.forEach(function (c) {
+      var n = R.newChar(c.name);
+      Object.keys(n).forEach(function (k) { if (c[k] === undefined) c[k] = n[k]; });
+      Object.keys(n.stats).forEach(function (k) { if (!c.stats[k]) c.stats[k] = n.stats[k]; });
+      Object.keys(n.defs).forEach(function (k) { if (!c.defs[k]) c.defs[k] = n.defs[k]; });
+      Object.keys(n.diary).forEach(function (k) { if (c.diary[k] === undefined) c.diary[k] = n.diary[k]; });
+    });
+    if (!o.chars.some(function (c) { return c.id === o.cur; })) o.cur = o.chars[0].id;
+    o.v = 1;
+    return o;
+  }
+
+  function load() {
+    try {
+      var s = localStorage.getItem(KEY);
+      if (s) { state = migrate(JSON.parse(s)); return state; }
+    } catch (e) { saveOk = false; }
+    state = blank();
+    return state;
+  }
+  function flush() {
+    timer = null;
+    try { localStorage.setItem(KEY, JSON.stringify(state)); saveOk = true; } catch (e) { saveOk = false; }
+  }
+  function save() { if (timer) clearTimeout(timer); timer = setTimeout(flush, 250); }
+
+  function cur() {
+    for (var i = 0; i < state.chars.length; i++) if (state.chars[i].id === state.cur) return state.chars[i];
+    return state.chars[0];
+  }
+  function setPath(o, p, v) {
+    var k = p.split('.');
+    for (var i = 0; i < k.length - 1; i++) { if (o[k[i]] == null) o[k[i]] = {}; o = o[k[i]]; }
+    o[k[k.length - 1]] = v;
+  }
+  function getPath(o, p) {
+    var k = p.split('.');
+    for (var i = 0; i < k.length; i++) { if (o == null) return undefined; o = o[k[i]]; }
+    return o;
+  }
+  function replaceAll(o) { state = migrate(o); flush(); return state; }
+
+  var S = {
+    load: load, save: save, flush: flush, cur: cur, setPath: setPath, getPath: getPath, migrate: migrate, blank: blank,
+    replaceAll: replaceAll, get: function () { return state; }, ok: function () { return saveOk; }
+  };
+  G.store = S;
+  if (typeof module !== 'undefined') module.exports = S;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Utilità di interfaccia: escape, campi, valori calcolati, barra dell'ultimo tiro. */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+  var R = G.rules, S = G.store;
+
+  var MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return MAP[c]; }); }
+
+  /* Stato volatile (non salvato): moduli del combattimento, import, ecc. */
+  var tmp = {};
+
+  /* attr: data-p (scheda), data-s (impostazioni), data-t (volatile) */
+  function inp(attr, path, val, o) {
+    o = o || {};
+    return '<input ' + attr + '="' + esc(path) + '" value="' + esc(val) + '" type="' + (o.type || 'text') + '"' +
+      (o.type === 'number' ? ' step="' + (o.step || 'any') + '" inputmode="decimal"' : '') +
+      (o.cls ? ' class="' + o.cls + '"' : '') + (o.ph != null ? ' placeholder="' + esc(o.ph) + '"' : '') +
+      (o.dis ? ' disabled' : '') + (o.title ? ' title="' + esc(o.title) + '"' : '') +
+      (o.label ? ' aria-label="' + esc(o.label) + '"' : '') + '>';
+  }
+  function sel(attr, path, val, opts, o) {
+    o = o || {};
+    return '<select ' + attr + '="' + esc(path) + '"' + (o.re ? ' data-re="1"' : '') + (o.cls ? ' class="' + o.cls + '"' : '') +
+      (o.label ? ' aria-label="' + esc(o.label) + '"' : '') + '>' +
+      opts.map(function (x) {
+        var v = Array.isArray(x) ? x[0] : x, l = Array.isArray(x) ? x[1] : x;
+        return '<option value="' + esc(v) + '"' + (String(v) === String(val) ? ' selected' : '') + '>' + esc(l) + '</option>';
+      }).join('') + '</select>';
+  }
+  function check(attr, path, val, label) {
+    return '<label class="chk"><input type="checkbox" ' + attr + '="' + esc(path) + '"' + (val ? ' checked' : '') + '> ' + esc(label) + '</label>';
+  }
+  function field(label, html) { return '<label class="fld"><span>' + esc(label) + '</span>' + html + '</label>'; }
+
+  /* ---- valori calcolati: aggiornati senza ridisegnare la pagina ---- */
+  function calcText(kind, arg) {
+    var c = S.cur(), st = S.get(), cx = R.ctx(st.settings), D = G.data;
+    switch (kind) {
+      case 'sb': return R.fmt(R.statBonus(c, arg, cx));
+      case 'st': return R.fmt(R.statTotal(c, arg, cx));
+      case 'sk': return R.fmt(R.skillTotal(c, +arg, cx));
+      case 'rk': return R.fmt(R.rankPart(c, +arg, cx));
+      case 'df': var d = D.DEFENSES.filter(function (x) { return x[0] === arg; })[0]; return R.fmt(R.defenseTotal(c, arg, d[2], cx));
+      case 'pts': return R.pointsSpent(c) + ' / ' + R.num(c.pool);
+      case 'pf': var p = R.pfInfo(c); return pfText(p);
+      case 'lvl': return c.livello === '' ? '' : String(R.xpForLevel(+c.livello));
+    }
+    return '';
+  }
+  function pfText(p) {
+    if (p.state === 'nd') return 'PF massimi non impostati';
+    var s = p.cur + ' / ' + p.max + ' PF';
+    if (p.state === 'zero') s += ' · a zero';
+    if (p.state === 'sotto') s += ' · sotto zero (morte a ' + p.deathAt + ' di danno)';
+    if (p.state === 'morte') s += ' · MORTO';
+    return s;
+  }
+  function updateCalc() {
+    var nodes = document.querySelectorAll('[data-calc]');
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i], a = n.getAttribute('data-calc').split(':');
+      n.textContent = calcText(a[0], a[1]);
+      if (a[0] === 'pf') n.setAttribute('data-state', R.pfInfo(S.cur()).state);
+    }
+    var ph = document.getElementById('pfstrip');
+    if (ph) { var p = R.pfInfo(S.cur()); ph.textContent = pfText(p); ph.setAttribute('data-state', p.state); }
+    var bonusPh = document.querySelectorAll('[data-bph]');
+    for (var j = 0; j < bonusPh.length; j++) {
+      var k = bonusPh[j].getAttribute('data-bph'), b = R.tableBonus(S.cur().stats[k].score, R.ctx(S.get().settings).tb1);
+      bonusPh[j].setAttribute('placeholder', b == null ? '' : R.fmt(b));
+    }
+  }
+  function calc(kind, arg, cls) {
+    return '<b class="tot ' + (cls || '') + '" data-calc="' + kind + (arg != null ? ':' + arg : '') + '">' + esc(calcText(kind, arg)) + '</b>';
+  }
+
+  /* ---- ultimo tiro, sempre visibile ---- */
+  function showRoll(label, detail, value) {
+    var st = S.get();
+    st.dlog.unshift({ t: Date.now(), label: label, detail: detail, value: value });
+    if (st.dlog.length > 60) st.dlog.length = 60;
+    S.save();
+    paintLast();
+  }
+  function paintLast() {
+    var el = document.getElementById('lastroll'), l = S.get().dlog[0];
+    if (!el) return;
+    el.innerHTML = l ? '<span class="lr-l">' + esc(l.label) + '</span> <span class="lr-d">' + esc(l.detail) + '</span> <b class="lr-v">' + esc(l.value) + '</b>' : 'Nessun tiro';
+  }
+
+  function toast(msg) {
+    var t = document.getElementById('toast'); if (!t) return;
+    t.textContent = msg; t.className = 'show';
+    clearTimeout(toast._t); toast._t = setTimeout(function () { t.className = ''; }, 3200);
+  }
+
+  function logLine(arr, text) {
+    arr.unshift({ t: Date.now(), s: text });
+    if (arr.length > 80) arr.length = 80;
+  }
+  function timeStr(t) {
+    var d = new Date(t), p = function (n) { return (n < 10 ? '0' : '') + n; };
+    return p(d.getDate()) + '/' + p(d.getMonth() + 1) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+  }
+
+  function bundled() { return G.tabledata || { atk: [], crit: [] }; }
+  function allAtk() { return bundled().atk.concat(S.get().atk); }
+  function allCrit() { return bundled().crit.concat(S.get().crit); }
+
+  var U = {
+    allAtk: allAtk, allCrit: allCrit, bundled: bundled,
+    esc: esc, tmp: tmp, inp: inp, sel: sel, check: check, field: field, calc: calc, calcText: calcText, updateCalc: updateCalc,
+    showRoll: showRoll, paintLast: paintLast, toast: toast, logLine: logLine, timeStr: timeStr, pfText: pfText
+  };
+  G.ui = U;
+  G.pages = G.pages || {};
+  if (typeof module !== 'undefined') module.exports = U;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Pagina Scheda. */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+  var R = G.rules, D = G.data, U = G.ui, S = G.store, esc = U.esc;
+
+  function identity(c) {
+    var f = function (label, path, o) { return U.field(label, U.inp('data-p', path, S.getPath(c, path), o)); };
+    return '<section class="card"><h2>Personaggio</h2><div class="grid g2">' +
+      f('Nome', 'name') + f('Professione', 'prof') +
+      U.field('Popolo', U.sel('data-act-change', 'popolo', c.popolo, [['', '(scegli)']].concat(D.POPOLI.map(function (p) { return p.n; })), { label: 'Popolo' })) +
+      f('Regno / origine', 'regno') + f('Livello', 'livello', { type: 'number' }) + f('Punti esperienza', 'px', { type: 'number' }) +
+      f('Altezza e corporatura', 'altezza') + f('Capelli', 'capelli') + f('Occhi', 'occhi') + f('Lingue', 'lingue') +
+      f('Temperamento', 'temperamento') + f('Segni particolari', 'segni') + f('Reputazione', 'reputazione') + f('Denaro', 'denaro') +
+      '</div><p class="hint">Soglia PE del livello indicato (tabella TE-5): <b data-calc="lvl">' + esc(U.calcText('lvl')) +
+      '</b>. Il testo del compendio non chiarisce se sia la soglia per raggiungere il livello o per lasciarlo: ricontrolla sul manuale.</p>' +
+      (c.popolo ? '<p class="hint">Popolo applicato: modifiche TB-3 a caratteristiche e tiri resistenza già inserite nelle colonne «Popolo» e «Mod. popolo».</p>' : '') +
+      '</section>';
+  }
+
+  function stats(c) {
+    var cx = R.ctx(S.get().settings);
+    var h = '<section class="card"><h2>Caratteristiche</h2><p class="hint">Punti spesi: <b data-calc="pts">' + esc(U.calcText('pts')) +
+      '</b> · riserva ' + U.inp('data-p', 'pool', c.pool, { type: 'number', cls: 'tiny', label: 'Riserva punti' }) +
+      '. Aspetto non si paga: il suo bonus è quello di Prontezza.</p><div class="stats">';
+    D.STATS.forEach(function (s) {
+      var k = s[0], st = c.stats[k], tb = R.tableBonus(st.score, cx.tb1);
+      var cost = R.pointCost(st.score);
+      h += '<div class="stat"><div class="stat-h"><b>' + k + '</b> <span>' + esc(s[1]) + '</span></div>' +
+        '<div class="row"><label>Valore' + U.inp('data-p', 'stats.' + k + '.score', st.score, { type: 'number', label: s[1] + ' valore' }) + '</label>' +
+        '<label>Bonus' + '<input data-p="stats.' + k + '.bonus" data-bph="' + k + '" type="number" step="any" inputmode="decimal" value="' + esc(st.bonus) +
+        '" placeholder="' + (tb == null ? '' : esc(R.fmt(tb))) + '" aria-label="' + esc(s[1]) + ' bonus a mano"></label>' +
+        '<label>Popolo' + U.inp('data-p', 'stats.' + k + '.razza', st.razza, { type: 'number', label: s[1] + ' bonus popolo' }) + '</label>' +
+        '<div class="tt">Tot.' + U.calc('st', k) + '</div></div>' +
+        (cost === undefined ? '<div class="warn">Fuori dall\'intervallo 20–100 della distribuzione punti.</div>' : '') + '</div>';
+    });
+    return h + '</div><p class="hint">Il bonus a mano, se compilato, sostituisce quello della tabella TB-1.</p></section>';
+  }
+
+  function pf(c) {
+    return '<section class="card"><h2>Punti ferita</h2><div class="grid g3">' +
+      U.field('PF massimi', U.inp('data-p', 'pf.max', c.pf.max, { type: 'number' })) +
+      U.field('Danno subito', U.inp('data-p', 'pf.dmg', c.pf.dmg, { type: 'number' })) +
+      '<div class="fld"><span>Stato</span><b class="pfbig" data-calc="pf" data-state="' + R.pfInfo(c).state + '">' + esc(U.calcText('pf')) + '</b></div></div>' +
+      '<p class="hint">Morte quando il danno raggiunge i PF massimi più il punteggio di Costituzione. I pulsanti PF in alto modificano il danno subito.</p></section>';
+  }
+
+  function skillRow(c, i) {
+    var s = c.skills[i], m = R.meta(s), free = s.cat === 'sec' || s.k === 'arm_x';
+    var label = free ? U.inp('data-p', 'skills.' + i + '.name', s.name, { ph: 'Abilità', label: 'Nome abilità' }) : '<span class="nm">' + esc(s.name) + (m.tag ? ' <i class="tag">' + m.tag + '</i>' : '') + '</span>';
+    var stat = m.noStat ? '<span class="dim">–</span>' : U.sel('data-p', 'skills.' + i + '.stat', s.stat, [['', '–']].concat(D.STATS.map(function (x) { return x[0]; })), { cls: 'sm', label: 'Caratteristica' });
+    var ranks = m.noRanks ? '<span class="dim">–</span>' : U.inp('data-p', 'skills.' + i + '.ranks', s.ranks, { type: 'number', cls: 'sm', label: 'Gradi', title: m.maxRanks ? 'Massimo ' + m.maxRanks + ' gradi (TB-4)' : '' });
+    if (m.prog === 'manual') ranks += U.inp('data-p', 'skills.' + i + '.rbm', s.rbm, { type: 'number', cls: 'sm', ph: 'bonus', label: 'Bonus gradi a mano', title: 'Progressione a dadi: inserisci il bonus a mano' });
+    var cell = function (field, off, label) { return off ? '<span class="dim">–</span>' : U.inp('data-p', 'skills.' + i + '.' + field, s[field], { type: 'number', cls: 'sm', label: label }); };
+    return '<tr><td class="l">' + label + '</td><td>' + stat + '</td><td>' + ranks + '</td><td>' + U.calc('rk', i, 'dim') + '</td><td>' + cell('prof', m.noProf, 'Bonus professione') +
+      '</td><td>' + cell('obj', m.noObj, 'Bonus oggetto') + '</td><td>' + U.inp('data-p', 'skills.' + i + '.spec', s.spec, { type: 'number', cls: 'sm', label: 'Bonus speciale' }) +
+      '</td><td>' + U.calc('sk', i) + '</td><td><button class="mini" data-act="rollskill" data-i="' + i + '" aria-label="Tira ' + esc(s.name) + '">🎲</button></td></tr>';
+  }
+  function skills(c) {
+    var h = '<section class="card"><h2>Abilità</h2><p class="hint">Totale = bonus gradi + caratteristica + professione + oggetto + speciale. Il pulsante 🎲 tira il d100 aperto e somma il totale. Le abilità secondarie seguono la progressione primaria: il testo non dice altro, verifica sul manuale.</p>';
+    D.CATS.forEach(function (cat) {
+      var idx = []; c.skills.forEach(function (s, i) { if (s.cat === cat[0]) idx.push(i); });
+      if (!idx.length) return;
+      h += '<details' + (cat[0] === 'arm' || cat[0] === 'mov' ? ' open' : '') + '><summary>' + esc(cat[1]) + '</summary><div class="scroll"><table class="sk"><thead><tr><th class="l">Abilità</th><th>Car.</th><th>Gradi</th><th>B.gr.</th><th>Prof</th><th>Ogg</th><th>Spec</th><th>Tot</th><th></th></tr></thead><tbody>' +
+        idx.map(function (i) { return skillRow(c, i); }).join('') + '</tbody></table></div></details>';
+    });
+    return h + '</section>';
+  }
+
+  function defenses(c) {
+    var h = '<section class="card"><h2>Difese e tiri resistenza</h2><div class="scroll"><table class="sk"><thead><tr><th class="l">Voce</th><th>Car.</th><th>Mod. popolo</th><th>Extra</th><th>Tot</th><th></th></tr></thead><tbody>';
+    D.DEFENSES.forEach(function (d) {
+      h += '<tr><td class="l">' + esc(d[1]) + '</td><td>' + d[2] + '</td><td>' + U.inp('data-p', 'defs.' + d[0] + '.mod', c.defs[d[0]].mod, { type: 'number', cls: 'sm', label: d[1] + ' modifica popolo' }) +
+        '</td><td>' + U.inp('data-p', 'defs.' + d[0] + '.extra', c.defs[d[0]].extra, { type: 'number', cls: 'sm', label: d[1] + ' extra' }) +
+        '</td><td>' + U.calc('df', d[0]) + '</td><td><button class="mini" data-act="rolldef" data-k="' + d[0] + '" aria-label="Tira ' + esc(d[1]) + '">🎲</button></td></tr>';
+    });
+    return h + '</tbody></table></div></section>';
+  }
+
+  function protection(c) {
+    var f = function (l, p) { return U.field(l, U.inp('data-p', 'prot.' + p, c.prot[p])); };
+    return '<section class="card"><h2>Protezioni</h2><div class="grid g3">' + f('Armatura', 'armatura') + f('Tipo / colonna armatura', 'res') + f('Scudo', 'scudo') + f('Elmo', 'elmo') +
+      f('Bracciali', 'bracciali') + f('Schinieri', 'schinieri') + f('Mod. al BD', 'modbd') + f('Ingombro', 'ingombro') + f('Movimento', 'mov') + '</div></section>';
+  }
+
+  function list(c, key, title, cols, addLabel) {
+    var h = '<section class="card"><h2>' + title + '</h2>';
+    c[key].forEach(function (it, i) {
+      h += '<div class="li">' + cols.map(function (col) {
+        return U.inp('data-p', key + '.' + i + '.' + col[0], it[col[0]], { ph: col[1], cls: col[2] || '', label: col[1] });
+      }).join('') + '<button class="mini" data-act="del" data-list="' + key + '" data-i="' + i + '" aria-label="Elimina">✕</button></div>';
+    });
+    return h + '<button data-act="add" data-list="' + key + '">' + addLabel + '</button></section>';
+  }
+
+  function render() {
+    var c = S.cur();
+    return identity(c) + stats(c) + pf(c) + skills(c) + defenses(c) + protection(c) +
+      list(c, 'inv', 'Inventario', [['n', 'Oggetto'], ['q', 'Quantità', 'sm'], ['note', 'Note']], '+ Oggetto') +
+      list(c, 'spells', 'Incantesimi', [['n', 'Incantesimo'], ['lvl', 'Livello', 'sm'], ['note', 'Note']], '+ Incantesimo') +
+      '<section class="card"><h2>Note</h2><textarea data-p="note" rows="5" aria-label="Note">' + esc(c.note) + '</textarea></section>';
+  }
+
+  G.pages.sheet = { render: render };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Pagina Dadi. */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+  var U = G.ui, S = G.store, esc = U.esc;
+
+  function history() {
+    var l = S.get().dlog;
+    if (!l.length) return '<p class="hint">Ancora nessun tiro.</p>';
+    return '<ul class="log">' + l.map(function (x) {
+      return '<li><span class="t">' + U.timeStr(x.t) + '</span> <b>' + esc(x.label) + '</b> ' + esc(x.detail) + ' → <b>' + esc(x.value) + '</b></li>';
+    }).join('') + '</ul>';
+  }
+
+  function render() {
+    var st = S.get();
+    return '<section class="card"><h2>Dadi</h2><div class="dicebtns">' +
+      '<button class="big" data-act="d100o">d100 aperto</button><button class="big" data-act="d100c">d100 chiuso</button>' +
+      ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'].map(function (d) { return '<button data-act="die" data-d="' + d + '">' + d + '</button>'; }).join('') +
+      '</div><div class="row"><label>Espressione (es. 2d6+1)' + U.inp('data-t', 'expr', U.tmp.expr || '', { ph: '2d6+1' }) + '</label>' +
+      '<button data-act="rollexpr">Tira</button></div>' +
+      '<p class="hint">Aperto: il compendio non definisce la regola. Si usa la convenzione MERP: primo tiro ≥ ' + st.settings.dice.high +
+      ' si tira ancora e si somma; ≤ ' + st.settings.dice.low + ' si tira ancora e si sottrae. Le soglie si cambiano in Dati.</p></section>' +
+      '<section class="card"><h2>Cronologia</h2><div class="row"><button class="ghost" data-act="clearroll">Svuota</button></div>' + history() + '</section>';
+  }
+  G.pages.dice = { render: render };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Pagina Combattimento: calcolo dell'attacco, colpo critico, avversari. */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+  var R = G.rules, D = G.data, U = G.ui, S = G.store, T = G.tables, esc = U.esc;
+  var LETTERS = ['', 'T', 'A', 'B', 'C', 'D', 'E'];
+  /* Tabella di fallimento suggerita in base alla tabella di attacco (scelta mia: il compendio non lo dice esplicitamente) */
+  var FUMBLE_DEFAULT = { 'TA-1': 'TTM-1', 'TA-2': 'TTM-1', 'TA-3': 'TTM-1', 'TA-10': 'TTM-1', 'TA-4': 'TTM-2', 'TA-11': 'TTM-6', 'TA-7': 'TTM-3', 'TA-8': 'TTM-3' };
+
+  function cb() {
+    if (!U.tmp.cb) U.tmp.cb = { atk: '', armor: '', limit: '', fumble: '', skill: '', bo: '', bd: '', mods: {}, extra: '', roll: '', pf: '', letter: '', ct: '', ft: '', croll: '', cres: null, fres: null, res: null, target: '' };
+    return U.tmp.cb;
+  }
+  function tableById(list, id) { for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i]; return null; }
+  function atkList(st) { return ((G.tabledata && G.tabledata.atk) || []).concat(st.atk); }
+  function critList(st) { return ((G.tabledata && G.tabledata.crit) || []).concat(st.crit); }
+
+  function modsSum(f, melee) {
+    var t = 0; D.ATK_MODS.forEach(function (m) { if (f.mods[m.id] && (melee || !m.melee)) t += m.v; });
+    return t;
+  }
+
+  /* Calcolo puro dell'attacco, separato dal DOM per poterlo provare. */
+  function resolveAttack(f, c, st, rollFn) {
+    var cx = R.ctx(st.settings), table = tableById(atkList(st), f.atk);
+    var r = f.roll !== '' ? { first: R.num(f.roll), total: R.num(f.roll), rolls: [R.num(f.roll)], dir: '' } : rollFn(st.settings.dice);
+    var bo = f.skill !== '' ? R.skillTotal(c, +f.skill, cx) : R.num(f.bo);
+    var bd = R.num(f.bd), ms = modsSum(f, true), extra = R.num(f.extra);
+    var total = r.total + bo - bd + ms + extra;
+    var res = { roll: r, bo: bo, bd: bd, mods: ms, extra: extra, total: total, table: table, cell: null, fumble: false, fail: false, beyond: false, capped: false, ti: false, fumbleMax: null };
+    if (table) {
+      var fm = f.fumble !== '' ? R.num(f.fumble) : table.fumble;
+      res.fumbleMax = fm;
+      if (fm != null && r.first <= fm) res.fumble = true;
+      if (f.armor !== '') {
+        var a = T.attackCell(table, +f.armor, total, { first: r.first, limit: f.limit });
+        res.cell = a.cell; res.beyond = a.beyond; res.capped = a.capped; res.ti = a.ti;
+        res.fail = !!(a.cell && a.cell.fail);
+      }
+    }
+    return res;
+  }
+
+  function attackHtml(f, st, c) {
+    var skills = c.skills.map(function (s, i) { return [String(i), s.name + ' (' + R.fmt(R.skillTotal(c, i, R.ctx(st.settings))) + ')']; })
+      .filter(function (x, i) { var s = c.skills[i]; return (s.cat === 'arm' || s.cat === 'ama' || s.cat === 'mag') && s.name; });
+    var tables = [['', '(nessuna: leggo io la tabella)']].concat(atkList(st).map(function (t) { return [t.id, t.name]; }));
+    var t = tableById(atkList(st), f.atk);
+    var armors = t ? [['', '(scegli)']].concat(t.armors.map(function (a, i) { return [String(i), a]; })) : [];
+    var h = '<section class="card"><h2>Attacco</h2><div class="grid g2">' +
+      U.field('Tabella di attacco', U.sel('data-t', 'cb.atk', f.atk, tables, { re: 1 })) +
+      (t ? U.field('Armatura del bersaglio', U.sel('data-t', 'cb.armor', f.armor, armors)) : '') +
+      (t && t.limits && t.limits.length ? U.field(t.id === 'TA-7' ? 'Tipo di dardo' : 'Taglia dell\'attacco', U.sel('data-t', 'cb.limit', f.limit, [['', '(scegli)']].concat(t.limits.map(function (l) { return [l.label, l.label]; })))) : '') +
+      (t && t.fumble == null ? U.field('Colpo maldestro: tiro massimo dell\'arma', U.inp('data-t', 'cb.fumble', f.fumble, { type: 'number', ph: 'es. 4' })) : '') +
+      U.field('BO dalla scheda', U.sel('data-t', 'cb.skill', f.skill, [['', '(a mano)']].concat(skills), { re: 1 })) +
+      (f.skill === '' ? U.field('BO a mano', U.inp('data-t', 'cb.bo', f.bo, { type: 'number' })) : '') +
+      U.field('BD del bersaglio', U.inp('data-t', 'cb.bd', f.bd, { type: 'number' })) +
+      U.field('Altri modificatori', U.inp('data-t', 'cb.extra', f.extra, { type: 'number' })) +
+      U.field('Tiro già fatto (vuoto = tira l\'app)', U.inp('data-t', 'cb.roll', f.roll, { type: 'number' })) + '</div><div class="mods">' +
+      D.ATK_MODS.map(function (m) { return U.check('data-tc', 'cb.mods.' + m.id, f.mods[m.id], m.label + ' (' + R.fmt(m.v) + ')'); }).join('') + '</div>' +
+      '<p class="hint">I modificatori «sul fianco», «da dietro», «sorpreso», «stordito» valgono solo in mischia: con armi da tiro o da lancio non spuntarli.</p>' +
+      '<div class="row"><button class="big" data-act="attack">Tira l\'attacco</button><button class="ghost" data-act="mybd">Usa il mio BD come BD</button></div>';
+    if (f.res) h += resultHtml(f, f.res, st);
+    return h + '</section>';
+  }
+
+  function fumbleBlock(f, res, st) {
+    var ids = critList(st).filter(function (x) { return /^TTM-/.test(x.id) || x.type === 'crit' && !/^TC-/.test(x.id); });
+    var def = f.ft || (res.table && FUMBLE_DEFAULT[res.table.id]) || '';
+    var h = '<div class="warn"><b>' + (res.table && /^TA-[78]$/.test(res.table.id) ? 'Fallimento dell\'incantesimo' : res.table && /^TA-[56]$/.test(res.table.id) ? 'Attacco fallito' : 'Colpo maldestro') +
+      '</b>: il tiro non modificato (' + res.roll.first + ') è ≤ ' + res.fumbleMax + '.';
+    if (ids.length && !(res.table && /^TA-[56]$/.test(res.table.id))) {
+      h += '<div class="row">' + U.field('Tabella dei fallimenti', U.sel('data-t', 'cb.ft', def, ids.map(function (x) { return [x.id, x.name]; }))) +
+        '<button data-act="fumbleroll">Tira il fallimento</button></div>';
+    }
+    h += '</div>';
+    if (f.fres) h += '<div class="res">Fallimento: tiro <b>' + f.fres.raw + '</b>' + (f.fres.row ? '<div class="hit">' + esc(f.fres.row.text) + '</div>' : '') + '</div>';
+    return h;
+  }
+
+  function resultHtml(f, r, st) {
+    var s = '<div class="res"><div>Tiro ' + (r.roll.rolls.length > 1 ? r.roll.rolls.join(', ') + ' = ' : '') + '<b>' + r.roll.total + '</b> + BO ' + R.fmt(r.bo) + ' − BD ' + r.bd +
+      (r.mods ? ' ' + R.fmt(r.mods) : '') + (r.extra ? ' ' + R.fmt(r.extra) : '') + ' = <b class="big">' + r.total + '</b></div>';
+    if (r.fumble) s += fumbleBlock(f, r, st);
+    if (r.cell && !r.fumble) {
+      if (r.fail) s += '<div class="warn"><b>Fallimento dell\'incantesimo</b> (cella «F»): tira sulla tabella dei fallimenti degli incantesimi (TTM-3).</div>';
+      else s += '<div class="hit">' + r.cell.pf + ' PF' + (r.cell.crit ? ' · critico <b>' + r.cell.crit + '</b>' : ' · nessun critico') + '</div>';
+      if (r.ti) s += '<div class="hint">Riga «TI» (tiro non modificato).</div>';
+      if (r.capped) s += '<div class="hint">Risultato limitato al massimo previsto per «' + esc(f.limit) + '».</div>';
+      if (r.beyond) s += '<div class="hint">Oltre l\'ultima riga della tabella: usata l\'ultima (il testo non prevede altro).</div>';
+    } else if (r.table && f.armor === '' && !r.fumble) {
+      s += '<div class="hint">Scegli l\'armatura del bersaglio per leggere la tabella.</div>';
+    } else if (!r.table) {
+      s += '<div class="hint">Nessuna tabella scelta: cerca il risultato <b>' + r.total + '</b> sulla tabella cartacea e inserisci PF e lettera qui sotto.</div>';
+    }
+    return s + '</div>';
+  }
+
+  function critHtml(f, st) {
+    var cts = [['', '(nessuna: leggo io)']].concat(critList(st).filter(function (t) { return !/^TTM-/.test(t.id); }).map(function (t) { return [t.id, t.name]; }));
+    var h = '<section class="card"><h2>Danno e colpo critico</h2><div class="grid g3">' +
+      U.field('PF inflitti', U.inp('data-t', 'cb.pf', f.pf, { type: 'number' })) +
+      U.field('Lettera critico', U.sel('data-t', 'cb.letter', f.letter, LETTERS.map(function (x) { return [x, x || '–']; }))) +
+      U.field('Tabella critici (dipende dall\'arma)', U.sel('data-t', 'cb.ct', f.ct, cts)) +
+      U.field('Tiro critico già fatto (1–100)', U.inp('data-t', 'cb.croll', f.croll, { type: 'number' })) + '</div>' +
+      '<div class="row"><button data-act="crit" ' + (f.letter ? '' : 'disabled') + '>Tira il critico</button>' +
+      '<button data-act="dmgenemy">PF all\'avversario</button><button data-act="dmgme">PF a me</button></div>';
+    if (f.cres) {
+      h += '<div class="res">Tiro ' + f.cres.raw + ' ' + R.fmt(f.cres.mod) + ' (lettera ' + f.cres.letter + ') = <b class="big">' + f.cres.total + '</b>' +
+        (f.cres.row ? '<div class="hit">' + esc(f.cres.row.text) + '</div>' : '<div class="hint">Cerca ' + f.cres.total + ' sulla tabella dei critici.</div>') + '</div>';
+    }
+    return h + '</section>';
+  }
+
+  function enemies(f, st) {
+    var h = '<section class="card"><h2>Avversari</h2>';
+    if (!st.enemies.length) h += '<p class="hint">Nessun avversario.</p>';
+    st.enemies.forEach(function (e, i) {
+      var cur = R.num(e.max) - R.num(e.dmg);
+      h += '<div class="li en' + (cur <= 0 && e.max !== '' ? ' dead' : '') + '"><label class="rad"><input type="radio" name="tg" data-act="target" data-i="' + i + '"' + (f.target === e.id ? ' checked' : '') + '> ' +
+        U.inp('data-p-en', i + '.n', e.n, { cls: 'wide', label: 'Nome avversario' }) + '</label><span class="pfb">' + (e.max === '' ? 'PF ?' : cur + '/' + e.max) + '</span>' +
+        '<button class="mini" data-act="enhit" data-i="' + i + '" data-n="1">−1</button><button class="mini" data-act="enhit" data-i="' + i + '" data-n="5">−5</button>' +
+        '<button class="mini" data-act="enhit" data-i="' + i + '" data-n="-5">+5</button><button class="mini" data-act="del" data-list="enemies" data-i="' + i + '">✕</button></div>';
+    });
+    return h + '<div class="row"><label>Nome' + U.inp('data-t', 'en.n', U.tmp.en && U.tmp.en.n || '') + '</label><label>PF' + U.inp('data-t', 'en.max', U.tmp.en && U.tmp.en.max || '', { type: 'number', cls: 'sm' }) +
+      '</label><button data-act="enadd">+ Aggiungi</button></div></section>';
+  }
+
+  function logHtml(st) {
+    return '<section class="card"><h2>Registro</h2><div class="row"><button class="ghost" data-act="clearclog">Svuota</button></div>' +
+      (st.clog.length ? '<ul class="log">' + st.clog.map(function (x) { return '<li><span class="t">' + U.timeStr(x.t) + '</span> ' + esc(x.s) + '</li>'; }).join('') + '</ul>' : '<p class="hint">Vuoto.</p>') + '</section>';
+  }
+
+  function render() {
+    var st = S.get(), c = S.cur(), f = cb();
+    return attackHtml(f, st, c) + critHtml(f, st) + enemies(f, st) + logHtml(st);
+  }
+
+  G.pages.combat = { render: render, resolveAttack: resolveAttack, modsSum: modsSum, cb: cb, tableById: tableById, atkList: atkList, critList: critList };
+  if (typeof module !== 'undefined') module.exports = G.pages.combat;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Pagina Diario: appunti per il librogame (paragrafo, registro, segnalini). */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+  var U = G.ui, S = G.store, esc = U.esc;
+
+  function render() {
+    var c = S.cur(), d = c.diary, h = '<section class="card"><h2>Librogame</h2><div class="grid g2">' +
+      U.field('Titolo del libro', U.inp('data-p', 'diary.book', d.book)) +
+      U.field('Paragrafo attuale', U.inp('data-p', 'diary.par', d.par, { type: 'number' })) + '</div></section>' +
+      '<section class="card"><h2>Registro delle scelte</h2><div class="row"><label>Nota' + U.inp('data-t', 'dn', U.tmp.dn || '', { cls: 'wide', ph: 'Es. ho preso la chiave, ho dato il pane al vecchio' }) +
+      '</label><button data-act="diaryadd">Aggiungi (con il paragrafo attuale)</button></div>';
+    if (!d.log.length) h += '<p class="hint">Nessuna nota.</p>';
+    else h += '<ul class="log">' + d.log.map(function (x, i) {
+      return '<li><span class="t">' + U.timeStr(x.t) + '</span> ' + (x.par !== '' ? '<b>§' + esc(x.par) + '</b> ' : '') + esc(x.s) +
+        ' <button class="mini" data-act="del" data-list="diary.log" data-i="' + i + '" aria-label="Elimina">✕</button></li>';
+    }).join('') + '</ul>';
+    h += '</section><section class="card"><h2>Segnalini e parole chiave</h2><div class="chips">' +
+      d.flags.map(function (f, i) { return '<span class="chip">' + esc(f) + ' <button class="mini" data-act="del" data-list="diary.flags" data-i="' + i + '" aria-label="Elimina">✕</button></span>'; }).join('') +
+      '</div><div class="row"><label>Nuovo segnalino' + U.inp('data-t', 'df', U.tmp.df || '', { ph: 'Es. Parola d\'ordine: Mellon' }) + '</label><button data-act="flagadd">+ Aggiungi</button></div></section>';
+    return h;
+  }
+  G.pages.diary = { render: render };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Pagina Dati: tabelle importate, impostazioni, copie di sicurezza, aiuti. */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+  var R = G.rules, D = G.data, U = G.ui, S = G.store, esc = U.esc;
+
+  function tablesCard(st) {
+    var im = U.tmp.imp || (U.tmp.imp = { name: '', armors: '', fumble: '', text: '', cname: '', ctext: '' });
+    var bd = U.bundled();
+    var h = '<section class="card"><h2>Tabelle</h2><p class="hint"><b>Incluse nell\'app</b> (dal compendio): ' + bd.atk.length + ' tabelle di attacco (TA-1…TA-11, senza TA-9 che non è nel documento), ' +
+      bd.crit.filter(function (t) { return /^TC-/.test(t.id); }).length + ' tabelle dei colpi critici (TC-1…TC-13) e ' + bd.crit.filter(function (t) { return /^TTM-/.test(t.id); }).length +
+      ' dei fallimenti (TTM-1…TTM-7). Qui sotto puoi aggiungerne altre tue, incollando il testo o importando un file JSON (formato in <code>data/README.md</code>).</p>';
+    h += '<h3>Tue tabelle di attacco</h3>' + (st.atk.length ? st.atk.map(function (t, i) {
+      return '<div class="li"><span><b>' + esc(t.name) + '</b> · ' + t.rows.length + ' righe · ' + t.armors.length + ' colonne</span><button class="mini" data-act="del" data-list="atk" data-i="' + i + '">✕</button></div>';
+    }).join('') : '<p class="hint">Nessuna.</p>');
+    h += '<h3>Tue tabelle di critici</h3>' + (st.crit.length ? st.crit.map(function (t, i) {
+      return '<div class="li"><span><b>' + esc(t.name) + '</b> · ' + t.rows.length + ' righe</span><button class="mini" data-act="del" data-list="crit" data-i="' + i + '">✕</button></div>';
+    }).join('') : '<p class="hint">Nessuna.</p>');
+    h += '<details><summary>Importa tabella di attacco</summary><div class="grid g2">' +
+      U.field('Nome (es. Spada corta)', U.inp('data-t', 'imp.name', im.name)) +
+      U.field('Intervallo di fallimento: massimo tiro', U.inp('data-t', 'imp.fumble', im.fumble, { type: 'number', ph: 'es. 4' })) + '</div>' +
+      U.field('Nomi delle colonne di armatura, separati da virgola', U.inp('data-t', 'imp.armors', im.armors, { ph: 'es. 1,2,3,…' })) +
+      U.field('Righe, una per riga: «36-40 0 0 1B 2C…»; la prima inizia con «xx-»', '<textarea data-t="imp.text" rows="8">' + esc(im.text) + '</textarea>') +
+      '<button data-act="impatk">Importa attacco</button></details>';
+    h += '<details><summary>Importa tabella dei critici</summary>' + U.field('Nome (es. Taglio)', U.inp('data-t', 'imp.cname', im.cname)) +
+      U.field('Righe: «06-16 testo…», «80 testo…», «-(49)-05 testo…»; le righe senza intervallo continuano la precedente', '<textarea data-t="imp.ctext" rows="8">' + esc(im.ctext) + '</textarea>') +
+      '<button data-act="impcrit">Importa critici</button></details>';
+    return h + '</section>';
+  }
+
+  function settingsCard(st) {
+    var s = st.settings, h = '<section class="card"><h2>Impostazioni di calcolo</h2>' +
+      '<h3>Tiro aperto (convenzione, non scritta nel compendio)</h3><div class="grid g2">' +
+      U.field('Si tira ancora se il primo tiro è almeno', U.inp('data-s', 'dice.high', s.dice.high, { type: 'number' })) +
+      U.field('Si tira ancora, sottraendo, se è al più', U.inp('data-s', 'dice.low', s.dice.low, { type: 'number' })) + '</div>' +
+      '<h3>Bonus gradi, progressione primaria (TB-4)</h3><div class="grid g3">' +
+      U.field('0 gradi', U.inp('data-s', 'prog.zero', s.prog.zero, { type: 'number' })) +
+      U.field('Gradi 1–10, per grado', U.inp('data-s', 'prog.r1', s.prog.r1, { type: 'number' })) +
+      U.field('Gradi 11–20', U.inp('data-s', 'prog.r2', s.prog.r2, { type: 'number' })) +
+      U.field('Gradi 21–30', U.inp('data-s', 'prog.r3', s.prog.r3, { type: 'number' })) +
+      U.field('Gradi 31 e oltre', U.inp('data-s', 'prog.r4', s.prog.r4, { type: 'number' })) + '</div>' +
+      '<details><summary>Tabella TB-1 (bonus alle caratteristiche)</summary><div class="scroll"><table class="sk"><thead><tr><th>Da</th><th>A</th><th>Bonus</th></tr></thead><tbody>' +
+      s.tb1.map(function (r, i) {
+        return '<tr><td>' + U.inp('data-s', 'tb1.' + i + '.from', r.from, { type: 'number', cls: 'sm' }) + '</td><td>' + U.inp('data-s', 'tb1.' + i + '.to', r.to, { type: 'number', cls: 'sm' }) +
+          '</td><td>' + U.inp('data-s', 'tb1.' + i + '.bonus', r.bonus, { type: 'number', cls: 'sm' }) + '</td></tr>';
+      }).join('') + '</tbody></table></div></details>' +
+      '<div class="row"><button class="ghost" data-act="resetsettings">Ripristina i valori del compendio</button></div></section>';
+    return h;
+  }
+
+  function healCard() {
+    var f = U.tmp.heal || (U.tmp.heal = { roll: '', col: '1', sev: 'lieve' }), out = '';
+    if (f.roll !== '') {
+      var days = R.healDays(R.num(f.roll), +f.col, f.sev);
+      out = '<div class="res">Guarigione: <b class="big">' + days + ' giorni</b></div>';
+    }
+    return '<section class="card"><h2>Guarigione (TFC-2)</h2><div class="grid g3">' +
+      U.field('Tiro + bonus Costituzione', U.inp('data-t', 'heal.roll', f.roll, { type: 'number' })) +
+      U.field('Tipo di ferita', U.sel('data-t', 'heal.col', f.col, D.HEAL_COLS.map(function (n, i) { return [String(i), n]; }))) +
+      U.field('Gravità', U.sel('data-t', 'heal.sev', f.sev, [['lieve', 'Lieve'], ['media', 'Media (×5)'], ['grave', 'Grave (×10)']])) +
+      '</div><button data-act="healroll">Tira il d100 per me</button>' + out + '</section>';
+  }
+
+  function backupCard() {
+    return '<section class="card"><h2>Copia di sicurezza</h2><p class="hint">I dati stanno nel browser di questo dispositivo. Esporta ogni tanto un file: è l\'unica protezione contro la cancellazione dei dati del sito.</p>' +
+      '<div class="row"><button data-act="export">Esporta tutto (JSON)</button><label class="btn ghost">Importa file<input type="file" accept=".json,application/json" data-act-file="1" hidden></label></div>' +
+      '<p class="hint">Importando un backup completo, i dati attuali vengono sostituiti. Un file di tabella singola viene invece aggiunto all\'elenco.</p>' +
+      '<div class="row"><button class="danger" data-act="wipe">Cancella tutti i dati</button></div></section>';
+  }
+
+  function render() {
+    var st = S.get();
+    return tablesCard(st) + settingsCard(st) + healCard() + backupCard();
+  }
+  G.pages.data = { render: render };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Avvio, navigazione e gestione degli eventi. */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA, R = G.rules, D = G.data, U = G.ui, S = G.store, T = G.tables, dice = G.dice.dice;
+  var P = G.pages, esc = U.esc;
+  var ROUTES = [['sheet', 'Scheda'], ['dice', 'Dadi'], ['combat', 'Combattimento'], ['diary', 'Diario'], ['data', 'Dati']];
+  var STATE_LISTS = { enemies: 1, atk: 1, crit: 1 };
+
+  function route() { var r = (location.hash || '').replace(/^#\/?/, ''); return P[r] ? r : 'sheet'; }
+  function val(t) { return t.type === 'checkbox' ? t.checked : t.value; }
+
+  function renderHeader() {
+    var st = S.get(), c = S.cur();
+    document.getElementById('charsel').innerHTML = st.chars.map(function (x) {
+      return '<option value="' + esc(x.id) + '"' + (x.id === st.cur ? ' selected' : '') + '>' + esc(x.name || '(senza nome)') + '</option>';
+    }).join('');
+    document.getElementById('nav').innerHTML = ROUTES.map(function (r) {
+      return '<a href="#/' + r[0] + '"' + (r[0] === route() ? ' aria-current="page"' : '') + '>' + r[1] + '</a>';
+    }).join('');
+    U.updateCalc();
+  }
+  function render() {
+    var y = root.scrollY;
+    document.getElementById('view').innerHTML = P[route()].render();
+    renderHeader(); U.paintLast();
+    root.scrollTo(0, y);
+  }
+
+  function pushLog(text) { U.logLine(S.get().clog, text); }
+  function need(cond, msg) { if (!cond) U.toast(msg); return cond; }
+
+  /* ---------- eventi di input ---------- */
+  document.addEventListener('input', function (e) {
+    var t = e.target, st = S.get();
+    if (t.hasAttribute('data-p')) {
+      S.setPath(S.cur(), t.getAttribute('data-p'), val(t));
+      if (t.getAttribute('data-p') === 'name') renderHeader();
+    } else if (t.hasAttribute('data-s')) {
+      var v = val(t); if (t.type === 'number') v = v === '' ? '' : +v;
+      S.setPath(st.settings, t.getAttribute('data-s'), v);
+    } else if (t.hasAttribute('data-t') || t.hasAttribute('data-tc')) {
+      S.setPath(U.tmp, t.getAttribute('data-t') || t.getAttribute('data-tc'), val(t));
+      return;
+    } else if (t.hasAttribute('data-p-en')) {
+      S.setPath(st.enemies, t.getAttribute('data-p-en'), val(t));
+    } else return;
+    S.save(); U.updateCalc();
+  });
+
+  document.addEventListener('change', function (e) {
+    var t = e.target;
+    if (t.hasAttribute('data-act-change')) {
+      var a = t.getAttribute('data-act-change');
+      if (a === 'char') { S.get().cur = t.value; S.save(); render(); }
+      if (a === 'popolo') { if (R.applyPopolo(S.cur(), t.value)) { S.save(); render(); U.toast('Applicate le modifiche del popolo (TB-3).'); } else { S.cur().popolo = ''; S.save(); } }
+    } else if (t.hasAttribute('data-act-file')) {
+      importFile(t.files && t.files[0]); t.value = '';
+    } else if (t.getAttribute('data-re')) render();
+  });
+
+  /* ---------- azioni ---------- */
+  function listOf(name) {
+    var st = S.get();
+    return STATE_LISTS[name] ? st[name] : S.getPath(S.cur(), name);
+  }
+  function openRoll(label, bonus) {
+    var r = dice.open(S.get().settings.dice), tot = r.total + bonus;
+    U.showRoll(label, 'tiro ' + (r.rolls.length > 1 ? r.rolls.join(', ') + ' = ' + r.total : r.total) + (bonus ? ' ' + R.fmt(bonus) : ''), tot);
+    return tot;
+  }
+
+  var ACT = {
+    pf: function (b) { var c = S.cur(); c.pf.dmg = Math.max(0, R.num(c.pf.dmg) + (+b.dataset.n)); S.save(); render(); },
+    newchar: function () {
+      var c = R.newChar('Personaggio ' + (S.get().chars.length + 1)); S.get().chars.push(c); S.get().cur = c.id; S.save(); location.hash = '#/sheet'; render();
+    },
+    dupchar: function () {
+      var c = JSON.parse(JSON.stringify(S.cur())); c.id = R.uid(); c.name += ' (copia)'; S.get().chars.push(c); S.get().cur = c.id; S.save(); render();
+    },
+    delchar: function () {
+      var st = S.get(); if (!need(st.chars.length > 1, 'Deve restare almeno un personaggio.')) return;
+      if (!confirm('Eliminare «' + S.cur().name + '»? Non si può annullare.')) return;
+      st.chars = st.chars.filter(function (x) { return x.id !== st.cur; }); st.cur = st.chars[0].id; S.save(); render();
+    },
+    rollskill: function (b) { var c = S.cur(), i = +b.dataset.i; openRoll(c.skills[i].name || 'Abilità', R.skillTotal(c, i, R.ctx(S.get().settings))); },
+    rolldef: function (b) {
+      var d = D.DEFENSES.filter(function (x) { return x[0] === b.dataset.k; })[0];
+      openRoll(d[1], R.defenseTotal(S.cur(), d[0], d[2], R.ctx(S.get().settings)));
+    },
+    d100o: function () { openRoll('d100 aperto', 0); },
+    d100c: function () { var r = dice.closed(); U.showRoll('d100 chiuso', '', r.total); render(); },
+    die: function (b) { var n = +b.dataset.d.slice(1), v = dice.d(n); U.showRoll(b.dataset.d, '', v); render(); },
+    rollexpr: function () {
+      var r = dice.expr(U.tmp.expr || ''); if (!need(r, 'Espressione non valida. Esempio: 2d6+1')) return;
+      U.showRoll(U.tmp.expr, '[' + r.rolls.join(', ') + ']' + (r.mod ? ' ' + R.fmt(r.mod) : ''), r.total); render();
+    },
+    clearroll: function () { S.get().dlog = []; S.save(); render(); },
+    add: function (b) {
+      var l = b.dataset.list, c = S.cur();
+      c[l].push(l === 'inv' ? { n: '', q: '', note: '' } : { n: '', lvl: '', note: '' }); S.save(); render();
+    },
+    del: function (b) {
+      var arr = listOf(b.dataset.list); if (!arr) return;
+      if ((b.dataset.list === 'atk' || b.dataset.list === 'crit') && !confirm('Eliminare questa tabella?')) return;
+      arr.splice(+b.dataset.i, 1); S.save(); render();
+    },
+    attack: function () {
+      var f = P.combat.cb(), st = S.get(), c = S.cur();
+      if (f.atk && !need(f.armor !== '', 'Scegli l\'armatura del bersaglio.')) return;
+      if (f.atk && (P.combat.tableById(P.combat.atkList(S.get()), f.atk).limits || []).length && !need(f.limit !== '', 'Scegli taglia o tipo di dardo.')) return;
+      var res = P.combat.resolveAttack(f, c, st, dice.open);
+      f.res = res;
+      if (res.cell) { f.pf = String(res.cell.pf); f.letter = res.cell.crit || ''; f.cres = null; }
+      var desc = 'Attacco ' + res.total + (res.cell && !res.fail ? ' → ' + res.cell.pf + ' PF' + (res.cell.crit ? ' + critico ' + res.cell.crit : '') : '') + (res.fumble ? ' · FALLIMENTO' : '');
+      pushLog(desc); U.showRoll('Attacco', 'tiro ' + res.roll.total + ' ' + R.fmt(res.bo) + ' − ' + res.bd, res.total);
+      S.save(); render();
+    },
+    fumbleroll: function () {
+      var f = P.combat.cb(), st = S.get(), id = f.ft || (f.res && f.res.table && ({ 'TA-1': 'TTM-1', 'TA-2': 'TTM-1', 'TA-3': 'TTM-1', 'TA-10': 'TTM-1', 'TA-4': 'TTM-2', 'TA-11': 'TTM-6', 'TA-7': 'TTM-3', 'TA-8': 'TTM-3' })[f.res.table.id]);
+      var tb = P.combat.tableById(P.combat.critList(st), id); if (!need(tb, 'Scegli la tabella dei fallimenti.')) return;
+      var raw = dice.closed().total, row = T.lookupCrit(tb, raw);
+      f.fres = { raw: raw, row: row }; pushLog('Fallimento (' + tb.id + ') ' + raw + ': ' + row.text); U.showRoll('Fallimento', tb.id, raw); S.save(); render();
+    },
+    mybd: function () {
+      var f = P.combat.cb(), c = S.cur();
+      f.bd = String(R.defenseTotal(c, 'bd', 'AG', R.ctx(S.get().settings)) + R.num(c.prot.modbd)); render();
+    },
+    crit: function () {
+      var f = P.combat.cb(), st = S.get(), raw = f.croll !== '' ? R.num(f.croll) : dice.closed().total;
+      var mod = D.CRIT_MOD[f.letter] || 0, total = raw + mod, tb = P.combat.tableById(P.combat.critList(st), f.ct);
+      f.cres = { raw: raw, mod: mod, letter: f.letter, total: total, row: tb ? T.lookupCrit(tb, total) : null };
+      pushLog('Critico ' + f.letter + ': ' + raw + ' ' + R.fmt(mod) + ' = ' + total + (f.cres.row ? ' — ' + f.cres.row.text : ''));
+      U.showRoll('Critico ' + f.letter, raw + ' ' + R.fmt(mod), total); S.save(); render();
+    },
+    dmgenemy: function () {
+      var f = P.combat.cb(), st = S.get(), e = st.enemies.filter(function (x) { return x.id === f.target; })[0];
+      if (!need(e, 'Seleziona un avversario.') || !need(f.pf !== '', 'Indica i PF inflitti.')) return;
+      e.dmg = R.num(e.dmg) + R.num(f.pf); pushLog(e.n + ' subisce ' + f.pf + ' PF'); S.save(); render();
+    },
+    dmgme: function () {
+      var f = P.combat.cb(), c = S.cur(); if (!need(f.pf !== '', 'Indica i PF inflitti.')) return;
+      c.pf.dmg = R.num(c.pf.dmg) + R.num(f.pf); pushLog(c.name + ' subisce ' + f.pf + ' PF'); S.save(); render();
+    },
+    enadd: function () {
+      var e = U.tmp.en || {}; if (!need((e.n || '').trim(), 'Dai un nome all\'avversario.')) return;
+      S.get().enemies.push({ id: R.uid(), n: e.n.trim(), max: e.max === undefined ? '' : e.max, dmg: 0 }); U.tmp.en = {}; S.save(); render();
+    },
+    enhit: function (b) { var e = S.get().enemies[+b.dataset.i]; e.dmg = Math.max(0, R.num(e.dmg) + (+b.dataset.n)); S.save(); render(); },
+    target: function (b) { P.combat.cb().target = S.get().enemies[+b.dataset.i].id; },
+    clearclog: function () { S.get().clog = []; S.save(); render(); },
+    diaryadd: function () {
+      var d = S.cur().diary, s = (U.tmp.dn || '').trim(); if (!need(s, 'Scrivi una nota.')) return;
+      d.log.unshift({ t: Date.now(), par: d.par, s: s }); U.tmp.dn = ''; S.save(); render();
+    },
+    flagadd: function () {
+      var s = (U.tmp.df || '').trim(); if (!need(s, 'Scrivi il segnalino.')) return;
+      S.cur().diary.flags.push(s); U.tmp.df = ''; S.save(); render();
+    },
+    impatk: function () {
+      var im = U.tmp.imp || {}, armors = (im.armors || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+      if (!need((im.name || '').trim(), 'Dai un nome alla tabella.') || !need(armors.length, 'Indica i nomi delle colonne di armatura.')) return;
+      try {
+        var rows = T.parseAttackText(im.text || '', armors.length);
+        S.get().atk.push({ id: R.uid(), name: im.name.trim(), armors: armors, fumble: im.fumble === undefined ? '' : im.fumble, rows: rows });
+        U.tmp.imp = null; S.save(); render(); U.toast('Tabella importata: ' + rows.length + ' righe.');
+      } catch (err) { U.toast(err.message); }
+    },
+    impcrit: function () {
+      var im = U.tmp.imp || {};
+      if (!need((im.cname || '').trim(), 'Dai un nome alla tabella.')) return;
+      try {
+        var rows = T.parseCritText(im.ctext || '');
+        S.get().crit.push({ id: R.uid(), name: im.cname.trim(), rows: rows });
+        U.tmp.imp = null; S.save(); render(); U.toast('Tabella importata: ' + rows.length + ' righe.');
+      } catch (err) { U.toast(err.message); }
+    },
+    resetsettings: function () { S.get().settings = R.defaultSettings(); S.save(); render(); U.toast('Impostazioni ripristinate.'); },
+    healroll: function () {
+      var f = U.tmp.heal || (U.tmp.heal = { roll: '', col: '1', sev: 'lieve' }), r = dice.d100();
+      f.roll = String(r + R.statBonus(S.cur(), 'CO', R.ctx(S.get().settings))); U.showRoll('Guarigione', 'd100 ' + r + ' + bonus CO', f.roll); render();
+    },
+    export: function () {
+      var blob = new Blob([JSON.stringify(S.get(), null, 1)], { type: 'application/json' }), a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'girsa-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    },
+    wipe: function () {
+      if (!confirm('Cancellare TUTTI i personaggi, le tabelle e le impostazioni di questo dispositivo?')) return;
+      S.replaceAll(S.blank()); render(); U.toast('Dati cancellati.');
+    }
+  };
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-act]') : null;
+    if (!b || b.tagName === 'INPUT' && b.type !== 'radio' || b.disabled) return;
+    var f = ACT[b.getAttribute('data-act')]; if (f) f(b);
+  });
+
+  /* ---------- importazione file ---------- */
+  function validTable(o) {
+    if (!o || typeof o !== 'object' || !Array.isArray(o.rows)) throw new Error('Tabella non valida: mancano le righe.');
+    if (o.type === 'attack') {
+      if (!Array.isArray(o.armors) || !o.armors.length) throw new Error('Tabella di attacco senza colonne di armatura.');
+      T.validateAttackRows(o.rows);
+      o.rows.forEach(function (r, i) { if (!Array.isArray(r.cells) || r.cells.length !== o.armors.length) throw new Error('Riga ' + (i + 1) + ': numero di celle diverso dalle colonne.'); });
+      return { id: R.uid(), name: String(o.name || 'Senza nome'), armors: o.armors.map(String), fumble: o.fumble == null ? '' : o.fumble, rows: o.rows };
+    }
+    o.rows.forEach(function (r, i) { if (typeof r.text !== 'string' || typeof r.max !== 'number') throw new Error('Riga ' + (i + 1) + ' dei critici non valida.'); });
+    return { id: R.uid(), name: String(o.name || 'Senza nome'), rows: o.rows };
+  }
+  function importFile(file) {
+    if (!file) return;
+    var fr = new FileReader();
+    fr.onload = function () {
+      try {
+        var o = JSON.parse(fr.result), st = S.get();
+        if (o && Array.isArray(o.chars)) {
+          if (!confirm('Sostituire tutti i dati attuali con quelli del file?')) return;
+          S.replaceAll(o); render(); U.toast('Backup importato.'); return;
+        }
+        var arr = Array.isArray(o) ? o : [o], n = 0;
+        arr.forEach(function (t) {
+          if (t.type === 'attack') { st.atk.push(validTable(t)); n++; } else if (t.type === 'crit') { st.crit.push(validTable(t)); n++; } else throw new Error('Formato non riconosciuto.');
+        });
+        S.save(); render(); U.toast('Importate ' + n + ' tabelle.');
+      } catch (err) { U.toast('Importazione fallita: ' + err.message); }
+    };
+    fr.readAsText(file);
+  }
+
+  /* ---------- avvio ---------- */
+  function init() {
+    S.load();
+    root.addEventListener('hashchange', render);
+    render();
+    if (!S.ok()) U.toast('Il browser impedisce il salvataggio: usa «Esporta» in Dati.');
+    root.addEventListener('pagehide', function () { S.flush(); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) S.flush(); });
+    if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+      navigator.serviceWorker.register('sw.js').catch(function () { });
+    }
+  }
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+  }
+  G.app = { render: render, ACT: ACT, validTable: validTable };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+</body>
+</html>

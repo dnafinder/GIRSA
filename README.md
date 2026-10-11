@@ -4,6 +4,15 @@ Scheda del personaggio e strumenti da tavolo per **GIRSA** (Gioco di Ruolo del S
 pensati per giocare i **librigame** da telefono o da computer. Nessun server, nessun account: tutto resta
 nel browser e funziona anche senza rete.
 
+## Usarla
+
+Apri **`dist/girsa.html`** nel browser (doppio clic, oppure copialo sul telefono). È un file unico, con le tabelle
+già dentro: non serve installare né configurare niente. Da GitHub: apri il file, poi «Download raw file».
+
+Se modifichi il codice, rigenera il file con `npm run build` e committalo insieme alle modifiche.
+
+Alternativa, come sito: servi la cartella con un server statico (`npx serve .`); da http(s) l'app si installa come PWA.
+
 ## Che cosa fa
 
 - **Scheda**: caratteristiche con bonus TB-1 e distribuzione dei 400 punti, popoli con modifiche TB-3,
@@ -11,34 +20,26 @@ nel browser e funziona anche senza rete.
   incantesimi, note. I totali si aggiornano mentre scrivi e ogni voce ha il suo pulsante 🎲.
 - **PF sempre in vista** in alto, con pulsanti −10 −5 −1 +1 +5 +10; l'ultimo tiro resta in basso.
 - **Dadi**: d100 aperto e chiuso, d4–d20, espressioni come `2d6+1`, cronologia.
-- **Combattimento**: attacco (tiro + BO − BD + modificatori), lettura della tabella di attacco,
-  fallimento critico, colpo critico con il modificatore della lettera, elenco avversari con PF, registro.
+- **Combattimento**: attacco (tiro + BO − BD + modificatori) con lettura della tabella di attacco dell'arma,
+  colpo maldestro o fallimento con la relativa tabella, colpo critico con il modificatore della lettera,
+  elenco avversari con PF, registro.
 - **Diario**: paragrafo attuale, registro delle scelte e segnalini per il librogame.
-- **Dati**: importazione delle tabelle, impostazioni, aiuto per la guarigione (TFC-2), esportazione e
-  importazione di una copia di sicurezza.
+- **Dati**: impostazioni di calcolo, aiuto per la guarigione (TFC-2), tabelle aggiuntive tue,
+  esportazione e importazione di una copia di sicurezza.
 
-## Usarla
+## Tabelle incluse
 
-**Il modo più semplice, senza installare niente**
-```
-npm run build
-```
-crea `dist/girsa.html`, un unico file che si apre con un doppio clic o si copia sul telefono.
+Dai PDF del compendio sono già incorporate le tabelle di attacco **TA-1…TA-8, TA-10, TA-11** (la TA-9 non è nel documento),
+dei colpi critici **TC-1…TC-13** e dei fallimenti **TTM-1…TTM-7**. Nel combattimento scegli la tabella dell'arma e
+l'armatura del bersaglio; per i critici scegli la tabella in base al tipo di danno dell'arma.
 
-**Come sito**: servi la cartella con un server statico qualsiasi (`npx serve .`). Da http(s) l'app si
-installa come PWA e funziona offline.
+Il compendio fornito non contiene la tabella TSC-1 con le statistiche delle armi, quindi due dati li inserisci tu:
+il **tiro massimo di colpo maldestro** di ciascuna arma (le tabelle TA-5…TA-8 lo hanno già) e il **tipo di critico**.
 
-**Sviluppo**: `npm test` esegue i test (Node 20 o successivo, nessuna dipendenza).
+## Copia di sicurezza
 
-## Prima di giocare
-
-Niente da configurare: le tabelle di attacco (TA-1…TA-11), dei colpi critici (TC-1…TC-13) e dei fallimenti
-(TTM-1…TTM-7) sono già dentro l'app. Fai solo una **copia di sicurezza** ogni tanto (Dati → Esporta): i dati stanno
-nel browser, e svuotare i dati del sito li cancella.
-
-Nel combattimento scegli la tabella dell'arma e l'armatura del bersaglio; per i critici scegli la tabella in base al tipo
-di danno dell'arma. Due cose che il compendio fornito non contiene (la tabella TSC-1 con le statistiche delle armi): il
-**tiro massimo di colpo maldestro** di ciascuna arma, che inserisci tu, e il **tipo di critico** dell'arma.
+I dati stanno nel browser del dispositivo e svuotare i dati del sito li cancella. Ogni tanto usa
+Dati → Esporta, e Dati → Importa per ripristinare.
 
 ## Che cosa il compendio non dice (scelte dell'app)
 
@@ -47,24 +48,29 @@ di danno dell'arma. Due cose che il compendio fornito non contiene (la tabella T
 - **Resistenza fisica**: la progressione è a dadi, quindi il bonus ai gradi si inserisce a mano.
 - **Abilità secondarie**: si usa la progressione primaria; il testo non indica altro.
 - **Esperienza (TE-5)**: non è chiaro se la soglia sia per raggiungere o per lasciare il livello; l'app la mostra solo come informazione.
-- **Limiti delle tabelle TA-5/TA-6 e TA-7**: nei PDF le etichette «Risultati Massimi con Attacchi …» e «… per i Dardi di …» chiudono il blocco di righe che le precede; l'app limita il risultato al massimo di quel blocco.
-- **Fallimenti**: la tabella suggerita per ogni arma (TTM-1 mischia, TTM-2 tiro, TTM-6 lancio, TTM-3 incantesimi) è una mia associazione; il d100 per i fallimenti è chiuso come per i critici, il testo non lo precisa.
-- **Oltre l'ultima riga** delle tabelle (risultato > 150): si usa l'ultima riga, il testo non prevede altro.
+- **Limiti nelle tabelle TA-5/TA-6 e TA-7**: nei PDF le etichette «Risultati Massimi con Attacchi …» e
+  «… per i Dardi di …» chiudono il blocco di righe che le precede; l'app limita il risultato al massimo di quel blocco.
+- **Fallimenti**: la tabella suggerita per ogni arma (TTM-1 mischia, TTM-2 tiro, TTM-6 lancio, TTM-3 incantesimi) è
+  una mia associazione, che puoi cambiare; il d100 dei fallimenti è chiuso come per i critici, il testo non lo precisa.
+- **Risultato oltre l'ultima riga** di una tabella: si usa l'ultima riga, il testo non prevede altro.
 - **Tag AS** delle abilità: non spiegato nei documenti, riportato com'è.
 
-## Struttura
+## Per chi sviluppa
+
+`npm test` esegue i test (Node 20 o successivo, nessuna dipendenza): calcoli, dadi, lettura delle tabelle e
+controlli sui valori letti dai PDF.
 
 ```
-js/data.js      parametri di regolamento (vedi NOTICE.md)
-js/rules.js     calcoli puri
-js/dice.js      dadi
-js/tables.js    lettura e consultazione delle tabelle
-js/tabledata.js tabelle del compendio (generato, vedi sotto)
-js/store.js     salvataggio locale
-js/*.js         pagine e interfaccia
-tools/build.mjs file unico dist/girsa.html
-tools/extract-tables.py rigenera js/tabledata.js dai PDF del compendio
-tests/          test con dati sintetici
+index.html, css/, js/   l'app (JavaScript semplice, senza dipendenze)
+js/data.js              parametri di regolamento (vedi NOTICE.md)
+js/rules.js             calcoli
+js/dice.js              dadi
+js/tables.js            consultazione delle tabelle
+js/tabledata.js         tabelle del compendio, generate da tools/extract-tables.py
+js/store.js             salvataggio locale
+tools/build.mjs         crea dist/girsa.html
+tools/extract-tables.py rigenera js/tabledata.js dai PDF (serve poppler e pdfplumber)
+tests/                  test
 ```
 
-Vedi anche `NOTICE.md` (provenienza e licenza dei dati) e `data/README.md` (formato JSON delle tabelle).
+Vedi anche `NOTICE.md` (provenienza e licenza dei dati) e `data/README.md` (formato JSON per aggiungere tabelle).
