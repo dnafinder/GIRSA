@@ -107,12 +107,19 @@
     attack: function () {
       var f = P.combat.cb(), st = S.get(), c = S.cur();
       if (f.atk && !need(f.armor !== '', 'Scegli l\'armatura del bersaglio.')) return;
+      if (f.atk && (P.combat.tableById(P.combat.atkList(S.get()), f.atk).limits || []).length && !need(f.limit !== '', 'Scegli taglia o tipo di dardo.')) return;
       var res = P.combat.resolveAttack(f, c, st, dice.open);
       f.res = res;
       if (res.cell) { f.pf = String(res.cell.pf); f.letter = res.cell.crit || ''; f.cres = null; }
-      var desc = 'Attacco ' + res.total + (res.cell ? ' → ' + res.cell.pf + ' PF' + (res.cell.crit ? ' + critico ' + res.cell.crit : '') : '') + (res.fumble ? ' · FALLIMENTO' : '');
+      var desc = 'Attacco ' + res.total + (res.cell && !res.fail ? ' → ' + res.cell.pf + ' PF' + (res.cell.crit ? ' + critico ' + res.cell.crit : '') : '') + (res.fumble ? ' · FALLIMENTO' : '');
       pushLog(desc); U.showRoll('Attacco', 'tiro ' + res.roll.total + ' ' + R.fmt(res.bo) + ' − ' + res.bd, res.total);
       S.save(); render();
+    },
+    fumbleroll: function () {
+      var f = P.combat.cb(), st = S.get(), id = f.ft || (f.res && f.res.table && ({ 'TA-1': 'TTM-1', 'TA-2': 'TTM-1', 'TA-3': 'TTM-1', 'TA-10': 'TTM-1', 'TA-4': 'TTM-2', 'TA-11': 'TTM-6', 'TA-7': 'TTM-3', 'TA-8': 'TTM-3' })[f.res.table.id]);
+      var tb = P.combat.tableById(P.combat.critList(st), id); if (!need(tb, 'Scegli la tabella dei fallimenti.')) return;
+      var raw = dice.closed().total, row = T.lookupCrit(tb, raw);
+      f.fres = { raw: raw, row: row }; pushLog('Fallimento (' + tb.id + ') ' + raw + ': ' + row.text); U.showRoll('Fallimento', tb.id, raw); S.save(); render();
     },
     mybd: function () {
       var f = P.combat.cb(), c = S.cur();
@@ -120,7 +127,7 @@
     },
     crit: function () {
       var f = P.combat.cb(), st = S.get(), raw = f.croll !== '' ? R.num(f.croll) : dice.closed().total;
-      var mod = D.CRIT_MOD[f.letter] || 0, total = raw + mod, tb = P.combat.tableById(st.crit, f.ct);
+      var mod = D.CRIT_MOD[f.letter] || 0, total = raw + mod, tb = P.combat.tableById(P.combat.critList(st), f.ct);
       f.cres = { raw: raw, mod: mod, letter: f.letter, total: total, row: tb ? T.lookupCrit(tb, total) : null };
       pushLog('Critico ' + f.letter + ': ' + raw + ' ' + R.fmt(mod) + ' = ' + total + (f.cres.row ? ' — ' + f.cres.row.text : ''));
       U.showRoll('Critico ' + f.letter, raw + ' ' + R.fmt(mod), total); S.save(); render();

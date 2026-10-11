@@ -49,3 +49,75 @@ test('tiro critico con modificatore di lettera', () => {
   assert.strictEqual(T.critRoll(50, 'E'), 70);
   assert.strictEqual(T.critRoll(50, null), 50);
 });
+
+/* ---- tabelle incluse (estratte dai PDF) ---- */
+const TD = require('../js/tabledata.js');
+const byId = (l, id) => l.find(t => t.id === id);
+
+test('tabelle incluse: struttura e contiguità', () => {
+  assert.strictEqual(TD.atk.length, 10);
+  assert.strictEqual(TD.crit.length, 20);
+  TD.atk.forEach(t => {
+    T.validateAttackRows(t.rows);
+    t.rows.forEach(r => assert.strictEqual(r.cells.length, 5, t.id));
+    assert.strictEqual(t.armors.length, 5);
+  });
+  TD.crit.forEach(t => {
+    t.rows.forEach((r, i) => { if (i) assert.strictEqual(r.min, t.rows[i - 1].max + 1, t.id); assert.ok(r.text.length > 3, t.id); });
+    assert.strictEqual(t.rows[0].min, null, t.id);
+    assert.strictEqual(t.rows[t.rows.length - 1].max, 120, t.id);
+  });
+});
+
+test('tabelle incluse: valori di controllo letti dal PDF', () => {
+  const ta1 = byId(TD.atk, 'TA-1');
+  const cell = (t, res, i) => T.attackCell(t, i, res).cell;
+  assert.deepStrictEqual(cell(ta1, 78, 3), { pf: 7, crit: 'A' });
+  assert.deepStrictEqual(cell(ta1, 78, 0), { pf: 4, crit: null });
+  assert.deepStrictEqual(cell(ta1, 150, 4), { pf: 30, crit: 'E' });
+  assert.strictEqual(cell(ta1, -20, 0).pf, 0);
+  assert.strictEqual(T.attackCell(ta1, 0, 170).beyond, true);
+  assert.deepStrictEqual(cell(byId(TD.atk, 'TA-2'), 78, 1), { pf: 8, crit: null });
+  assert.deepStrictEqual(cell(byId(TD.atk, 'TA-11'), 106, 2), { pf: 11, crit: 'B' });
+  assert.strictEqual(byId(TD.atk, 'TA-5').fumble, 2);
+  assert.strictEqual(byId(TD.atk, 'TA-8').fumble, 4);
+});
+
+test('limiti di taglia (TA-5) e tipo di dardo (TA-7), righe TI', () => {
+  const ta5 = byId(TD.atk, 'TA-5'), ta7 = byId(TD.atk, 'TA-7'), ta8 = byId(TD.atk, 'TA-8');
+  assert.deepStrictEqual(ta5.limits.map(l => l.label), ['Minuscoli', 'Piccoli', 'Medi', 'Grandi', 'Enormi']);
+  const free = T.attackCell(ta5, 4, 150, { limit: 'Enormi' });
+  assert.deepStrictEqual(free.cell, { pf: 24, crit: 'E' });
+  const small = T.attackCell(ta5, 4, 150, { limit: 'Minuscoli' });
+  assert.strictEqual(small.capped, true);
+  assert.deepStrictEqual(small.cell, { pf: 10, crit: 'T' });
+  assert.deepStrictEqual(T.attackCell(ta7, 0, 120, { limit: 'Acqua' }).cell, { pf: 11, crit: 'B' });
+  assert.deepStrictEqual(T.attackCell(ta7, 0, 90, { first: 100, limit: 'Energia' }).cell, { pf: 18, crit: 'D' });
+  assert.deepStrictEqual(T.attackCell(ta7, 0, 5, {}).cell, { pf: 0, crit: null, fail: true });
+  assert.deepStrictEqual(T.attackCell(ta8, 4, 120, { first: 97 }).cell, { pf: 26, crit: 'E' });
+  assert.deepStrictEqual(T.attackCell(ta8, 4, 2, {}).cell, { pf: 1, crit: null });
+});
+
+test('critici inclusi: ricerca per tiro con modificatore', () => {
+  const tc1 = byId(TD.crit, 'TC-1');
+  assert.match(T.lookupCrit(tc1, T.critRoll(30, 'A')).text, /Costole incrinate/);
+  assert.match(T.lookupCrit(tc1, T.critRoll(20, 'C')).text, /Colpo al fianco/);
+  assert.strictEqual(T.lookupCrit(tc1, 5).min, null);
+  assert.strictEqual(T.lookupCrit(tc1, 120).min, 120);
+  assert.match(byId(TD.crit, 'TTM-3').name, /Fallimento degli Incantesimi/);
+});
+
+/* ---- calcolo dell'attacco della pagina ---- */
+test('resolveAttack con tabella inclusa', () => {
+  const R = require('../js/rules.js'), S = require('../js/store.js');
+  globalThis.GIRSA.tabledata = TD; require('../js/ui.js');
+  const C = require('../js/combat.js');
+  const st = S.blank(), c = st.chars[0];
+  const f = { atk: 'TA-1', armor: '3', limit: '', fumble: '', skill: '', bo: '20', bd: '5', mods: { fianco: true }, extra: '', roll: '50' };
+  const r = C.resolveAttack(f, c, st, null);
+  assert.strictEqual(r.total, 50 + 20 - 5 + 15);
+  assert.deepStrictEqual(r.cell, { pf: 7, crit: 'A' });
+  assert.strictEqual(r.fumble, false);
+  f.fumble = '50'; f.roll = '3';
+  assert.strictEqual(C.resolveAttack(f, c, st, null).fumble, true);
+});

@@ -32,9 +32,13 @@ installa come PWA e funziona offline.
 
 ## Prima di giocare
 
-1. Apri **Dati** e importa le tabelle di attacco (una per arma) e dei colpi critici copiandole dal tuo PDF.
-   Senza tabelle l'app calcola il risultato e ti dice quale riga cercare sulla carta.
-2. Fai una **copia di sicurezza** ogni tanto: i dati stanno nel browser, e svuotare i dati del sito li cancella.
+Niente da configurare: le tabelle di attacco (TA-1…TA-11), dei colpi critici (TC-1…TC-13) e dei fallimenti
+(TTM-1…TTM-7) sono già dentro l'app. Fai solo una **copia di sicurezza** ogni tanto (Dati → Esporta): i dati stanno
+nel browser, e svuotare i dati del sito li cancella.
+
+Nel combattimento scegli la tabella dell'arma e l'armatura del bersaglio; per i critici scegli la tabella in base al tipo
+di danno dell'arma. Due cose che il compendio fornito non contiene (la tabella TSC-1 con le statistiche delle armi): il
+**tiro massimo di colpo maldestro** di ciascuna arma, che inserisci tu, e il **tipo di critico** dell'arma.
 
 ## Che cosa il compendio non dice (scelte dell'app)
 
@@ -43,6 +47,9 @@ installa come PWA e funziona offline.
 - **Resistenza fisica**: la progressione è a dadi, quindi il bonus ai gradi si inserisce a mano.
 - **Abilità secondarie**: si usa la progressione primaria; il testo non indica altro.
 - **Esperienza (TE-5)**: non è chiaro se la soglia sia per raggiungere o per lasciare il livello; l'app la mostra solo come informazione.
+- **Limiti delle tabelle TA-5/TA-6 e TA-7**: nei PDF le etichette «Risultati Massimi con Attacchi …» e «… per i Dardi di …» chiudono il blocco di righe che le precede; l'app limita il risultato al massimo di quel blocco.
+- **Fallimenti**: la tabella suggerita per ogni arma (TTM-1 mischia, TTM-2 tiro, TTM-6 lancio, TTM-3 incantesimi) è una mia associazione; il d100 per i fallimenti è chiuso come per i critici, il testo non lo precisa.
+- **Oltre l'ultima riga** delle tabelle (risultato > 150): si usa l'ultima riga, il testo non prevede altro.
 - **Tag AS** delle abilità: non spiegato nei documenti, riportato com'è.
 
 ## Struttura
@@ -51,10 +58,12 @@ installa come PWA e funziona offline.
 js/data.js      parametri di regolamento (vedi NOTICE.md)
 js/rules.js     calcoli puri
 js/dice.js      dadi
-js/tables.js    lettura e consultazione delle tabelle importate
+js/tables.js    lettura e consultazione delle tabelle
+js/tabledata.js tabelle del compendio (generato, vedi sotto)
 js/store.js     salvataggio locale
 js/*.js         pagine e interfaccia
 tools/build.mjs file unico dist/girsa.html
+tools/extract-tables.py rigenera js/tabledata.js dai PDF del compendio
 tests/          test con dati sintetici
 ```
 

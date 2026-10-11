@@ -1,6 +1,6 @@
 # Formato delle tabelle in JSON
 
-Le tabelle non sono nel repository. Oltre all'incolla di testo nella pagina Dati, si può importare un file JSON
+Le tabelle del compendio sono già incluse (`js/tabledata.js`). Questo formato serve per aggiungerne altre. Oltre all'incolla di testo nella pagina Dati, si può importare un file JSON
 (anche un array di tabelle). Metti i tuoi file qui come `*.local.json`: sono ignorati da git.
 
 ## Tabella di attacco
@@ -25,3 +25,8 @@ Le tabelle non sono nel repository. Oltre all'incolla di testo nella pagina Dati
 ```json
 { "type": "crit", "name": "Taglio", "rows": [{ "min": null, "max": 5, "text": "…" }, { "min": 6, "max": 16, "text": "…" }] }
 ```
+
+Campi facoltativi delle tabelle di attacco, usati da quelle incluse:
+- `limits`: `[{ "label": "Piccoli", "max": 105 }]`, il risultato non supera `max` per il limite scelto;
+- `ti`: `[{ "min": 100, "max": 100, "limit": null, "cells": [...] }]`, righe «tiro invariato», valide se il tiro non modificato rientra in `min`–`max`;
+- una cella `{ "pf": 0, "crit": null, "fail": true }` indica un fallimento dell'incantesimo («F»).

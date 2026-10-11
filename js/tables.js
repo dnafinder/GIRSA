@@ -11,6 +11,7 @@
   function norm(line) { return line.replace(/[–−—]/g, '-').trim(); }
 
   function parseCell(s) {
+    if (/^F$/i.test(s)) return { pf: 0, crit: null, fail: true };
     var m = s.match(/^(\d+)([A-Ea-eTt])?$/);
     if (!m) throw new Error('Cella non valida: "' + s + '"');
     return { pf: +m[1], crit: m[2] ? m[2].toUpperCase() : null };
@@ -43,17 +44,36 @@
     }
   }
 
+  /* Riga della tabella per un risultato; sotto la prima riga si usa la prima, sopra l'ultima si usa l'ultima. */
   function lookupAttack(table, result) {
     var rows = table.rows, last = rows.length - 1;
     for (var i = 0; i <= last; i++) {
       var r = rows[i];
-      if ((r.min == null || result >= r.min) && result <= r.max) return { row: r, cell: null, beyond: false };
+      if ((r.min == null || result >= r.min) && result <= r.max) return { row: r, beyond: false };
     }
-    return { row: rows[last], cell: null, beyond: result > rows[last].max };
+    return result < rows[0].min ? { row: rows[0], beyond: false } : { row: rows[last], beyond: true };
   }
-  function attackCell(table, armorIndex, result) {
+  /*
+   * Cella della tabella.
+   * opts.first: tiro non modificato (per le righe «TI», tiro invariato);
+   * opts.limit: etichetta del limite scelto (taglia della creatura o tipo di dardo): il risultato non supera il massimo di quel limite.
+   */
+  function attackCell(table, armorIndex, result, opts) {
+    opts = opts || {};
+    var ti = table.ti || [], i, lim = null;
+    if (opts.limit) { (table.limits || []).forEach(function (l) { if (l.label === opts.limit) lim = l; }); }
+    if (opts.first != null) {
+      for (i = 0; i < ti.length; i++) {
+        var e = ti[i];
+        if (opts.first >= e.min && opts.first <= e.max && (e.limit == null || e.limit === opts.limit)) {
+          return { cell: e.cells[armorIndex], beyond: false, row: e, ti: true, capped: false };
+        }
+      }
+    }
+    var capped = false;
+    if (lim && result > lim.max) { result = lim.max; capped = true; }
     var f = lookupAttack(table, result);
-    return { cell: f.row.cells[armorIndex], beyond: f.beyond, row: f.row };
+    return { cell: f.row.cells[armorIndex], beyond: f.beyond, row: f.row, ti: false, capped: capped };
   }
 
   /* Tabella critici: righe come "06-16 testo...", "80 testo", "-(49)-05 testo"; le righe senza intervallo continuano la precedente. */

@@ -104,7 +104,12 @@
     return p(d.getDate()) + '/' + p(d.getMonth() + 1) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
   }
 
+  function bundled() { return G.tabledata || { atk: [], crit: [] }; }
+  function allAtk() { return bundled().atk.concat(S.get().atk); }
+  function allCrit() { return bundled().crit.concat(S.get().crit); }
+
   var U = {
+    allAtk: allAtk, allCrit: allCrit, bundled: bundled,
     esc: esc, tmp: tmp, inp: inp, sel: sel, check: check, field: field, calc: calc, calcText: calcText, updateCalc: updateCalc,
     showRoll: showRoll, paintLast: paintLast, toast: toast, logLine: logLine, timeStr: timeStr, pfText: pfText
   };
