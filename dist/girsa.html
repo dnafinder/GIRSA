@@ -3964,6 +3964,46 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
 
 </script>
 <script>
+/* Nomi per popolo, per la pagina Crea. Raccolta fatta il 12/10/2026 da Tolkien Gateway (tolkiengateway.net, pagine di categoria dei personaggi
+   e pagine dei singoli popoli); per gli Uruk i nomi sono quelli della pagina «Uruk-hai», per gli Orchi la categoria «Orcs».
+   Sono nomi di personaggi del legendarium: la lista dei Variag, dei Lossoth, degli Haradrim ecc. è vuota perché le fonti consultate non ne danno.
+   Nomi che compaiono solo in giochi o film (per esempio Lurtz, Suladân, Yrjänä) sono stati lasciati fuori.
+   m = maschili, f = femminili, x = nomi di cui la fonte non dice il genere (si propongono in entrambi i casi). Non è una lista del compendio GIRSA. */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+  function L(s) { return s.split(',').map(function (x) { return x.trim(); }).filter(Boolean); }
+  var NOMI = {
+    nani: { m: L('Thorin, Balin, Dwalin, Fíli, Kíli, Dori, Nori, Ori, Óin, Glóin, Bifur, Bofur, Bombur, Dáin, Náin, Thráin, Thrór, Fundin, Farin, Borin, Gimli, Narvi, Frerin, Flói, Frár, Frór, Lóni, Náli, Gróin, Grór, Azaghâl, Durin'), f: L('Dís'), x: [] },
+    umli: { m: L('Mîm, Khîm, Ibun'), f: [], x: [] },
+    noldor: { m: L('Fëanor, Maedhros, Maglor, Celegorm, Caranthir, Curufin, Amrod, Amras, Fingolfin, Fingon, Finarfin, Finrod, Angrod, Aegnor, Orodreth, Argon, Finwë, Gil-galad, Celebrimbor, Ecthelion, Glorfindel, Gildor, Pengolodh, Voronwë, Gwindor, Guilin, Mahtan, Finbor, Edrahil, Egalmoth'), f: L('Galadriel, Idril, Aredhel, Anairë, Findis, Finduilas, Míriel, Nerdanel, Írimë'), x: [] },
+    sindar: { m: L('Thingol, Beleg, Círdan, Celeborn, Daeron, Dior, Elmo, Amdír, Amroth, Annael, Galathil, Galdor, Legolas, Mablung, Oropher, Thranduil, Eöl'), f: L('Celebrían, Elwing, Meril, Nellas, Nimloth'), x: [] },
+    silvani: { m: L('Haldir, Rúmil, Orophin, Galion'), f: L('Nimrodel, Mithrellas'), x: [] },
+    mezzelfi: { m: L('Elrond, Elros, Elladan, Elrohir, Eärendil, Eluréd, Elurín, Dior'), f: L('Arwen, Elwing'), x: [] },
+    hobbit: { m: L('Bilbo, Frodo, Samwise, Peregrin, Meriadoc, Fredegar, Fastred, Folco, Fosco, Drogo, Dudo, Mungo, Largo, Longo, Lotho, Balbo, Bandobras, Basso, Berilac, Bodo, Bosco, Bungo, Dinodas, Doderic, Everard, Ferdibrand, Gorbadoc, Gormadoc, Hamfast, Hildibrand, Hob, Isembold, Isengrim, Madoc, Marcho, Adalgrim, Adelard, Anson'),
+      f: L('Belladonna, Esmeralda, Lobelia, Amaranth, Asphodel, Berylla, Camellia, Celandine, Daisy, Diamond, Donnamira, Dora, Eglantine, Elanor, Gilly, Goldilocks, Jessamine, Lily, Linda, Malva, Marigold, Melilot, Mentha, Mimosa, Mirabella, Myrtle, Hilda, Laura, Lavender'), x: [],
+      cognomi: L('Baggins, Took, Brandybuck, Bolger, Boffin, Proudfoot, Burrows, Bracegirdle, Chubb, Cotton, Gamgee, Hornblower, Grubb, Goodbody, Goodchild, Greenhand, Sackville, Underhill, Gardner, Bunce, Maggot, Roper, Banks, Diggle, Headstrong, Hayward, Oldbuck') },
+    beorniani: { m: L('Beorn, Grimbeorn'), f: [], x: [] },
+    corsari: { m: L('Angamaitë, Sangahyando'), f: [], x: [] },
+    dunedain: { m: L('Elendil, Imrazôr, Imrahil, Amrothos, Elphir, Erchirion, Angbor, Anborn, Damrod, Hirluin, Húrin, Ingold, Ohtar, Estelmo, Aglahad, Angelimir, Borondir, Dervorin, Minohtar, Baranor, Adrahil'), f: L('Lothíriel, Finduilas, Ivorwen, Ivriniel, Morwen'), x: [] },
+    dunlandiani: { m: L('Freca, Wulf'), f: [], x: [] },
+    esterling: { m: L('Khamûl, Bór, Ulfang, Brodda, Lorgan, Uldor, Ulfast, Ulwarth, Borlach, Borlad, Borthand'), f: [], x: [] },
+    gondoriani: { m: L('Boromir, Faramir, Denethor, Beregond, Bergil, Cirion, Eärnil, Eärnur, Ecthelion, Elboron, Eldacar, Forlong, Mardil, Minardil, Ondoher, Pelendur, Vorondil, Hallas, Hirgon, Duilin, Duinhir, Golasgil, Belecthor, Borlas, Calmacil, Ciryandil, Meneldil, Valacar, Damrod, Mablung, Targon'), f: L('Ioreth, Finduilas, Lothíriel, Rían, Gilmith, Fíriel, Ivriniel, Morwen, Berúthiel'), x: [] },
+    numneri: { m: L('Herumor, Fuinur'), f: L('Berúthiel'), x: [] },
+    rohirrim: { m: L('Eorl, Brego, Aldor, Baldor, Brytta, Déor, Dúnhere, Elfhelm, Elfwine, Éomer, Éomund, Éothain, Erkenbrand, Fengel, Folca, Folcwine, Fréa, Fréaláf, Fréawine, Gamling, Gárulf, Gléowine, Goldwine, Gram, Grimbold, Guthláf, Háma, Helm, Herefara, Herubrand, Horn, Marhath, Théoden, Théodred, Thengel, Walda, Wídfara, Ceorl, Eofor'), f: L('Éowyn, Elfhild, Hild, Théodwyn, Idis'), x: [] },
+    wose: { m: L('Ghân, Ghân-buri-Ghân'), f: [], x: [] },
+    orchetti: { m: [], f: [], x: L('Azog, Bolg, Golfimbul, Grishnákh, Lagduf, Muzgash, Ufthak, Gorgol, Lug, Boldog, Radbug, Shagram, Othrod, Balcmeg, Naglur-Danlo, Orcobal') },
+    uruk: { m: [], f: [], x: L('Uglúk, Mauhúr, Shagrat') },
+    troll: { m: L('Bert, Tom, William'), f: [], x: [] }
+  };
+  var api = { NOMI: NOMI, nomi: function (id, sesso) { var n = NOMI[id]; if (!n) return []; return (sesso === 'm' ? n.m : sesso === 'f' ? n.f : n.m.concat(n.f)).concat(n.x); },
+    cognomi: function (id) { return (NOMI[id] && NOMI[id].cognomi) || []; } };
+  G.namedata = api;
+  if (typeof module !== 'undefined') module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
 /* Pagina Crea: creazione guidata del personaggio e sviluppo (punti sviluppo, livelli). */
 (function (root) {
   'use strict';
@@ -4024,6 +4064,46 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
     S.save(); render(); say('Popolo applicato: ' + p.n + '.');
   };
 
+
+  /* ---------- 2. nome (dopo il popolo) ---------- */
+  var ND = G.namedata;
+  function stepName(c) {
+    var k = cr(c), t = T(), pid = k.people, h = '<section class="card"><h2>2 · Nome</h2>';
+    if (!pid) return h + '<p class="hint">Scegli prima il popolo: il nome si propone in base a quello.</p></section>';
+    var sx = t.nsex || '', nm = ND.nomi(pid, sx), cg = ND.cognomi(pid), tot = ND.nomi(pid, '').length;
+    h += U.field('Nome del personaggio', U.inp('data-p', 'name', c.name, { label: 'Nome del personaggio' }));
+    if (!tot) {
+      return h + '<p class="hint">Per questo popolo le fonti consultate (Tolkien Gateway) non danno nomi: scrivilo tu.</p></section>';
+    }
+    h += '<div class="grid g2">' + U.field('Proponi nomi', U.sel('data-t', 'cr.nsex', sx, [['', 'maschili e femminili'], ['m', 'maschili'], ['f', 'femminili']], { re: 1, label: 'Genere dei nomi' })) +
+      '<div class="fld"><span>&nbsp;</span><button data-act="cr_namerand">Suggeriscine uno</button></div></div>';
+    h += '<p class="hint">Sono nomi di personaggi di Tolkien (raccolta da Tolkien Gateway, non dal compendio GIRSA). ' + tot + ' per questo popolo' + (cg.length ? ', più ' + cg.length + ' cognomi' : '') + '. Toccane uno per usarlo.</p>';
+    h += '<details><summary>Elenco dei nomi</summary><p class="names">' + nm.map(function (n) { return '<button class="mini" data-act="cr_setname" data-n="' + esc(n) + '">' + esc(n) + '</button>'; }).join(' ') + '</p>' +
+      (cg.length ? '<p class="hint">Cognomi:</p><p class="names">' + cg.map(function (n) { return '<button class="mini" data-act="cr_setsur" data-n="' + esc(n) + '">' + esc(n) + '</button>'; }).join(' ') + '</p>' : '') + '</details>';
+    return h + '</section>';
+  }
+  /* Cambia il nome senza ridisegnare la pagina: l'elenco dei nomi resta aperto e si può provare più di un nome. */
+  function putName(c, v) {
+    c.name = v; S.save();
+    var el = document.querySelector('input[data-p="name"]'); if (el) el.value = v;
+    G.app.header();
+  }
+  G.acts.cr_namerand = function () {
+    var c = S.cur(), k = cr(c), t = T(), nm = ND.nomi(k.people, t.nsex || ''), cg = ND.cognomi(k.people);
+    if (!nm.length) { say('Nessun nome per questo popolo.'); return; }
+    var n = nm[Math.floor(Math.random() * nm.length)];
+    putName(c, cg.length ? n + ' ' + cg[Math.floor(Math.random() * cg.length)] : n);
+  };
+  G.acts.cr_setname = function (b) {
+    var c = S.cur(), parts = String(c.name || '').trim().split(/\s+/), cg = ND.cognomi(cr(c).people);
+    var last = parts.length > 1 && cg.indexOf(parts[parts.length - 1]) >= 0 ? ' ' + parts[parts.length - 1] : '';
+    putName(c, b.dataset.n + last);
+  };
+  G.acts.cr_setsur = function (b) {
+    var c = S.cur(), parts = String(c.name || '').trim().split(/\s+/).filter(Boolean), cg = ND.cognomi(cr(c).people);
+    if (parts.length > 1 && cg.indexOf(parts[parts.length - 1]) >= 0) parts.pop();
+    putName(c, (parts.length ? parts.join(' ') + ' ' : '') + b.dataset.n);
+  };
   /* ---------- 2. professione ---------- */
   function profInfo(f, lv) {
     var h = '<p class="hint">Caratteristica fondamentale: <b>' + esc(f.stat.length ? f.stat.join(' / ') : 'legata all\'occupazione') + '</b>' + (f.sec.length ? ' · secondaria: ' + esc(f.sec.join(' / ')) : '') +
@@ -4038,7 +4118,7 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
     var sel = t.selProf || k.prof || c.prof || '';
     if (list.indexOf(sel) < 0) sel = '';
     var f = X.profByName(sel);
-    var h = '<section class="card"><h2>2 · Professione e livello</h2><p class="hint">' + (p ? 'Professioni consentite al popolo «' + esc(p.n) + '»: ' + list.length + '. ' : 'Scegli prima il popolo per vedere solo le professioni consentite. ') + '</p>' +
+    var h = '<section class="card"><h2>3 · Professione e livello</h2><p class="hint">' + (p ? 'Professioni consentite al popolo «' + esc(p.n) + '»: ' + list.length + '. ' : 'Scegli prima il popolo per vedere solo le professioni consentite. ') + '</p>' +
       '<div class="grid g2">' + U.field('Professione', U.sel('data-t', 'cr.selProf', sel, [['', '(scegli)']].concat(list.map(function (n) { return n; })), { re: 1, label: 'Professione' })) +
       U.field('Livello', U.inp('data-p', 'livello', c.livello, { type: 'number', ph: '1' })) + '</div>';
     if (f) {
@@ -4078,7 +4158,7 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
   }
   function stepStats(c) {
     var t = T(), k = cr(c), p = person(c), f = prof(c);
-    var h = '<section class="card"><h2>3 · Caratteristiche</h2>' +
+    var h = '<section class="card"><h2>4 · Caratteristiche</h2>' +
       '<p class="hint"><b>Metodo classico</b>: 6 tiri di d100 (si ritira se esce meno di 20) da assegnare alle caratteristiche; se nella caratteristica principale il risultato è meno di 90, diventa 90 (opzione: nella secondaria, meno di 75 diventa 75). ' +
       'Noldor: il valore più alto va a Prontezza; Sindar: a Prontezza uno dei due più alti; Silvani: uno dei tre più alti. <b>Distribuzione di punti</b>: 400 punti, valori da 20 a 100 (oltre 90 il costo è 90 + (valore − 90)²), principale almeno 90, secondaria almeno 75 (opzione), Noldor almeno 90 in Prontezza, Sindar e Silvani almeno 75. ' +
       'Punti spesi: <b data-calc="pts">' + esc(U.calcText('pts')) + '</b>.</p>' +
@@ -4172,7 +4252,7 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
   }
   function stepBg(c) {
     var k = cr(c), p = person(c), t = T(), pts = p ? p.bg : 0, used = k.bg.length;
-    var h = '<section class="card"><h2>4 · Opzioni di background</h2>';
+    var h = '<section class="card"><h2>5 · Opzioni di background</h2>';
     if (!p) return h + '<p class="hint">Scegli prima il popolo: i punti di background dipendono da lui.</p></section>';
     h += '<p class="hint">Il popolo «' + esc(p.n) + '» ha <b>' + pts + '</b> punt' + (pts === 1 ? 'o' : 'i') + ' di background (usati: ' + used + '). Il GM può far scegliere l\'opzione, farla tirare o sceglierla lui. ' +
       (p.bgAbil ? 'Per questo popolo, abilità speciali: ' + esc(p.bgAbil) : '') + '</p>';
@@ -4258,7 +4338,7 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
 
   /* ---------- 5. adolescenza ---------- */
   function stepAdol(c) {
-    var k = cr(c), p = person(c), h = '<section class="card"><h2>5 · Adolescenza</h2>';
+    var k = cr(c), p = person(c), h = '<section class="card"><h2>6 · Adolescenza</h2>';
     if (!p) return h + '<p class="hint">Scegli prima il popolo.</p></section>';
     var t = X.adolescenceOf(p.id), plan = X.adolescencePlan(p.id);
     h += '<p class="hint">Gradi appresi prima della professione (TGP-5) per il popolo «' + esc(p.n) + '».</p><div class="chips">' +
@@ -4285,7 +4365,7 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
   /* ---------- 6. punti sviluppo ---------- */
   function stepPs(c) {
     var k = cr(c), f = prof(c), t = T();
-    var h = '<section class="card"><h2>6 · Punti sviluppo e livelli</h2>';
+    var h = '<section class="card"><h2>Punti sviluppo e livelli</h2>';
     if (!f) return h + '<p class="hint">Scegli e applica la professione.</p></section>';
     h += '<p class="hint">Ogni livello (e alla creazione) hai i punti della tabella TGP-4 per la professione. Un grado in un\'abilità costa 1 PS, due gradi 3 PS; nessuna abilità sale più di due gradi per livello. ' +
       'Manovre in movimento: 1 PS per grado, senza limite. Si possono trasferire PS tra categorie: ogni PS ottenuto costa 2 PS se la professione ha già almeno 1 PS in quella categoria, altrimenti 4; Arti marziali sempre 2 a 1; ' +
@@ -4344,9 +4424,15 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
     var c = S.cur();
     return '<section class="card"><p class="hint">Percorso di creazione del personaggio «' + esc(c.name) + '», nell\'ordine del compendio. Ogni passo scrive nella scheda; puoi tornare indietro e rifare. ' +
       'Il compendio non dà tabelle per i PF iniziali: scrivili in Scheda.</p></section>' +
-      stepPeople(c) + stepProf(c) + stepStats(c) + stepBg(c) + stepAdol(c) + stepPs(c);
+      stepPeople(c) + stepName(c) + stepProf(c) + stepStats(c) + stepBg(c) + stepAdol(c) +
+      '<section class="card"><p class="hint">Crescita del personaggio (punti sviluppo, nuovi livelli): <a href="#/develop">pagina Sviluppa</a>.</p></section>';
+  }
+  function develop_() {
+    var c = S.cur();
+    return '<section class="card"><p class="hint">Sviluppo di «' + esc(c.name) + '»: punti sviluppo, gradi alle abilità, trasferimenti tra categorie e passaggio di livello. La creazione (popolo, nome, professione, caratteristiche, background, adolescenza) è in <a href="#/create">Crea</a>.</p></section>' + stepPs(c);
   }
   G.pages.create = { render: render_ };
+  G.pages.develop = { render: develop_ };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -5723,7 +5809,7 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
   'use strict';
   var G = root.GIRSA, R = G.rules, D = G.data, U = G.ui, S = G.store, T = G.tables, dice = G.dice.dice;
   var P = G.pages, esc = U.esc;
-  var ROUTES = [['sheet', 'Scheda'], ['create', 'Crea'], ['dice', 'Dadi'], ['combat', 'Combattimento'], ['gear', 'Oggetti'], ['world', 'Mondo'], ['diary', 'Diario'], ['ref', 'Guida'], ['data', 'Dati']];
+  var ROUTES = [['create', 'Crea'], ['develop', 'Sviluppa'], ['sheet', 'Scheda'], ['dice', 'Dadi'], ['combat', 'Combattimento'], ['gear', 'Oggetti'], ['world', 'Mondo'], ['diary', 'Diario'], ['ref', 'Guida'], ['data', 'Dati']];
   var STATE_LISTS = { enemies: 1, atk: 1, crit: 1 };
 
   function route() { var r = (location.hash || '').replace(/^#\/?/, ''); return P[r] ? r : 'sheet'; }
@@ -5981,7 +6067,7 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
   }
-  G.app = { render: render, ACT: ACT, validTable: validTable };
+  G.app = { render: render, header: renderHeader, ACT: ACT, validTable: validTable };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>

@@ -3,7 +3,7 @@
   'use strict';
   var G = root.GIRSA, R = G.rules, D = G.data, U = G.ui, S = G.store, T = G.tables, dice = G.dice.dice;
   var P = G.pages, esc = U.esc;
-  var ROUTES = [['sheet', 'Scheda'], ['create', 'Crea'], ['dice', 'Dadi'], ['combat', 'Combattimento'], ['gear', 'Oggetti'], ['world', 'Mondo'], ['diary', 'Diario'], ['ref', 'Guida'], ['data', 'Dati']];
+  var ROUTES = [['create', 'Crea'], ['develop', 'Sviluppa'], ['sheet', 'Scheda'], ['dice', 'Dadi'], ['combat', 'Combattimento'], ['gear', 'Oggetti'], ['world', 'Mondo'], ['diary', 'Diario'], ['ref', 'Guida'], ['data', 'Dati']];
   var STATE_LISTS = { enemies: 1, atk: 1, crit: 1 };
 
   function route() { var r = (location.hash || '').replace(/^#\/?/, ''); return P[r] ? r : 'sheet'; }
@@ -261,5 +261,5 @@
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
   }
-  G.app = { render: render, ACT: ACT, validTable: validTable };
+  G.app = { render: render, header: renderHeader, ACT: ACT, validTable: validTable };
 })(typeof window !== 'undefined' ? window : globalThis);

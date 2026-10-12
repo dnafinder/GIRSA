@@ -58,6 +58,46 @@
     S.save(); render(); say('Popolo applicato: ' + p.n + '.');
   };
 
+
+  /* ---------- 2. nome (dopo il popolo) ---------- */
+  var ND = G.namedata;
+  function stepName(c) {
+    var k = cr(c), t = T(), pid = k.people, h = '<section class="card"><h2>2 · Nome</h2>';
+    if (!pid) return h + '<p class="hint">Scegli prima il popolo: il nome si propone in base a quello.</p></section>';
+    var sx = t.nsex || '', nm = ND.nomi(pid, sx), cg = ND.cognomi(pid), tot = ND.nomi(pid, '').length;
+    h += U.field('Nome del personaggio', U.inp('data-p', 'name', c.name, { label: 'Nome del personaggio' }));
+    if (!tot) {
+      return h + '<p class="hint">Per questo popolo le fonti consultate (Tolkien Gateway) non danno nomi: scrivilo tu.</p></section>';
+    }
+    h += '<div class="grid g2">' + U.field('Proponi nomi', U.sel('data-t', 'cr.nsex', sx, [['', 'maschili e femminili'], ['m', 'maschili'], ['f', 'femminili']], { re: 1, label: 'Genere dei nomi' })) +
+      '<div class="fld"><span>&nbsp;</span><button data-act="cr_namerand">Suggeriscine uno</button></div></div>';
+    h += '<p class="hint">Sono nomi di personaggi di Tolkien (raccolta da Tolkien Gateway, non dal compendio GIRSA). ' + tot + ' per questo popolo' + (cg.length ? ', più ' + cg.length + ' cognomi' : '') + '. Toccane uno per usarlo.</p>';
+    h += '<details><summary>Elenco dei nomi</summary><p class="names">' + nm.map(function (n) { return '<button class="mini" data-act="cr_setname" data-n="' + esc(n) + '">' + esc(n) + '</button>'; }).join(' ') + '</p>' +
+      (cg.length ? '<p class="hint">Cognomi:</p><p class="names">' + cg.map(function (n) { return '<button class="mini" data-act="cr_setsur" data-n="' + esc(n) + '">' + esc(n) + '</button>'; }).join(' ') + '</p>' : '') + '</details>';
+    return h + '</section>';
+  }
+  /* Cambia il nome senza ridisegnare la pagina: l'elenco dei nomi resta aperto e si può provare più di un nome. */
+  function putName(c, v) {
+    c.name = v; S.save();
+    var el = document.querySelector('input[data-p="name"]'); if (el) el.value = v;
+    G.app.header();
+  }
+  G.acts.cr_namerand = function () {
+    var c = S.cur(), k = cr(c), t = T(), nm = ND.nomi(k.people, t.nsex || ''), cg = ND.cognomi(k.people);
+    if (!nm.length) { say('Nessun nome per questo popolo.'); return; }
+    var n = nm[Math.floor(Math.random() * nm.length)];
+    putName(c, cg.length ? n + ' ' + cg[Math.floor(Math.random() * cg.length)] : n);
+  };
+  G.acts.cr_setname = function (b) {
+    var c = S.cur(), parts = String(c.name || '').trim().split(/\s+/), cg = ND.cognomi(cr(c).people);
+    var last = parts.length > 1 && cg.indexOf(parts[parts.length - 1]) >= 0 ? ' ' + parts[parts.length - 1] : '';
+    putName(c, b.dataset.n + last);
+  };
+  G.acts.cr_setsur = function (b) {
+    var c = S.cur(), parts = String(c.name || '').trim().split(/\s+/).filter(Boolean), cg = ND.cognomi(cr(c).people);
+    if (parts.length > 1 && cg.indexOf(parts[parts.length - 1]) >= 0) parts.pop();
+    putName(c, (parts.length ? parts.join(' ') + ' ' : '') + b.dataset.n);
+  };
   /* ---------- 2. professione ---------- */
   function profInfo(f, lv) {
     var h = '<p class="hint">Caratteristica fondamentale: <b>' + esc(f.stat.length ? f.stat.join(' / ') : 'legata all\'occupazione') + '</b>' + (f.sec.length ? ' · secondaria: ' + esc(f.sec.join(' / ')) : '') +
@@ -72,7 +112,7 @@
     var sel = t.selProf || k.prof || c.prof || '';
     if (list.indexOf(sel) < 0) sel = '';
     var f = X.profByName(sel);
-    var h = '<section class="card"><h2>2 · Professione e livello</h2><p class="hint">' + (p ? 'Professioni consentite al popolo «' + esc(p.n) + '»: ' + list.length + '. ' : 'Scegli prima il popolo per vedere solo le professioni consentite. ') + '</p>' +
+    var h = '<section class="card"><h2>3 · Professione e livello</h2><p class="hint">' + (p ? 'Professioni consentite al popolo «' + esc(p.n) + '»: ' + list.length + '. ' : 'Scegli prima il popolo per vedere solo le professioni consentite. ') + '</p>' +
       '<div class="grid g2">' + U.field('Professione', U.sel('data-t', 'cr.selProf', sel, [['', '(scegli)']].concat(list.map(function (n) { return n; })), { re: 1, label: 'Professione' })) +
       U.field('Livello', U.inp('data-p', 'livello', c.livello, { type: 'number', ph: '1' })) + '</div>';
     if (f) {
@@ -112,7 +152,7 @@
   }
   function stepStats(c) {
     var t = T(), k = cr(c), p = person(c), f = prof(c);
-    var h = '<section class="card"><h2>3 · Caratteristiche</h2>' +
+    var h = '<section class="card"><h2>4 · Caratteristiche</h2>' +
       '<p class="hint"><b>Metodo classico</b>: 6 tiri di d100 (si ritira se esce meno di 20) da assegnare alle caratteristiche; se nella caratteristica principale il risultato è meno di 90, diventa 90 (opzione: nella secondaria, meno di 75 diventa 75). ' +
       'Noldor: il valore più alto va a Prontezza; Sindar: a Prontezza uno dei due più alti; Silvani: uno dei tre più alti. <b>Distribuzione di punti</b>: 400 punti, valori da 20 a 100 (oltre 90 il costo è 90 + (valore − 90)²), principale almeno 90, secondaria almeno 75 (opzione), Noldor almeno 90 in Prontezza, Sindar e Silvani almeno 75. ' +
       'Punti spesi: <b data-calc="pts">' + esc(U.calcText('pts')) + '</b>.</p>' +
@@ -206,7 +246,7 @@
   }
   function stepBg(c) {
     var k = cr(c), p = person(c), t = T(), pts = p ? p.bg : 0, used = k.bg.length;
-    var h = '<section class="card"><h2>4 · Opzioni di background</h2>';
+    var h = '<section class="card"><h2>5 · Opzioni di background</h2>';
     if (!p) return h + '<p class="hint">Scegli prima il popolo: i punti di background dipendono da lui.</p></section>';
     h += '<p class="hint">Il popolo «' + esc(p.n) + '» ha <b>' + pts + '</b> punt' + (pts === 1 ? 'o' : 'i') + ' di background (usati: ' + used + '). Il GM può far scegliere l\'opzione, farla tirare o sceglierla lui. ' +
       (p.bgAbil ? 'Per questo popolo, abilità speciali: ' + esc(p.bgAbil) : '') + '</p>';
@@ -292,7 +332,7 @@
 
   /* ---------- 5. adolescenza ---------- */
   function stepAdol(c) {
-    var k = cr(c), p = person(c), h = '<section class="card"><h2>5 · Adolescenza</h2>';
+    var k = cr(c), p = person(c), h = '<section class="card"><h2>6 · Adolescenza</h2>';
     if (!p) return h + '<p class="hint">Scegli prima il popolo.</p></section>';
     var t = X.adolescenceOf(p.id), plan = X.adolescencePlan(p.id);
     h += '<p class="hint">Gradi appresi prima della professione (TGP-5) per il popolo «' + esc(p.n) + '».</p><div class="chips">' +
@@ -319,7 +359,7 @@
   /* ---------- 6. punti sviluppo ---------- */
   function stepPs(c) {
     var k = cr(c), f = prof(c), t = T();
-    var h = '<section class="card"><h2>6 · Punti sviluppo e livelli</h2>';
+    var h = '<section class="card"><h2>Punti sviluppo e livelli</h2>';
     if (!f) return h + '<p class="hint">Scegli e applica la professione.</p></section>';
     h += '<p class="hint">Ogni livello (e alla creazione) hai i punti della tabella TGP-4 per la professione. Un grado in un\'abilità costa 1 PS, due gradi 3 PS; nessuna abilità sale più di due gradi per livello. ' +
       'Manovre in movimento: 1 PS per grado, senza limite. Si possono trasferire PS tra categorie: ogni PS ottenuto costa 2 PS se la professione ha già almeno 1 PS in quella categoria, altrimenti 4; Arti marziali sempre 2 a 1; ' +
@@ -378,7 +418,13 @@
     var c = S.cur();
     return '<section class="card"><p class="hint">Percorso di creazione del personaggio «' + esc(c.name) + '», nell\'ordine del compendio. Ogni passo scrive nella scheda; puoi tornare indietro e rifare. ' +
       'Il compendio non dà tabelle per i PF iniziali: scrivili in Scheda.</p></section>' +
-      stepPeople(c) + stepProf(c) + stepStats(c) + stepBg(c) + stepAdol(c) + stepPs(c);
+      stepPeople(c) + stepName(c) + stepProf(c) + stepStats(c) + stepBg(c) + stepAdol(c) +
+      '<section class="card"><p class="hint">Crescita del personaggio (punti sviluppo, nuovi livelli): <a href="#/develop">pagina Sviluppa</a>.</p></section>';
+  }
+  function develop_() {
+    var c = S.cur();
+    return '<section class="card"><p class="hint">Sviluppo di «' + esc(c.name) + '»: punti sviluppo, gradi alle abilità, trasferimenti tra categorie e passaggio di livello. La creazione (popolo, nome, professione, caratteristiche, background, adolescenza) è in <a href="#/create">Crea</a>.</p></section>' + stepPs(c);
   }
   G.pages.create = { render: render_ };
+  G.pages.develop = { render: develop_ };
 })(typeof window !== 'undefined' ? window : globalThis);

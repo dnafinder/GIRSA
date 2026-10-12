@@ -33,3 +33,5 @@ Di conseguenza:
 - `js/worlddata.js` è generato da `tools/extract-world.py` dai PDF «Animali e mostri tolkeniani» (TS-2) e «Manovre Statiche» (TM-2), «Freddo e Caldo» (TRR-2), «Pirocinesi» e «Potenziamento corporeo» (liste), che hanno il testo, e da `tools/world_hand.py`, dove ho trascritto a mano dalle immagini dei PDF «Punti Esperienza» (TE-0…TE-7), «Manovre in Movimento» (TM-1), «Precipitazioni e Temperature» (TS-8, TS-8.2), «Incontri e Rischio Incantesimi» (TS-10, TS-12), «Tabelle dei tesori e oggetti magici» (TS-6, TS-7) e «Mutaforma»: tabelle e testi come nei PDF, refusi compresi. Valgono le stesse condizioni: uso personale, repository privato, niente vendita.
 
 GIRSA e «Il Signore degli Anelli» appartengono ai rispettivi titolari. Il progetto non è affiliato a nessuno di loro.
+
+- `js/namedata.js`: elenco di nomi di personaggi di J.R.R. Tolkien raccolti il 12/10/2026 dalle pagine di categoria di Tolkien Gateway (<https://tolkiengateway.net>); non fa parte del compendio «Istaro Quettar». Sono solo nomi propri, senza testi tratti dal sito.

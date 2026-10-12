@@ -149,3 +149,15 @@ test('liste: Pirocinesi e Potenziamento Corporeo', () => {
   const i13 = q.sp.findIndex((s) => s.lv === 13), i12 = q.sp.findIndex((s) => s.lv === 12);
   assert.ok(i13 < i12);
 });
+
+test('nomi per popolo', () => {
+  require('../js/creationdata.js');
+  const N = require('../js/namedata.js'), ids = global.GIRSA.creation.PEOPLE.map((p) => p.id);
+  Object.keys(N.NOMI).forEach((k) => assert.ok(ids.includes(k), 'popolo sconosciuto: ' + k));
+  assert.ok(N.nomi('rohirrim', 'f').includes('Éowyn') && !N.nomi('rohirrim', 'f').includes('Éomer'));
+  assert.ok(N.nomi('rohirrim', '').includes('Éomer') && N.nomi('rohirrim', '').includes('Éowyn'));
+  assert.deepStrictEqual(N.nomi('variag', ''), []);
+  assert.ok(N.nomi('uruk', 'f').includes('Uglúk'));
+  assert.ok(N.cognomi('hobbit').includes('Baggins') && N.cognomi('nani').length === 0);
+  Object.values(N.NOMI).forEach((n) => ['m', 'f', 'x'].forEach((g) => assert.strictEqual(new Set(n[g]).size, n[g].length, 'duplicati')));
+});

@@ -18,10 +18,11 @@ nel browser e funziona anche senza rete.
   abilità con bonus ai gradi (TB-4), difese e tiri resistenza, PF con soglia di morte, inventario,
   incantesimi, note. I totali si aggiornano mentre scrivi e ogni voce ha il suo pulsante 🎲.
 - **PF sempre in vista** in alto, con pulsanti −10 −5 −1 +1 +5 +10; l'ultimo tiro resta in basso.
-- **Crea** (creazione guidata in sei passi): popolo (applica le modifiche TB-3, lingue e scheda completa), professione consentita
+- **Crea** (creazione guidata in sei passi): popolo (applica le modifiche TB-3, lingue e scheda completa), nome (con nomi di personaggi di Tolkien per popolo), professione consentita
   al popolo e livello (bonus per livello TB-4.2 scritti nella colonna «Prof»), caratteristiche (tiro classico o 400 punti, controlli
   su principale/secondaria e sulle regole degli Elfi, Aspetto), background (punti del popolo, tabelle TGP-2 con le regole di
-  ogni popolo), gradi di adolescenza (TGP-5), punti sviluppo con trasferimenti e passaggio di livello.
+  ogni popolo), gradi di adolescenza (TGP-5).
+- **Sviluppa**: punti sviluppo (TGP-4) con gradi alle abilità, trasferimenti tra categorie e passaggio di livello. Il menu va in ordine di gioco: Crea, Sviluppa, Scheda.
 - **Guida**: consultazione di popoli, professioni, tabelle di creazione e delle 170 abilità secondarie (ricercabili, con pulsante per aggiungerle alla scheda), del Prospetto sul Combattimento, delle tabelle di copertura, gittata e animali, della magia (tipi, classi, TA-9, TRR, TSC-3) e della Corruzione.
 - **Dadi**: d100 aperto e chiuso, d4–d20, espressioni come `2d6+1`, cronologia.
 - **Combattimento**: iniziativa, attacco (tiro + BO − BD + modificatori) con lettura della tabella di attacco dell'arma scelta dal catalogo,
@@ -57,6 +58,8 @@ scegli l'arma: tabella di attacco, colpo maldestro, tabella e tipo massimo dei c
 - **Rete da gladiatore e armi che dimezzano i PF**: i PF dimezzati non sono calcolati, solo segnalati.
 
 ## Creazione del personaggio: scelte dell'app
+
+- **Nomi** (`js/namedata.js`): non vengono dal compendio GIRSA. Li ho raccolti il 12/10/2026 da Tolkien Gateway (pagine di categoria dei personaggi) e sono nomi di personaggi di Tolkien. Per 19 popoli c'è almeno un nome; per gli altri (Haradrim, Lossoth, Variag, Dorwinrim, Eriadoriani, Uomini dei Boschi, Mezzorchi, Olog-Hai, Mezzitroll) le fonti non ne danno e l'app non ne inventa. Alcune liste sono cortissime (Umli 3, Beorniani 2, Dunlandiani 2, Corsari 2, Wose 2). Nomi che esistono solo in giochi o film (per esempio Lurtz, Suladân, Yrjänä) sono esclusi. Il genere (maschile/femminile) l'ho assegnato io dai personaggi; per orchi e Uruk non c'è. I cognomi ci sono solo per gli Hobbit, in inglese come nelle fonti.
 
 - **Abbinamento dei tiri alle caratteristiche**: il compendio lo lascia libero; «Assegna in automatico» mette i due valori più alti a principale e secondaria (con le regole degli Elfi su Prontezza), gli altri in ordine FR, AG, CO, IN, IT, PR. Puoi assegnare a mano.
 - **Númenóreani Neri**: il TB-3 non ha una riga per loro; l'app usa «Uomini» (cambiabile in Scheda → Popolo).
@@ -128,7 +131,8 @@ js/creationdata.js      creazione: popoli, professioni, background, punti svilup
 js/creationpdf.js       gradi di adolescenza (TGP-5), generato da tools/extract-creation.py
 js/secdata.js           abilità secondarie, generato dallo stesso script
 js/creation.js          logica della creazione
-js/createpage.js, js/refpage.js   pagine «Crea» e «Guida»
+js/createpage.js, js/refpage.js   pagine «Crea», «Sviluppa» e «Guida»
+js/namedata.js          nomi per popolo (da Tolkien Gateway)
 js/combatdata.js        TA-9, TRR, TSC-3/4/5, generato da tools/extract-combat.py
 js/combatrules.js       testo del Prospetto sul Combattimento, generato da tools/extract-combatrules.py
 js/magic.js, js/magicpage.js   incantesimi base, iniziativa, TFI, gittata
