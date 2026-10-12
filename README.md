@@ -18,6 +18,11 @@ nel browser e funziona anche senza rete.
   abilità con bonus ai gradi (TB-4), difese e tiri resistenza, PF con soglia di morte, inventario,
   incantesimi, note. I totali si aggiornano mentre scrivi e ogni voce ha il suo pulsante 🎲.
 - **PF sempre in vista** in alto, con pulsanti −10 −5 −1 +1 +5 +10; l'ultimo tiro resta in basso.
+- **Crea** (creazione guidata in sei passi): popolo (applica le modifiche TB-3, lingue e scheda completa), professione consentita
+  al popolo e livello (bonus per livello TB-4.2 scritti nella colonna «Prof»), caratteristiche (tiro classico o 400 punti, controlli
+  su principale/secondaria e sulle regole degli Elfi, Aspetto), background (punti del popolo, tabelle TGP-2 con le regole di
+  ogni popolo), gradi di adolescenza (TGP-5), punti sviluppo con trasferimenti e passaggio di livello.
+- **Guida**: consultazione di popoli, professioni, tabelle di creazione e delle 170 abilità secondarie (ricercabili, con pulsante per aggiungerle alla scheda).
 - **Dadi**: d100 aperto e chiuso, d4–d20, espressioni come `2d6+1`, cronologia.
 - **Combattimento**: attacco (tiro + BO − BD + modificatori) con lettura della tabella di attacco dell'arma scelta dal catalogo,
   colpo maldestro o fallimento con la relativa tabella, colpo critico con il modificatore della lettera,
@@ -34,6 +39,15 @@ dei colpi critici **TC-1…TC-13**, dei fallimenti **TTM-1…TTM-7** e la **tabe
 In **Scheda → Armi** aggiungi un'arma scegliendola dal catalogo e indichi l'abilità da cui prendere il BO. Nel **Combattimento**
 scegli l'arma: tabella di attacco, colpo maldestro, tabella e tipo massimo dei critici, critico secondario e modificatori
 «sulla TA» si compilano da soli. Resta da indicare l'armatura del bersaglio e il BD.
+
+## Creazione del personaggio: scelte dell'app
+
+- **Abbinamento dei tiri alle caratteristiche**: il compendio lo lascia libero; «Assegna in automatico» mette i due valori più alti a principale e secondaria (con le regole degli Elfi su Prontezza), gli altri in ordine FR, AG, CO, IN, IT, PR. Puoi assegnare a mano.
+- **Númenóreani Neri**: il TB-3 non ha una riga per loro; l'app usa «Uomini» (cambiabile in Scheda → Popolo).
+- **Incrementi di caratteristica**: le righe «1/2» e «2/4» della tabella si sovrappongono nel PDF (probabile refuso); si usa la prima.
+- **Applicare una professione** sostituisce i valori già scritti nella colonna «Prof» delle abilità.
+- **PF per livello ed esperienza** non sono nei documenti caricati: non sono calcolati.
+- Le tabelle dei popoli, delle professioni, del background e della TB-6/TGP-4 sono in immagini nei PDF e sono state trascritte a mano e controllate con somme e confronti incrociati, non cella per cella da una macchina: se trovi un valore dubbio, controlla il PDF.
 
 ## Copia di sicurezza
 
@@ -73,8 +87,14 @@ js/dice.js              dadi
 js/tables.js            consultazione delle tabelle
 js/tabledata.js         tabelle del compendio, generate da tools/extract-tables.py
 js/weapondata.js        catalogo armi (TSC-1), generato dallo stesso script
+js/creationdata.js      creazione: popoli, professioni, background, punti sviluppo (trascritti a mano)
+js/creationpdf.js       gradi di adolescenza (TGP-5), generato da tools/extract-creation.py
+js/secdata.js           abilità secondarie, generato dallo stesso script
+js/creation.js          logica della creazione
+js/createpage.js, js/refpage.js   pagine «Crea» e «Guida»
 js/store.js             salvataggio locale
 tools/build.mjs         crea dist/girsa.html
+tools/extract-creation.py rigenera creationpdf.js e secdata.js dai PDF di adolescenza e abilità secondarie
 tools/extract-tables.py rigenera tabledata.js e weapondata.js dai PDF (serve poppler e pdfplumber)
 tests/                  test
 ```

@@ -124,7 +124,7 @@
       pool: 400, stats: {}, skills: [], ps: {}, defs: {}, pf: { max: '', dmg: 0 },
       prot: { armatura: '', res: '', scudo: '', elmo: '', bracciali: '', schinieri: '', modbd: '', ingombro: '', mov: '' },
       bonusVari: '', note: '', corruzione: '', spells: [], inv: [], weapons: [], reputazione: '', denaro: '', classi: '',
-      diary: { book: '', par: '', log: [], flags: [] }
+      diary: { book: '', par: '', log: [], flags: [] }, creation: {}
     };
     D.STATS.forEach(function (s) { c.stats[s[0]] = { score: '', bonus: '', razza: '' }; });
     D.SKILLS.forEach(function (d) {

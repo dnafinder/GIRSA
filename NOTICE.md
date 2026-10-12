@@ -20,4 +20,8 @@ Di conseguenza:
 - le tabelle `TB-1`, `TB-3`, `TB-4`, `TE-5`, `TFC-2` sono state trascritte da immagini: vale la pena
   ricontrollarle sul PDF (i test in `tests/` verificano i calcoli, non la fedeltà della trascrizione).
 
+- `js/creationdata.js` contiene popoli, professioni, background, punti sviluppo e relative tabelle, **trascritti a mano** dai PDF di creazione del personaggio (in gran parte immagini);
+  `js/creationpdf.js` e `js/secdata.js` sono generati da `tools/extract-creation.py` (gradi di adolescenza e abilità secondarie). Valgono le stesse condizioni: uso personale, repository privato, niente vendita.
+  La scelta di pubblicare con GitHub Pages rende il repository pubblico: è una decisione tua, non dell'app.
+
 GIRSA e «Il Signore degli Anelli» appartengono ai rispettivi titolari. Il progetto non è affiliato a nessuno di loro.

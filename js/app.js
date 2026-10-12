@@ -3,7 +3,7 @@
   'use strict';
   var G = root.GIRSA, R = G.rules, D = G.data, U = G.ui, S = G.store, T = G.tables, dice = G.dice.dice;
   var P = G.pages, esc = U.esc;
-  var ROUTES = [['sheet', 'Scheda'], ['dice', 'Dadi'], ['combat', 'Combattimento'], ['diary', 'Diario'], ['data', 'Dati']];
+  var ROUTES = [['sheet', 'Scheda'], ['create', 'Crea'], ['dice', 'Dadi'], ['combat', 'Combattimento'], ['diary', 'Diario'], ['ref', 'Guida'], ['data', 'Dati']];
   var STATE_LISTS = { enemies: 1, atk: 1, crit: 1 };
 
   function route() { var r = (location.hash || '').replace(/^#\/?/, ''); return P[r] ? r : 'sheet'; }
@@ -63,6 +63,8 @@
         U.weaponCat().forEach(function (x) { if (x.id === t.value) cw = x; });
         ww.id = t.value; if (cw && !ww.n) ww.n = cw.n; S.save(); render();
       }
+      var ap = a.split(':');
+      if (G.changes && G.changes[ap[0]]) G.changes[ap[0]](t.value, ap[1]);
       if (a === 'popolo') { if (R.applyPopolo(S.cur(), t.value)) { S.save(); render(); U.toast('Applicate le modifiche del popolo (TB-3).'); } else { S.cur().popolo = ''; S.save(); } }
     } else if (t.hasAttribute('data-act-file')) {
       importFile(t.files && t.files[0]); t.value = '';
@@ -209,7 +211,7 @@
   document.addEventListener('click', function (e) {
     var b = e.target.closest ? e.target.closest('[data-act]') : null;
     if (!b || b.tagName === 'INPUT' && b.type !== 'radio' || b.disabled) return;
-    var f = ACT[b.getAttribute('data-act')]; if (f) f(b);
+    var nm = b.getAttribute('data-act'), f = ACT[nm] || (G.acts && G.acts[nm]); if (f) f(b);
   });
 
   /* ---------- importazione file ---------- */
