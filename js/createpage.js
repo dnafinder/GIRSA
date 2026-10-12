@@ -59,21 +59,24 @@
   };
 
 
-  /* ---------- 2. nome (dopo il popolo) ---------- */
+  /* ---------- 2. sesso e nome (dopo il popolo) ---------- */
   var ND = G.namedata;
+  function nameBtns(list, act) { return list.map(function (n) { return '<button class="mini" data-act="' + act + '" data-n="' + esc(n) + '">' + esc(n) + '</button>'; }).join(' '); }
   function stepName(c) {
-    var k = cr(c), t = T(), pid = k.people, h = '<section class="card"><h2>2 · Nome</h2>';
-    if (!pid) return h + '<p class="hint">Scegli prima il popolo: il nome si propone in base a quello.</p></section>';
-    var sx = t.nsex || '', nm = ND.nomi(pid, sx), cg = ND.cognomi(pid), tot = ND.nomi(pid, '').length;
-    h += U.field('Nome del personaggio', U.inp('data-p', 'name', c.name, { label: 'Nome del personaggio' }));
-    if (!tot) {
-      return h + '<p class="hint">Per questo popolo le fonti consultate (Tolkien Gateway) non danno nomi: scrivilo tu.</p></section>';
-    }
-    h += '<div class="grid g2">' + U.field('Proponi nomi', U.sel('data-t', 'cr.nsex', sx, [['', 'maschili e femminili'], ['m', 'maschili'], ['f', 'femminili']], { re: 1, label: 'Genere dei nomi' })) +
-      '<div class="fld"><span>&nbsp;</span><button data-act="cr_namerand">Suggeriscine uno</button></div></div>';
-    h += '<p class="hint">Sono nomi di personaggi di Tolkien (raccolta da Tolkien Gateway, non dal compendio GIRSA). ' + tot + ' per questo popolo' + (cg.length ? ', più ' + cg.length + ' cognomi' : '') + '. Toccane uno per usarlo.</p>';
-    h += '<details><summary>Elenco dei nomi</summary><p class="names">' + nm.map(function (n) { return '<button class="mini" data-act="cr_setname" data-n="' + esc(n) + '">' + esc(n) + '</button>'; }).join(' ') + '</p>' +
-      (cg.length ? '<p class="hint">Cognomi:</p><p class="names">' + cg.map(function (n) { return '<button class="mini" data-act="cr_setsur" data-n="' + esc(n) + '">' + esc(n) + '</button>'; }).join(' ') + '</p>' : '') + '</details>';
+    var k = cr(c), pid = k.people, h = '<section class="card"><h2>2 · Sesso e nome</h2>';
+    if (!pid) return h + '<p class="hint">Scegli prima il popolo: i nomi si propongono in base a quello.</p></section>';
+    var sx = c.sesso || '', canon = ND.canon(pid, sx), fan = ND.fan(pid, sx), cg = ND.cognomi(pid), fcg = ND.fanCognomi(pid), tot = canon.length + fan.length;
+    h += '<p class="hint">Scegli prima il sesso: i nomi proposti seguono quello.</p><div class="grid g2">' +
+      U.field('Sesso', U.sel('data-p', 'sesso', sx, [['', '—'], ['m', 'Maschile'], ['f', 'Femminile']], { re: 1, label: 'Sesso' })) +
+      U.field('Nome del personaggio', U.inp('data-p', 'name', c.name, { label: 'Nome del personaggio' })) + '</div>';
+    if (!sx) return h + '<p class="hint">Con il sesso non scelto i nomi non vengono proposti.</p></section>';
+    if (!tot) return h + '<p class="hint">Per questo popolo non ho trovato nomi (né in Tolkien Gateway né nell\'elenco di Chapman): scrivilo tu.</p></section>';
+    h += '<div class="row"><button data-act="cr_namerand">Suggeriscine uno</button></div>' +
+      '<p class="hint">' + [canon.length ? canon.length + ' nomi di personaggi di Tolkien (da Tolkien Gateway)' : '', fan.length ? fan.length + ' di un elenco di appassionato (Colin Chapman, non canonico)' : ''].filter(Boolean).join(' e ') + (cg.length ? '; cognomi: ' + cg.length : '') + '. Non vengono dal compendio GIRSA. Toccane uno per usarlo.</p>';
+    h += '<details><summary>Elenco dei nomi</summary>' +
+      (canon.length ? '<p class="hint">Di Tolkien:</p><p class="names">' + nameBtns(canon, 'cr_setname') + '</p>' : '') +
+      (fan.length ? '<p class="hint">Dall\'elenco di Chapman (inventati sul modello delle lingue di Tolkien):</p><p class="names">' + nameBtns(fan, 'cr_setname') + '</p>' : '') +
+      (cg.length ? '<p class="hint">Cognomi' + (fcg.length && cg.length > fcg.length ? ' (i primi da Tolkien, gli altri da Chapman)' : fcg.length ? ' (da Chapman)' : '') + ':</p><p class="names">' + nameBtns(cg, 'cr_setsur') + '</p>' : '') + '</details>';
     return h + '</section>';
   }
   /* Cambia il nome senza ridisegnare la pagina: l'elenco dei nomi resta aperto e si può provare più di un nome. */
@@ -83,7 +86,7 @@
     G.app.header();
   }
   G.acts.cr_namerand = function () {
-    var c = S.cur(), k = cr(c), t = T(), nm = ND.nomi(k.people, t.nsex || ''), cg = ND.cognomi(k.people);
+    var c = S.cur(), k = cr(c), t = T(), nm = ND.nomi(k.people, c.sesso || ''), cg = ND.cognomi(k.people);
     if (!nm.length) { say('Nessun nome per questo popolo.'); return; }
     var n = nm[Math.floor(Math.random() * nm.length)];
     putName(c, cg.length ? n + ' ' + cg[Math.floor(Math.random() * cg.length)] : n);

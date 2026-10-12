@@ -34,4 +34,4 @@ Di conseguenza:
 
 GIRSA e «Il Signore degli Anelli» appartengono ai rispettivi titolari. Il progetto non è affiliato a nessuno di loro.
 
-- `js/namedata.js`: elenco di nomi di personaggi di J.R.R. Tolkien raccolti il 12/10/2026 dalle pagine di categoria di Tolkien Gateway (<https://tolkiengateway.net>); non fa parte del compendio «Istaro Quettar». Sono solo nomi propri, senza testi tratti dal sito.
+- `js/namedata.js`: elenco di nomi di personaggi di J.R.R. Tolkien raccolti il 12/10/2026 dalle pagine di categoria di Tolkien Gateway (<https://tolkiengateway.net>); non fa parte del compendio «Istaro Quettar». Sono solo nomi propri, senza testi tratti dal sito. Una parte dei nomi viene da «Names of Middle-earth» di Colin Chapman (v. 1.7.2, <https://www.darkshire.net/jhkim/rpg/lordoftherings/names.pdf>), un elenco di appassionato senza dichiarazione di licenza: ne è stata usata una selezione di soli nomi propri, con l'attribuzione nel file.

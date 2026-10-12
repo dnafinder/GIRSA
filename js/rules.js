@@ -119,7 +119,7 @@
   /* ---- scheda nuova ---- */
   function newChar(name) {
     var c = {
-      id: uid(), name: name || 'Nuovo personaggio', prof: '', regno: '', razza: '', popolo: '', livello: '', px: '', pm: '',
+      id: uid(), name: name || 'Nuovo personaggio', prof: '', regno: '', razza: '', popolo: '', sesso: '', livello: '', px: '', pm: '',
       altezza: '', capelli: '', occhi: '', lingue: '', temperamento: '', segni: '',
       pool: 400, stats: {}, skills: [], ps: {}, defs: {}, pf: { max: '', dmg: 0 },
       prot: { armatura: '', res: '', scudo: '', elmo: '', bracciali: '', schinieri: '', modbd: '', ingombro: '', mov: '' },

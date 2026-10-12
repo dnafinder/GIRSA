@@ -156,7 +156,10 @@ test('nomi per popolo', () => {
   Object.keys(N.NOMI).forEach((k) => assert.ok(ids.includes(k), 'popolo sconosciuto: ' + k));
   assert.ok(N.nomi('rohirrim', 'f').includes('Éowyn') && !N.nomi('rohirrim', 'f').includes('Éomer'));
   assert.ok(N.nomi('rohirrim', '').includes('Éomer') && N.nomi('rohirrim', '').includes('Éowyn'));
-  assert.deepStrictEqual(N.nomi('variag', ''), []);
+  assert.deepStrictEqual(N.nomi('variag', ''), []); assert.deepStrictEqual(N.nomi('lossoth', 'f'), []);
+  assert.ok(N.fan('haradrim', 'f').includes('Hind') && !N.canon('haradrim', 'f').length);
+  assert.ok(N.canon('esterling', 'm').includes('Khamûl') && N.fan('esterling', 'f').includes('Katun'));
+  assert.ok(N.cognomi('eriadoriani').includes('Butterbur') && N.fanCognomi('hobbit').length === 0);
   assert.ok(N.nomi('uruk', 'f').includes('Uglúk'));
   assert.ok(N.cognomi('hobbit').includes('Baggins') && N.cognomi('nani').length === 0);
   Object.values(N.NOMI).forEach((n) => ['m', 'f', 'x'].forEach((g) => assert.strictEqual(new Set(n[g]).size, n[g].length, 'duplicati')));
