@@ -119,15 +119,29 @@
     })) + '<p class="hint">Le malattie e gli effetti ambientali non si comprano: servono al GM. Codici da 600.</p>';
   }
 
+  /* Rapporti di cambio dalla nota della TS-6 (Tabelle dei tesori) */
+  function cvText() {
+    var t = T(), W = G.world, amt = t.cva === undefined ? '1' : t.cva, cc = t.cvc || 'MO';
+    if (amt === '' || isNaN(+amt) || +amt < 0) return 'Scrivi una quantità.';
+    return W.fromMS(W.toMS(+amt, cc)).map(function (x) { return '<b>' + W.fmtNum(x.v) + '</b> ' + x.code; }).join(' · ');
+  }
+  function converter() {
+    var t = T(), amt = t.cva === undefined ? '1' : t.cva, cc = t.cvc || 'MO';
+    return '<details><summary>Convertitore di monete</summary><div class="grid g2">' + U.field('Quantità', U.inp('data-t', 'gear.cva', amt, { type: 'number', label: 'Quantità' }).replace('<input ', '<input data-w="cv" ')) +
+      U.field('Moneta', U.sel('data-t', 'gear.cvc', cc, G.worlddata.monete.map(function (m) { return [m[0], m[0] + ' · ' + m[1]]; }), { label: 'Moneta' }).replace('<select ', '<select data-w="cv" ')) + '</div>' +
+      '<p class="pl" id="cvres">' + cvText() + '</p>' +
+      '<p class="hint">MS: Moneta di Stagno (1) · MR: Rame (10) · MB: Bronzo (100) · MA: Argento (1.000) · MO: Oro (10.000) · MM: Mithril (1.000.000), dalla nota della TS-6.</p></details>';
+  }
+
   function render() {
     var t = T(), sig = [t.sec, t.q, t.cat, t.cl].join('|');
     if (sig !== t.sig) { t.sig = sig; t.lim = 60; }
     var body = PRICE[t.sec] ? priceSec(t.sec) : t.sec === 'arm' ? armSec() : t.sec === 'met' ? metSec() : t.sec === 'gem' ? gemSec() : t.sec === 'erbe' ? herbSec() : malSec();
     return '<section class="card"><h2>Oggetti</h2><p class="hint">Equipaggiamento e prezzi, armature, metalli e gemme, erbe, veleni e malattie del compendio Istaro Quettar. Con «+ Inv.» la voce va nell\'inventario della Scheda, con «Indossa» nelle Protezioni, con «+ Erbario» nell\'erbario. ' +
-      'Le monete sono quelle del compendio (MO, MA, MB, MS, MR, MM): i testi non danno qui i rapporti di cambio, quindi l\'app non converte.</p>' +
+      'Le monete sono quelle del compendio (nella tabella dei tesori TS-6: MS=1, MR=10, MB=100, MA=1.000, MO=10.000, MM=1.000.000): in fondo trovi il convertitore.</p>' +
       '<div class="grid g2">' + U.field('Sezione', U.sel('data-t', 'gear.sec', t.sec, SECS, { re: 1, label: 'Sezione' })) +
       U.field('Cerca', '<input type="search" data-t="gear.q" data-re="1" value="' + esc(t.q) + '" placeholder="es. spada, cotta, athelas, cura">') + '</div>' +
-      '<p class="hint">Scrivi e premi Invio per cercare.</p>' + body + '</section>';
+      '<p class="hint">Scrivi e premi Invio per cercare.</p>' + body + converter() + '</section>';
   }
 
   /* ---- azioni ---- */
@@ -155,6 +169,15 @@
     S.save(); U.toast('«' + h.n + '» nell\'erbario.');
   };
   G.acts.gear_more = function () { T().lim += 60; G.app.render(); };
+
+  if (typeof document !== 'undefined') {
+    var cvUpd = function (e) {
+      var t = e.target;
+      if (!t || !t.getAttribute || t.getAttribute('data-w') !== 'cv') return;
+      setTimeout(function () { var el = document.getElementById('cvres'); if (el) el.innerHTML = cvText(); }, 0);
+    };
+    document.addEventListener('input', cvUpd); document.addEventListener('change', cvUpd);
+  }
 
   G.pages.gear = { render: render };
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -28,6 +28,7 @@ nel browser e funziona anche senza rete.
   colpo maldestro o fallimento con la relativa tabella, colpo critico con il modificatore della lettera,
   elenco avversari con PF, registro. In più: **incantesimi di attacco base** (TA-9 e tiro resistenza sulla TRR), **incantesimi inoffensivi** (TFI) e **gittata** (TSC-5).
 - **Oggetti**: equipaggiamento e prezzi (TS-4: armi, protezioni, accessori, borse, vestiti, vitto e servizi, trasporti), statistiche delle armature, degli elmi e degli scudi (TSC-4), metalli e gemme, 347 erbe, veleni ed effetti e 18 malattie (TS-5), con ricerca. «+ Inv.» porta una voce nell'inventario, «Indossa» nelle Protezioni (la Scheda mostra poi MM, BO, BD e resistenza del pezzo), «+ Erbario» nell'erbario della Scheda.
+- **Mondo**: **Punti Esperienza** (TE-0…TE-7 e semplificati, con un calcolatore che somma i PE alla Scheda), **manovre in movimento** (TM-1) e **statiche** (TM-2) con tiro, **meteo** (TS-8, TS-8.2), **incontri** (TS-10), **rischio degli incantesimi** (TS-12), **tesori** (TS-6, con generatore) e **prezzi degli oggetti magici** (TS-7), **animali e mostri** (TS-2: 147 animali, 92 creature speciali, cavalcature; «+ Avv.» li porta tra gli avversari del Combattimento) e le regole del **Mutaforma**.
 - **Diario**: paragrafo attuale, registro delle scelte e segnalini per il librogame.
 - **Dati**: impostazioni di calcolo, aiuto per la guarigione (TFC-2), tabelle aggiuntive tue,
   esportazione e importazione di una copia di sicurezza.
@@ -61,16 +62,24 @@ scegli l'arma: tabella di attacco, colpo maldestro, tabella e tipo massimo dei c
 - **Númenóreani Neri**: il TB-3 non ha una riga per loro; l'app usa «Uomini» (cambiabile in Scheda → Popolo).
 - **Incrementi di caratteristica**: le righe «1/2» e «2/4» della tabella si sovrappongono nel PDF (probabile refuso); si usa la prima.
 - **Applicare una professione** sostituisce i valori già scritti nella colonna «Prof» delle abilità.
-- **PF per livello ed esperienza** non sono nei documenti caricati: non sono calcolati.
+- **PF per livello** non sono nei documenti caricati: non sono calcolati. L'esperienza (TE-0…TE-7) è invece nella pagina Mondo; i PE necessari per livello (TE-5) sono nella Scheda.
 - Le tabelle dei popoli, delle professioni, del background e della TB-6/TGP-4 sono in immagini nei PDF e sono state trascritte a mano e controllate con somme e confronti incrociati, non cella per cella da una macchina: se trovi un valore dubbio, controlla il PDF.
 
 ## Oggetti: scelte dell'app
 
-- **Nessuna conversione di monete**: nei documenti caricati non ci sono i rapporti tra MO, MA, MB, MS, MR e MM, e l'app non li inventa. Prezzi, pesi e tempi sono riportati come nel compendio, refusi compresi.
+- **Monete**: i rapporti di cambio stanno nella nota della TS-6 (MS=1, MR=10, MB=100, MA=1.000, MO=10.000, MM=1.000.000) e il convertitore in fondo alla pagina li usa. Una mia affermazione precedente, «nei documenti non ci sono i rapporti», era sbagliata. Prezzi, pesi e tempi sono riportati come nel compendio, refusi compresi.
 - **Tipo delle erbe** (curativa, varia/d'utilità, veleno, malattia/effetto ambientale): nel PDF è dato solo dal colore del nome, secondo la legenda in fondo alla tabella; l'app lo legge da lì.
 - **Armature**: le penalità (MM, BO-M, BO-T, PRC) e i bonus (BD) sono mostrati, non applicati ai tiri: la Scheda li ricorda, tu li somma dove serve. La resistenza non è tracciata punto per punto.
 - **Nomi delle armature**: alcuni si ripetono in gruppi diversi (per esempio «Corazza rigida» tra cuoio rinforzato e piastre); «Indossa» scrive il nome con la sigla del gruppo, per ritrovare le statistiche.
 - **Armi**: la tabella dei prezzi (TS-4) e il catalogo delle statistiche di combattimento (TSC-1) restano separati; le due fonti hanno nomi in parte diversi e l'app non li abbina a indovinare.
+
+## Mondo: scelte dell'app
+
+- **Dove i PDF hanno solo testo** (animali e mostri TS-2, manovre statiche TM-2) i dati sono letti dai PDF da `tools/extract-world.py` con asserzioni (conteggi per gruppo, intervalli). **Dove sono immagini** (esperienza, TM-1, meteo, TS-10, TS-12, tesori TS-6, prezzi TS-7, Mutaforma) le ho trascritte a mano da pagine ingrandite (`tools/world_hand.py`) e controllate da asserzioni: intervalli senza buchi, valori monotoni, nella TM-1 la distanza in metri è esattamente (percentuale−100)×0,3 troncato, nei tesori i valori monetari hanno il formato giusto. Non è una verifica cella per cella contro una seconda lettura: se un valore ti pare strano, guarda il PDF.
+- **Anomalie del compendio lasciate com'erano** (elenco anche in `worlddata.js`, campo `anomalie`): TE-1 colonna «11+» (130, 150, 200 ai livelli 8–10, lo schema darebbe 110, 130, 150); TM-2 l'estremo 175 sta in due righe («111/175» e «175 o più»: vale la prima); TS-6 oggetti magici «11/22» e «21/30» si sovrappongono (vale la prima); TS-8.2 Gelido a Gwaeron è stampato «42/-12» (probabile «-42»); tre celle di TS-8 senza parentesi di chiusura (le ho chiuse per leggerle). Il refuso «MVVE» (Renna) e «MN» (Demone III° Cerchia) restano.
+- **Tiri**: il compendio non definisce come si tirano l'Attività e l'Evasione (TS-10), né la probabilità di precipitazione (TS-8): l'app usa il d100 aperto del resto dell'app e «tiro ≤ probabilità»; sono scorciatoie, e puoi inserire a mano ogni tiro.
+- **Manca nei PDF** la tabella «Fallimento Manovre in Movimento», che la TM-1 nomina: l'app non la inventa e, quando esce «F», lo dice. Le celle della TM-2 sono lunghe: i risultati sono mostrati riga per riga, con le cinque colonne in elenco.
+- **Cavalcature**: «Bue», «Mulo/Somaro», i pony e lo «Zurafy» seguono gli elefanti senza un titolo proprio nel PDF; l'app li raggruppa come «Altri».
 
 ## Crediti
 
@@ -125,12 +134,15 @@ js/magic.js, js/magicpage.js   incantesimi base, iniziativa, TFI, gittata
 js/refcombat.js         parti di combattimento e magia della Guida
 js/geardata.js          armature, equipaggiamento e prezzi, metalli, gemme, erbe e malattie, generato da tools/extract-gear.py
 js/gear.js, js/gearpage.js   ricerca e pagina «Oggetti»
+js/worlddata.js         animali, manovre statiche (dai PDF) ed esperienza, TM-1, meteo, incontri, rischio, tesori, Mutaforma (trascritti), generato da tools/extract-world.py
+js/world.js, js/worldpage.js   regole (ricerche, PE, tesori, monete) e pagina «Mondo»
 js/store.js             salvataggio locale
 tools/build.mjs         crea dist/girsa.html
 tools/extract-combat.py  rigenera combatdata.js (TA-9, TRR, TSC-3/4/5)
 tools/extract-combatrules.py rigenera combatrules.js (testo del Prospetto sul Combattimento)
 tools/extract-creation.py rigenera creationpdf.js e secdata.js dai PDF di adolescenza e abilità secondarie
 tools/extract-gear.py   rigenera geardata.js dai PDF di armature, equipaggiamento, metalli e gemme, erbe (con tools/pdfgrid.py)
+tools/extract-world.py  rigenera worlddata.js (usa tools/world_hand.py per le tabelle trascritte a mano)
 tools/extract-tables.py rigenera tabledata.js (con i critici mirati) e weapondata.js dai PDF (serve poppler e pdfplumber)
 tests/                  test
 ```
