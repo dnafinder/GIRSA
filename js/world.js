@@ -15,6 +15,8 @@
     if ((m = /^più di (\d+)$/.exec(s))) return [+m[1] + 1, INF];
     if ((m = /^(-?\d+) o meno$/.exec(s))) return [-INF, +m[1]];
     if ((m = /^(-?\d+) o più$/.exec(s))) return [+m[1], INF];
+    if ((m = /^(\d+) o \+$/.exec(s))) return [+m[1], INF];
+    if (s === 'Meno di 0') return [-INF, -1];
     if (s === '00') return [100, 100];
     if ((m = /^(-?\d+)\/(-?\d+)$/.exec(s))) { var a = parseInt(m[1], 10), b = parseInt(m[2], 10); return [a, (b === 0 && a > 0) ? 100 : b]; }
     return null;
@@ -64,6 +66,18 @@
   function rischioLookup(total, area) {
     var i = rowIndex(W.rischio.righe, total);
     return { row: i, label: W.rischio.righe[i][0], res: W.rischio.righe[i][1][area] };
+  }
+
+  /* ---- TRR-2: freddo e caldo. kind = 'freddo' | 'caldo' ---- */
+  function trr2Lookup(kind, total) {
+    var i = rowIndex(W.trr2[kind].righe, total);
+    return { row: i, range: W.trr2[kind].righe[i][0], text: W.trr2[kind].righe[i][1] };
+  }
+  /* Fattore di rischio TS-12 del tipo di incantesimo (E, ED, ES, U, ...) */
+  function riskFactor(code) {
+    var f = W.rischio.fatt;
+    for (var i = 0; i < f.length; i++) if (f[i][0].split(' ')[0] === code) return f[i][1];
+    return null;
   }
 
   /* ---- monete (TS-6): MS=1, MR=10, MB=100, MA=1.000, MO=10.000, MM=1.000.000 ---- */
@@ -150,7 +164,7 @@
 
   var api = {
     range: range, rowIndex: rowIndex, movCell: movCell, movLookup: movLookup, statLookup: statLookup, incLookup: incLookup, incText: incText, modNum: modNum,
-    rischioLookup: rischioLookup, coinVal: coinVal, toMS: toMS, fromMS: fromMS, fmtNum: fmtNum, parseTreasure: parseTreasure, treasure: treasure, wealthIndex: wealthIndex,
+    rischioLookup: rischioLookup, trr2Lookup: trr2Lookup, riskFactor: riskFactor, coinVal: coinVal, toMS: toMS, fromMS: fromMS, fmtNum: fmtNum, parseTreasure: parseTreasure, treasure: treasure, wealthIndex: wealthIndex,
     peKillBase: peKillBase, peKill: peKill, peCritInflitti: peCritInflitti, peCritSubiti: peCritSubiti, peSpell: peSpell, SIZE_MULT: SIZE_MULT,
     precParse: precParse, tempParse: tempParse, allAnimals: allAnimals
   };

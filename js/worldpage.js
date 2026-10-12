@@ -7,7 +7,7 @@
   G.acts = G.acts || {};
 
   var SECS = [['xp', 'Punti Esperienza (TE)'], ['mov', 'Manovre in movimento (TM-1)'], ['stat', 'Manovre statiche (TM-2)'], ['meteo', 'Meteo (TS-8)'], ['inc', 'Incontri (TS-10)'],
-    ['ris', 'Rischio incantesimi (TS-12)'], ['tes', 'Tesori (TS-6)'], ['mag', 'Prezzi oggetti magici (TS-7)'], ['anim', 'Animali e mostri (TS-2)'], ['muta', 'Mutaforma']];
+    ['ris', 'Rischio incantesimi (TS-12)'], ['clima', 'Freddo e caldo (TRR-2)'], ['liste', 'Liste di incantesimi: Pirocinesi, Potenziamento Corporeo'], ['tes', 'Tesori (TS-6)'], ['mag', 'Prezzi oggetti magici (TS-7)'], ['anim', 'Animali e mostri (TS-2)'], ['muta', 'Mutaforma']];
 
   function T() {
     var t = U.tmp.world;
@@ -19,6 +19,8 @@
         meteo: { mese: '0', pc: '2', tc: '2', res: null },
         inc: { dens: '1', ter: '', abit: '', xa: '', dim: '', modo: '', gen: '', xe: '', ra: '', re: '', res: null },
         ris: { tipo: '6', per: '2', area: '1', r1: '', r2: '', x2: '', res: null },
+        clima: { kind: 'freddo', tr: '', temp: '', ind: '', alt: {}, x: '', min: '', max: '', roll: '', res: null },
+        liste: { l: '0' },
         tes: { w: '2', res: null } };
     }
     return t;
@@ -275,6 +277,81 @@
     s.res = res; U.showRoll('Rischio incantesimo', 'rischio ' + risk, risk >= 100 ? res.res : 'niente'); G.app.render();
   };
 
+
+  /* ================= Freddo e caldo (TRR-2) ================= */
+  function climaTR(kind) {
+    var c = S.cur(), cx = R.ctx(S.get().settings), key = kind === 'freddo' ? 'fre' : 'cal', d = null;
+    G.data.DEFENSES.forEach(function (x) { if (x[0] === key) d = x; });
+    return R.defenseTotal(c, key, d[2], cx);
+  }
+  function climaMods(kind) {
+    var t = T().clima, D = Wd.trr2[kind], total = 0, parts = [];
+    var pick = function (list, v, label) { if (v !== '' && v != null && list[+v]) { var n = Wr.modNum(list[+v][1]); if (n != null) { total += n; parts.push(label + ' ' + sg(n)); } } };
+    pick(D.mods.temp, t.temp, 'temperatura');
+    if (kind === 'freddo') pick(D.mods.ind, t.ind, 'indumenti');
+    D.mods.altro.forEach(function (a, i) { var n = Wr.modNum(a[1]); if (n != null && t.alt && t.alt[kind + i]) { total += n; parts.push(a[0].toLowerCase() + ' ' + sg(n)); } });
+    if (t.x !== '') { total += num(t.x); parts.push('altre ' + sg(num(t.x))); }
+    return { total: total, parts: parts };
+  }
+  function climaSec() {
+    var t = T().clima, k = t.kind, D = Wd.trr2[k], h = '';
+    h += '<div class="grid g2">' + selF('Temperature estreme', 'world.clima.kind', k, [['freddo', 'Freddo'], ['caldo', 'Caldo']]) + '</div>';
+    h += '<p class="pl">' + esc(D.intro) + '</p><p class="pl"><b>' + esc(D.formula) + '</b></p>';
+    var auto = climaTR(k);
+    h += '<h3>Tira</h3><div class="grid g3">' + fld('TR contro ' + (k === 'freddo' ? 'Freddo' : 'Calore') + ' (vuoto = dalla Scheda: ' + sg(auto) + ')', 'world.clima.tr', t.tr, null, 'cl') +
+      selF('Temperatura', 'world.clima.temp', t.temp, [['', '(nessuna)']].concat(opts(D.mods.temp, function (m) { return m[0] + ' (' + m[1] + ')'; }))) +
+      (k === 'freddo' ? selF('Indumenti', 'world.clima.ind', t.ind, [['', '(nessuno scelto)']].concat(opts(D.mods.ind, function (m) { return m[0] + ' (' + m[1] + ')'; }))) : '') +
+      fld('Altre modifiche (valori con intervallo, ecc.)', 'world.clima.x', t.x, null, 'cl') + fld('Risultato minimo consentito (condizioni migliorate)', 'world.clima.min', t.min) + fld('Risultato massimo consentito (condizioni peggiorate)', 'world.clima.max', t.max) +
+      fld('Tiro (vuoto = tira l\'app)', 'world.clima.roll', t.roll) + '</div>';
+    h += '<p class="hint">Altro (spunta quelli che valgono):</p><div class="grid g2">' + D.mods.altro.map(function (a, i) {
+      var n = Wr.modNum(a[1]);
+      return n == null ? '<span class="hint">' + esc(a[0] + ' ' + a[1]) + ': scrivilo in «altre modifiche»</span>' :
+        '<label class="chk"><input type="checkbox" data-t="world.clima.alt.' + k + i + '"' + (t.alt && t.alt[k + i] ? ' checked' : '') + '> ' + esc(a[0] + ' ' + a[1]) + '</label>';
+    }).join('') + '</div><p><button data-act="world_clima">Tira (d100 aperto)</button></p>';
+    if (t.res) {
+      var r = t.res;
+      h += out('Tiro ' + r.roll + ' ' + sg(r.tr) + ' (TR) ' + sg(r.mod) + ' (modificatori' + (r.parts.length ? ': ' + esc(r.parts.join(', ')) : '') + ') = ' + r.raw + (r.total !== r.raw ? ' → limitato a <b>' + r.total + '</b>' : '') +
+        '<br>Riga <b>' + esc(r.range) + '</b>: ' + esc(r.text));
+    }
+    h += '<p class="hint">Il TR della Scheda è il «TR contro ' + (k === 'freddo' ? 'Freddo' : 'Calore') + '» già comprensivo del Bonus di Costituzione. Il tiro si ripete ogni 4 ore o quando cambiano le condizioni.</p>';
+    h += '<h3>Tabella: ' + (k === 'freddo' ? 'Freddo' : 'Caldo') + '</h3>' + table([['Risultato', 1], ['Effetto', 1]], D.righe.map(function (r, i) { return '<tr' + (t.res && t.res.row === i && t.res.kind === k ? ' class="hit"' : '') + '>' + td(r[0], 1) + td(r[1], 1) + '</tr>'; })) + notes(D.note.concat([Wd.trr2.nota]));
+    var ml = function (title, arr) { return '<h4>' + esc(title) + '</h4>' + table([['', 1], ['', 0]], arr.map(function (m) { return '<tr>' + td(m[0], 1) + td(m[1]) + '</tr>'; })); };
+    h += det('Modificatori al tiro', ml('Temperatura', D.mods.temp) + (k === 'freddo' ? ml('Indumenti', D.mods.ind) : '') + ml('Altro', D.mods.altro));
+    return h;
+  }
+  G.acts.world_clima = function () {
+    var t = T().clima, k = t.kind, D = Wd.trr2[k], tr = t.tr !== '' ? num(t.tr) : climaTR(k), m = climaMods(k), roll = t.roll !== '' ? num(t.roll) : openRoll().total;
+    var raw = roll + tr + m.total, total = raw;
+    if (t.min !== '' && total < num(t.min)) total = num(t.min);
+    if (t.max !== '' && total > num(t.max)) total = num(t.max);
+    var L = Wr.trr2Lookup(k, total);
+    t.res = { kind: k, roll: roll, tr: tr, mod: m.total, parts: m.parts, raw: raw, total: total, row: L.row, range: L.range, text: L.text };
+    U.showRoll('TR contro ' + (k === 'freddo' ? 'freddo' : 'caldo'), roll + ' ' + sg(tr) + ' ' + sg(m.total) + ' = ' + total, L.range); G.app.render();
+  };
+
+  /* ================= Liste di incantesimi ================= */
+  function listeSec() {
+    var t = T(), s = t.liste, L = Wd.liste[+s.l], q = (t.q || '').toLowerCase().trim(), h = '';
+    h += '<div class="grid g2">' + selF('Lista', 'world.liste.l', s.l, Wd.liste.map(function (x, i) { return [String(i), x.n + ' (' + x.tipo.replace(/,.*/, '') + ')']; })) +
+      U.field('Cerca', '<input type="search" data-t="world.q" data-re="1" value="' + esc(t.q) + '" placeholder="es. fiamma, bonus">') + '</div>';
+    h += '<p class="hint">' + esc(L.n) + ' · ' + esc(L.tipo) + '. D = durata, R = raggio d\'azione; tra parentesi il tipo di incantesimo e, dopo «rischio», il fattore della TS-12. «+ Incantesimo» lo porta nell\'elenco della Scheda.' + (L.note.length ? ' ' + esc(L.note.join(' ')) : '') + ' Scrivi e premi Invio per cercare.</p>';
+    var any = false;
+    L.sp.forEach(function (x, i) {
+      if (q && (x.n + ' ' + x.x + ' ' + x.t).toLowerCase().indexOf(q) < 0) return;
+      any = true;
+      var rf = Wr.riskFactor(x.t);
+      h += '<div class="pl"><b>' + x.lv + ') ' + esc(x.n) + '</b> (' + esc(x.t) + ')' + (x.d ? ' D: ' + esc(x.d) : '') + ' R: ' + esc(x.r || '–') + (rf != null ? ' · rischio ' + sg(rf) : '') +
+        ' <button class="mini" data-act="world_spell" data-l="' + esc(s.l) + '" data-i="' + i + '" aria-label="Aggiungi ' + esc(x.n) + ' alla scheda">+ Incantesimo</button><br>' + esc(x.x) + '</div>';
+    });
+    if (!any) h += '<p class="hint">Nessun incantesimo trovato.</p>';
+    return h;
+  }
+  G.acts.world_spell = function (b) {
+    var L = Wd.liste[+b.dataset.l], x = L && L.sp[+b.dataset.i], c = S.cur(); if (!x) return;
+    c.spells.push({ n: x.n + ' (' + L.n + ')', lvl: String(x.lv), note: ((x.d ? 'D: ' + x.d + ' ' : '') + 'R: ' + (x.r || '–') + ' · tipo ' + x.t).trim() });
+    S.save(); U.toast('«' + x.n + '» nell\'elenco incantesimi della Scheda.');
+  };
+
   /* ================= Tesori ================= */
   function itemText(it) {
     var p = it.p;
@@ -398,7 +475,7 @@
   function render() {
     var t = T(), sig = t.sec;
     var body = t.sec === 'xp' ? xpSec() : t.sec === 'mov' ? movSec() : t.sec === 'stat' ? statSec() : t.sec === 'meteo' ? meteoSec() : t.sec === 'inc' ? incSec() :
-      t.sec === 'ris' ? risSec() : t.sec === 'tes' ? tesSec() : t.sec === 'mag' ? magSec() : t.sec === 'anim' ? animSec() : mutaSec();
+      t.sec === 'ris' ? risSec() : t.sec === 'clima' ? climaSec() : t.sec === 'liste' ? listeSec() : t.sec === 'tes' ? tesSec() : t.sec === 'mag' ? magSec() : t.sec === 'anim' ? animSec() : mutaSec();
     return '<section class="card"><h2>Mondo</h2><p class="hint">Esperienza, manovre, meteo, incontri, rischio degli incantesimi, tesori, prezzi magici, animali e mostri del compendio Istaro Quettar. Le tabelle sono quelle dei PDF; i tiri sono scorciatoie e dicono sempre da dove viene il risultato.</p>' +
       '<div class="grid g2">' + U.field('Sezione', U.sel('data-t', 'world.sec', t.sec, SECS, { re: 1, label: 'Sezione' })) + '</div>' + body + '</section>';
   }

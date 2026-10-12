@@ -2,7 +2,7 @@
 """Genera js/worlddata.js: animali e mostri (TS-2) e manovre statiche (TM-2) letti dai PDF con testo;
 esperienza (TE-0..7), manovre in movimento (TM-1), meteo (TS-8), incontri (TS-10), rischio incantesimi (TS-12),
 tesori (TS-6), prezzi magici (TS-7) e Mutaforma trascritti a mano (tools/world_hand.py) e controllati qui.
-Uso: extract-world.py ANIMALI.pdf STATICHE.pdf > js/worlddata.js
+Uso: extract-world.py ANIMALI.pdf STATICHE.pdf TRR2.pdf PIROCINESI.pdf POTENZIAMENTO.pdf > js/worlddata.js
 Il testo del compendio resta com'è (refusi compresi); le anomalie note sono elencate in 'anomalie'."""
 import json
 import re
@@ -146,6 +146,99 @@ def statiche(path):
             'righe': rows, 'difficolta': diff, 'modifiche': mm}
 
 
+# ------------------------------------------------------------------ TRR-2: freddo e caldo (PDF con testo)
+def pdftext(path):
+    import subprocess
+    return subprocess.run(['pdftotext', '-layout', path, '-'], capture_output=True, text=True, check=True).stdout
+
+
+def trr2(path):
+    lines = pdftext(path).split('\n')
+    start = [i for i, l in enumerate(lines) if 'TRR – 2 Tiri resistenza contro temperature estreme' in l]
+    assert len(start) == 1
+    L = lines[start[0] + 1:]
+    iF = L.index('Freddo'); iC = L.index('Caldo')
+    clean = lambda t: re.sub(r'\s+', ' ', t).strip()
+
+    def section(a, b, ncols):
+        seg = L[a + 1:b]
+        # testo introduttivo: righe prima della prima riga di tabella
+        rowre = re.compile(r'^(100 o \+|\d+/\d+|Meno di 0)\s{2,}(.*)$')
+        intro, rows, i = [], [], 0
+        while not rowre.match(seg[i]):
+            intro.append(seg[i]); i += 1
+        while i < len(seg):
+            m = rowre.match(seg[i])
+            if m:
+                rows.append([m.group(1), m.group(2)]); i += 1
+            elif seg[i].startswith(' ' * 15) and seg[i].strip() and rows and not seg[i].strip().startswith('Modificatori'):
+                rows[-1][1] += ' ' + seg[i].strip(); i += 1
+            else:
+                break
+        rest = seg[i:]
+        notes = [clean(x) for x in rest if x.startswith('*')]
+        # modificatori
+        mi = [k for k, x in enumerate(rest) if x.startswith('Modificatori al tiro')][0]
+        mods = {'temp': [], 'ind': [], 'altro': []}
+        ent = re.compile(r'(\S.*?)\s+([+-]\d+(?:/[+-]\d+)?(?:/ora)?)(?=\s{2,}|$)')
+        for x in rest[mi + 2:]:
+            if x.startswith('*') or not x.strip():
+                continue
+            if x.strip().startswith('(Guanti/sciarpe)'):
+                mods['ind'][-1][0] += ' (Guanti/sciarpe)'
+                x = x.replace('(Guanti/sciarpe)', ' ' * len('(Guanti/sciarpe)'), 1)
+            ms = list(ent.finditer(x))
+            for m in ms:
+                col = 'temp' if m.start() < 36 else ('ind' if (ncols == 3 and m.start() < 74) else ('altro' if ncols == 3 or m.start() < 100 else 'altro2'))
+                mods[col].append([clean(m.group(1)), m.group(2)])
+        mods['altro'] += mods.pop('altro2', [])
+        return {'intro': clean(' '.join(intro)), 'righe': [[r[0], clean(r[1])] for r in rows], 'mods': mods, 'note': notes}
+    fre = section(iF, iC, 3)
+    cal = section(iC, len(L) - 1, 2)
+    # il testo prima della tabella: ultime due righe = «Il risultato del … questa tabella:»; separiamo i due paragrafi
+    for d in (fre, cal):
+        m = re.search(r'^(.*?)\s*(Il risultato del “Tiro.*)$', d['intro'])
+        assert m, d['intro']
+        d['intro'], d['formula'] = m.group(1), m.group(2)
+    fre['note'] = [n for n in fre['note'] if n.startswith('*Il TR contro malattie')]
+    nota_fin = [clean(x) for x in L if x.startswith('*I TR contro Calore e Freddo')]
+    assert len(fre['righe']) == 10 and len(cal['righe']) == 10, (len(fre['righe']), len(cal['righe']))
+    for d in (fre, cal):
+        assert [r[0] for r in d['righe']] == ['100 o +', '75/99', '60/74', '50/59', '40/49', '30/39', '20/29', '10/19', '0/09', 'Meno di 0']
+    assert [len(fre['mods'][k]) for k in ('temp', 'ind', 'altro')] == [6, 6, 8], [len(fre['mods'][k]) for k in ('temp', 'ind', 'altro')]
+    assert [len(cal['mods'][k]) for k in ('temp', 'altro')] == [6, 9], [len(cal['mods'][k]) for k in ('temp', 'altro')]
+    return {'freddo': fre, 'caldo': cal, 'nota': nota_fin[0]}
+
+
+# ------------------------------------------------------------------ Liste di incantesimi (PDF con testo)
+def lista(path, titolo_riga):
+    import subprocess
+    t = subprocess.run(['pdftotext', path, '-'], capture_output=True, text=True, check=True).stdout
+    t = t.replace('\x0c', '\n')
+    i = t.index(titolo_riga)
+    pre = [x.strip() for x in t[:i].split('\n') if x.strip()]
+    nome = pre[-1]
+    rest = t[i:].split('\n', 1)
+    tipo = rest[0].strip()
+    txt = rest[1]
+    parts = re.split(r'(?m)^(\d+)\) ', txt)
+    assert parts[0].strip() == '', parts[0]
+    sp = []
+    notes = []
+    for k in range(1, len(parts), 2):
+        n = int(parts[k]); blk = parts[k + 1]
+        m = re.search(r'\n\s*Note: (.*)$', blk, re.S)
+        if m:
+            notes.append(re.sub(r'\s+', ' ', m.group(1)).strip()); blk = blk[:m.start()]
+        flat = re.sub(r'\s+', ' ', blk).strip()
+        mm = re.match(r'^(.+?) \((E|ED|ES|U)\) (.*?)R:(.*?) [–-] (.*)$', flat)
+        assert mm, flat[:80]
+        d = mm.group(3).strip()
+        assert d == '' or d.startswith('D:'), (n, d)
+        sp.append({'lv': n, 'n': mm.group(1), 't': mm.group(2), 'd': d[2:].strip(), 'r': mm.group(4).strip(), 'x': mm.group(5).strip()})
+    return {'n': nome, 'tipo': tipo, 'sp': sp, 'note': notes}
+
+
 # ------------------------------------------------------------------ controlli delle tabelle trascritte a mano
 def rng(label):
     """'01/20' -> (1, 20); '≤ 05' -> (-9999, 5); '201+' -> (201, 9999); '00' -> (100, 100); 'più di 200' -> (201, 9999); '91/00' -> (91, 100)"""
@@ -262,9 +355,15 @@ def main():
     controlli()
     anim, cavnote = animali(sys.argv[1])
     st = statiche(sys.argv[2])
+    tr2 = trr2(sys.argv[3])
+    piro = lista(sys.argv[4], 'Liste Chiuse')
+    pot = lista(sys.argv[5], 'Liste Aperte')
+    assert [len(piro['sp']), len(pot['sp'])] == [23, 23] and piro['n'] == 'Pirocinesi' and pot['n'] == 'Potenziamento Corporeo'
     out = {
         'animali': {'animali': anim['animali'], 'cavalcature': anim['cav'], 'cavNote': cavnote, 'mostri': anim['mostri'], 'velocita': VEL, 'legenda': LEGENDA},
         'statiche': st,
+        'trr2': tr2,
+        'liste': [piro, pot],
         'xp': {'te0': H.TE0, 'te0t': H.TE0_TXT, 'te1t': H.TE1_TXT, 'te1': H.TE1, 'te1n': H.TE1_NOTE, 'te3t': H.TE3_TXT, 'te3': H.TE3, 'te3n': H.TE3_NOTE, 'te3m': H.TE3_MOLT,
                'pf': H.PF_TXT, 'morte': H.MORTE_TXT, 'te2t': H.TE2_TXT, 'te2': H.TE2, 'te2m': H.TE2_MOLT, 'te4t': H.TE4_TXT, 'te4': H.TE4, 'te6': H.TE6, 'te6m': H.TE6_MOLT,
                'te7t': H.TE7_TXT, 'te7': H.TE7, 'semplt': H.SEMPL_TXT, 'sempl': H.SEMPL},
@@ -284,6 +383,9 @@ def main():
             'TS-6: negli oggetti magici «11/22» e «21/30» si sovrappongono (21 e 22).',
             'TS-8.2: Gelido, mese 3 (Gwaeron) è stampato «42/-12»: probabilmente «-42/-12».',
             'TS-8: tre celle sono stampate senza la parentesi di chiusura (202(80, 126(50, 278(95).',
+            'Potenziamento Corporeo: il 13 (Concentrazione IV) precede il 12 (Vista nell’Oscurità); manca un «Potenziamento corporeo IV»; l’asterisco dei nomi (Slancio*, Potenziamento*, Concentrazione*, Ignora dolore*) non è spiegato nel PDF.',
+            'TRR-2 Caldo (riga «Meno di 0»): il testo stampato dice «o sei il risultato del dado è 1 o 2» (per «se il risultato»).',
+            'Pirocinesi: nel 2 compare «al concentrazione» (per «la»); nei punti 6, 8, 15 e 18 la citazione «“Crea Fiamma)» non ha le virgolette di chiusura; i livelli vanno da 1 a 20, poi 25, 30 e 50.',
         ],
     }
     sys.stdout.write('/* GENERATO da tools/extract-world.py (PDF con testo) e tools/world_hand.py (tabelle trascritte a mano): non modificare a mano. */\n'

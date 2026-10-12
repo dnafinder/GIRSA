@@ -121,3 +121,31 @@ test('intervalli', () => {
   assert.deepStrictEqual(W.range('91/00'), [91, 100]); assert.deepStrictEqual(W.range('00'), [100, 100]); assert.deepStrictEqual(W.range('-25/04'), [-25, 4]);
   assert.deepStrictEqual(W.range('≤ 05'), [-1e9, 5]); assert.deepStrictEqual(W.range('più di 200'), [201, 1e9]);
 });
+
+test('TRR-2: freddo e caldo', () => {
+  assert.strictEqual(WD.trr2.freddo.righe.length, 10); assert.strictEqual(WD.trr2.caldo.righe.length, 10);
+  ['freddo', 'caldo'].forEach((k) => {
+    assert.strictEqual(W.trr2Lookup(k, 150).range, WD.trr2[k].righe[0][0]);
+    assert.strictEqual(W.trr2Lookup(k, -50).range, WD.trr2[k].righe[9][0]);
+    assert.strictEqual(W.trr2Lookup(k, 100).row, W.trr2Lookup(k, 300).row);
+    assert.ok(W.trr2Lookup(k, 50).row > W.trr2Lookup(k, 100).row);
+  });
+  assert.deepStrictEqual(W.range('100 o +'), [100, 1e9]); assert.deepStrictEqual(W.range('Meno di 0'), [-1e9, -1]);
+  assert.deepStrictEqual(W.range('75/99'), [75, 99]);
+});
+
+test('rischio: fattore per tipo di incantesimo', () => {
+  assert.strictEqual(W.riskFactor('ES'), 50); assert.strictEqual(W.riskFactor('ED'), 40);
+  assert.strictEqual(W.riskFactor('E'), 25); assert.strictEqual(W.riskFactor('U'), 5);
+});
+
+test('liste: Pirocinesi e Potenziamento Corporeo', () => {
+  assert.strictEqual(WD.liste.length, 2);
+  WD.liste.forEach((l) => assert.strictEqual(l.sp.length, 23));
+  const p = WD.liste.find((l) => /Piro/i.test(l.n));
+  assert.deepStrictEqual(p.sp.map((s) => s.lv).slice(-3), [30, 50].length ? [25, 30, 50] : []);
+  assert.ok(/Vero Crea Fiamma/.test(p.sp[p.sp.length - 1].n));
+  const q = WD.liste.find((l) => /Potenz/i.test(l.n));
+  const i13 = q.sp.findIndex((s) => s.lv === 13), i12 = q.sp.findIndex((s) => s.lv === 12);
+  assert.ok(i13 < i12);
+});
