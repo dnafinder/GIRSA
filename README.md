@@ -22,23 +22,37 @@ nel browser e funziona anche senza rete.
   al popolo e livello (bonus per livello TB-4.2 scritti nella colonna «Prof»), caratteristiche (tiro classico o 400 punti, controlli
   su principale/secondaria e sulle regole degli Elfi, Aspetto), background (punti del popolo, tabelle TGP-2 con le regole di
   ogni popolo), gradi di adolescenza (TGP-5), punti sviluppo con trasferimenti e passaggio di livello.
-- **Guida**: consultazione di popoli, professioni, tabelle di creazione e delle 170 abilità secondarie (ricercabili, con pulsante per aggiungerle alla scheda).
+- **Guida**: consultazione di popoli, professioni, tabelle di creazione e delle 170 abilità secondarie (ricercabili, con pulsante per aggiungerle alla scheda), del Prospetto sul Combattimento, delle tabelle di copertura, gittata e animali, della magia (tipi, classi, TA-9, TRR, TSC-3) e della Corruzione.
 - **Dadi**: d100 aperto e chiuso, d4–d20, espressioni come `2d6+1`, cronologia.
-- **Combattimento**: attacco (tiro + BO − BD + modificatori) con lettura della tabella di attacco dell'arma scelta dal catalogo,
+- **Combattimento**: iniziativa, attacco (tiro + BO − BD + modificatori) con lettura della tabella di attacco dell'arma scelta dal catalogo,
   colpo maldestro o fallimento con la relativa tabella, colpo critico con il modificatore della lettera,
-  elenco avversari con PF, registro.
+  elenco avversari con PF, registro. In più: **incantesimi di attacco base** (TA-9 e tiro resistenza sulla TRR), **incantesimi inoffensivi** (TFI) e **gittata** (TSC-5).
 - **Diario**: paragrafo attuale, registro delle scelte e segnalini per il librogame.
 - **Dati**: impostazioni di calcolo, aiuto per la guarigione (TFC-2), tabelle aggiuntive tue,
   esportazione e importazione di una copia di sicurezza.
 
 ## Tabelle incluse
 
-Dai PDF del compendio sono già incorporate le tabelle di attacco **TA-1…TA-8, TA-10, TA-11** (la TA-9 non è nel documento),
-dei colpi critici **TC-1…TC-13**, dei fallimenti **TTM-1…TTM-7** e la **tabella delle armi (TSC-1)** con 56 armi.
+Dai PDF del compendio sono già incorporate le tabelle di attacco **TA-1…TA-8, TA-10, TA-11**, quella degli incantesimi base **TA-9** con i tiri resistenza **TRR**,
+i colpi critici **TC-1…TC-13**, i critici mirati da punta **TCM-1…TCM-4**, i fallimenti **TTM-1…TTM-7**, la **tabella delle armi (TSC-1)** con 56 armi
+e le tabelle **TSC-2** (animali), **TSC-3** (incantesimi), **TSC-4** (copertura) e **TSC-5** (gittata).
 
 In **Scheda → Armi** aggiungi un'arma scegliendola dal catalogo e indichi l'abilità da cui prendere il BO. Nel **Combattimento**
 scegli l'arma: tabella di attacco, colpo maldestro, tabella e tipo massimo dei critici, critico secondario e modificatori
 «sulla TA» si compilano da soli. Resta da indicare l'armatura del bersaglio e il BD.
+
+## Combattimento e magia: scelte dell'app
+
+- **TA-9, colonna «Generale»**: il compendio non spiega a che cosa serva. L'app la usa quando il bersaglio non ha nessuna delle protezioni elencate per il regno (armatura di metallo o di cuoio per l'Essenza, armatura o scudo di metallo per il Flusso, elmo di metallo o di cuoio per il Mentalismo).
+- **TRR oltre il 15° livello**: si applica la nota della tabella (+1 per ogni livello d'attacco oltre il 15°, −1 per ogni livello del bersaglio oltre il 15°). Le cifre «1, 5, 10, 15» a margine della tabella non sono spiegate e non sono usate.
+- **Iniziativa**: il tiro è un d100 chiuso (il testo dice solo «1d100»). Il bonus alle Manovre in Movimento si legge dalla scheda o si scrive a mano.
+- **Incantesimi inoffensivi (TFI)**: il compendio dice che le classi II e I valgono come già preparate da 1 e 2 round, ma non se si sommano ai round dedicati: li indichi tu. Il tiro è aperto, come scritto.
+- **Gittata**: ai limiti tra due fasce (per esempio 10 m con base 10) la tabella dà lo stesso numero a entrambe; l'app usa la fascia più vicina.
+- **«Oltre il 150»**: è una concessione facoltativa del GM, quindi l'app mostra solo il margine e la lettera suggerita; non tira il critico supplementare.
+- **Modificatori al BO**: stordito (+20), atterrato (+30) e prono (+50) non si sommano tra loro: si applica il più alto. Le tabelle degli attacchi in mischia e a distanza dicono «stordito o a terra +20»: l'app segue il Prospetto sul Combattimento, che è più preciso.
+- **Frusta**: nel PDF con i modificatori delle armi il −15 sulla TA compare solo nelle colonne piastre e maglia (con ½ PF); l'app lo applica solo lì. L'app non dimezza i PF: è un'indicazione nelle note dell'arma.
+- **Azza (Bec de Corbin)**: due pagine del compendio non concordano. La tabella delle armi (TSC-1) dà −10 sulla TA contro cuoio e nessuna armatura; la tabella TA-10 con i modificatori dà −5. L'app segue la TSC-1: se vuoi il −5, cambia il modificatore a mano.
+- **Rete da gladiatore e armi che dimezzano i PF**: i PF dimezzati non sono calcolati, solo segnalati.
 
 ## Creazione del personaggio: scelte dell'app
 
@@ -96,10 +110,16 @@ js/creationpdf.js       gradi di adolescenza (TGP-5), generato da tools/extract-
 js/secdata.js           abilità secondarie, generato dallo stesso script
 js/creation.js          logica della creazione
 js/createpage.js, js/refpage.js   pagine «Crea» e «Guida»
+js/combatdata.js        TA-9, TRR, TSC-3/4/5, generato da tools/extract-combat.py
+js/combatrules.js       testo del Prospetto sul Combattimento, generato da tools/extract-combatrules.py
+js/magic.js, js/magicpage.js   incantesimi base, iniziativa, TFI, gittata
+js/refcombat.js         parti di combattimento e magia della Guida
 js/store.js             salvataggio locale
 tools/build.mjs         crea dist/girsa.html
+tools/extract-combat.py  rigenera combatdata.js (TA-9, TRR, TSC-3/4/5)
+tools/extract-combatrules.py rigenera combatrules.js (testo del Prospetto sul Combattimento)
 tools/extract-creation.py rigenera creationpdf.js e secdata.js dai PDF di adolescenza e abilità secondarie
-tools/extract-tables.py rigenera tabledata.js e weapondata.js dai PDF (serve poppler e pdfplumber)
+tools/extract-tables.py rigenera tabledata.js (con i critici mirati) e weapondata.js dai PDF (serve poppler e pdfplumber)
 tests/                  test
 ```
 

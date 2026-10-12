@@ -3,8 +3,9 @@
 Estrae le tabelle di attacco, dei colpi critici, dei fallimenti e delle armi dai PDF del compendio
 «Istaro Quettar» (Tabelle_dattacco.pdf e Colpi_Critici.pdf) e scrive js/tabledata.js.
 
-Uso:  python3 tools/extract-tables.py ATTACCO.pdf CRITICI.pdf [ARMI.pdf]
+Uso:  python3 tools/extract-tables.py ATTACCO.pdf CRITICI.pdf [ARMI.pdf [MIRATI.pdf]]
 Con ARMI.pdf (tabella TSC-1) scrive anche js/weapondata.js.
+Con MIRATI.pdf (Colpi Critici Mirati da Punta) aggiunge a tabledata.js le tabelle TCM-1…TCM-4.
 Richiede: poppler (pdftotext) e pdfplumber.
 I PDF non fanno parte del repository.
 """
@@ -149,10 +150,39 @@ def crit_tables(pdf_path):
     return out
 
 
+def mirati_tables(pdf_path):
+    out = []
+    with pdfplumber.open(pdf_path) as pdf:
+        t = pdf.pages[1].extract_tables()[0]
+    heads = t[1]
+    for c in range(1, len(heads)):
+        m = re.match(r'^(\d)-(.*)$', clean(heads[c]))
+        if not m:
+            raise SystemExit('intestazione TCM non riconosciuta: ' + str(heads[c]))
+        rows = []
+        for r in t[2:]:
+            if not r[0] or not clean(r[0]):
+                continue
+            mn, mx = crit_range(clean(r[0]))
+            rows.append({'min': mn, 'max': mx, 'text': clean(r[c])})
+        prev = None
+        for r in rows:
+            if prev is not None and r['min'] != prev + 1:
+                raise SystemExit('TCM-%s: righe non contigue prima di %s' % (m.group(1), r['max']))
+            prev = r['max']
+        if len(rows) != 21 or rows[-1]['max'] != 120 or any(not r['text'] for r in rows):
+            raise SystemExit('TCM-%s: attese 21 righe fino a 120, tutte con testo' % m.group(1))
+        out.append({'type': 'crit', 'id': 'TCM-' + m.group(1), 'name': 'TCM-%s Colpi Critici Mirati da Punta: %s' % (m.group(1), m.group(2).strip()), 'rows': rows})
+    return out
+
+
 GROUPS = [  # (chiave, parola chiave nell'intestazione)
     ('taglio1', 'Armi da Taglio a Una Mano'), ('contund1', 'Armi Contundenti a Una Mano'), ('asta1', 'Armi ad Asta a Una Mano'),
     ('asta2', 'Armi ad Asta a Due Mani'), ('due_mani', 'Armi a Due Mani'), ('lancio', 'Armi da Lancio'), ('tiro', 'Armi da Tiro')]
 ROW = re.compile(r'^(?P<n>\S.*?)\s{2,}(?P<cm>\d+)\s+(?P<c1>[A-Z]{2,3}(?:\([TABCDE]\))?)\s+(?P<c2>-|[A-Z]{2,3}(?:\([TABCDE]\))?)\s+(?P<g>-|\d+\*?)\s*(?P<m>.*)$')
+# Nel PDF «Tabelle d'attacco con modificatori delle Armi» la Frusta ha «-15 ½PF» solo nelle colonne piastre e maglie:
+# il -15 sulla TA vale quindi solo contro quelle due armature (la tabella TSC-1 non lo diceva in modo chiaro).
+DALLA_TA = {'contund1-frusta': [{'v': -15, 'arm': [0, 1]}]}
 ARM_IDX = {'piastre': [0], 'maglia': [1], 'maglie': [1], 'cuoio rinf.': [2], 'cuoio': [2, 3], 'na': [4]}
 
 
@@ -207,6 +237,8 @@ def weapons(pdf_path):
         w = {'id': grp + '-' + re.sub(r'[^a-z0-9]+', '-', m.group('n').lower()).strip('-'), 'n': m.group('n').strip(), 'group': grp, 'atk': atk,
              'cm': int(m.group('cm')), 'c1': crit_code(m.group('c1')), 'c2': crit_code(m.group('c2')),
              'git': None if m.group('g') == '-' else m.group('g'), 'mods': mods, 'manual': manual, 'note': note}
+        if w['id'] in DALLA_TA:   # colonne lette nella riga «Modificatori delle Armi» della tabella di attacco (PDF «con modificatori»)
+            w['mods'], w['manual'] = DALLA_TA[w['id']], []
         t6 = re.search(r'tabella (TA-\d+), Attacco (Medio|Piccolo|Grande|Enorme|Minuscolo)', note)
         if t6:
             w['atk'] = t6.group(1)
@@ -219,10 +251,12 @@ def weapons(pdf_path):
 
 
 def main():
-    if len(sys.argv) not in (3, 4):
+    if len(sys.argv) not in (3, 4, 5):
         raise SystemExit(__doc__)
     atk = attack_tables(sys.argv[1])
     crit = crit_tables(sys.argv[2])
+    if len(sys.argv) == 5:
+        crit += mirati_tables(sys.argv[4])
     root = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
     js = ("/* Generato da tools/extract-tables.py dal compendio «Istaro Quettar» (Filduin). Non modificare a mano. Vedi NOTICE.md. */\n"
           "(function (root) {\n  var G = root.GIRSA = root.GIRSA || {};\n  G.tabledata = %s;\n"
@@ -230,7 +264,7 @@ def main():
           "})(typeof window !== 'undefined' ? window : globalThis);\n") % json.dumps({'atk': atk, 'crit': crit}, ensure_ascii=False, separators=(',', ':'))
     with open(os.path.join(root, 'js', 'tabledata.js'), 'w', encoding='utf-8') as f:
         f.write(js)
-    if len(sys.argv) == 4:
+    if len(sys.argv) >= 4:
         wp = weapons(sys.argv[3])
         wjs = ("/* Generato da tools/extract-tables.py (tabella TSC-1 del compendio «Istaro Quettar»). Non modificare a mano. Vedi NOTICE.md. */\n"
                "(function (root) {\n  var G = root.GIRSA = root.GIRSA || {};\n  G.weapondata = %s;\n"

@@ -47,8 +47,12 @@
   function critList(st) { return ((G.tabledata && G.tabledata.crit) || []).concat(st.crit); }
 
   function modsSum(f, melee) {
-    var t = 0; D.ATK_MODS.forEach(function (m) { if (f.mods[m.id] && (melee || !m.melee)) t += m.v; });
-    return t;
+    var t = 0, pos = 0;
+    D.ATK_MODS.forEach(function (m) {
+      if (!f.mods[m.id] || !(melee || !m.melee)) return;
+      if (m.grp === 'pos') pos = Math.max(pos, m.v); else t += m.v;   // stordito, atterrato, prono: se ne applica uno solo
+    });
+    return t + pos;
   }
 
   /* Calcolo puro dell'attacco, separato dal DOM per poterlo provare. */
@@ -91,14 +95,14 @@
       U.field('Altri modificatori', U.inp('data-t', 'cb.extra', f.extra, { type: 'number' })) +
       U.field('Tiro già fatto (vuoto = tira l\'app)', U.inp('data-t', 'cb.roll', f.roll, { type: 'number' })) + '</div><div class="mods">' +
       D.ATK_MODS.map(function (m) { return U.check('data-tc', 'cb.mods.' + m.id, f.mods[m.id], m.label + ' (' + R.fmt(m.v) + ')'); }).join('') + '</div>' +
-      '<p class="hint">I modificatori «sul fianco», «da dietro», «sorpreso», «stordito» valgono solo in mischia: con armi da tiro o da lancio non spuntarli.</p>' +
+      '<p class="hint">I bonus «fianco», «da dietro», «sorpresa», «stordito», «atterrato», «prono» non valgono con armi da tiro o da lancio. Tra stordito, atterrato e prono si applica uno solo (il più alto). Gli altri modificatori sono cumulativi.</p>' +
       '<div class="row"><button class="big" data-act="attack">Tira l\'attacco</button><button class="ghost" data-act="mybd">Usa il mio BD come BD</button></div>';
     if (f.res) h += resultHtml(f, f.res, st);
     return h + '</section>';
   }
 
   function fumbleBlock(f, res, st) {
-    var ids = critList(st).filter(function (x) { return /^TTM-/.test(x.id) || x.type === 'crit' && !/^TC-/.test(x.id); });
+    var ids = critList(st).filter(function (x) { return /^TTM-/.test(x.id) || x.type === 'crit' && !/^TCM?-/.test(x.id); });
     var def = f.ft || (res.table && FUMBLE_DEFAULT[res.table.id]) || '';
     var h = '<div class="warn"><b>' + (res.table && /^TA-[78]$/.test(res.table.id) ? 'Fallimento dell\'incantesimo' : res.table && /^TA-[56]$/.test(res.table.id) ? 'Attacco fallito' : 'Colpo maldestro') +
       '</b>: il tiro non modificato (' + res.roll.first + ') è ≤ ' + res.fumbleMax + '.';
@@ -121,7 +125,11 @@
       else s += '<div class="hit">' + r.cell.pf + ' PF' + (r.cell.crit ? ' · critico <b>' + r.cell.crit + '</b>' : ' · nessun critico') + '</div>';
       if (r.ti) s += '<div class="hint">Riga «TI» (tiro non modificato).</div>';
       if (r.capped) s += '<div class="hint">Risultato limitato al massimo previsto per «' + esc(f.limit) + '».</div>';
-      if (r.beyond) s += '<div class="hint">Oltre l\'ultima riga della tabella: usata l\'ultima (il testo non prevede altro).</div>';
+      if (r.beyond) {
+        var b = G.magic && !/^TA-[78]$/.test(r.table.id) ? G.magic.beyond150(r.total + r.ta) : null;
+        s += '<div class="hint">Oltre l\'ultima riga della tabella: usata l\'ultima.' + (b ? ' Regola «Oltre il 150» (a discrezione del GM): margine ' + b.margin + ', ' +
+          (b.letter ? 'ulteriore colpo critico di grado <b>' + b.letter + '</b> dello stesso tipo del primario dell\'arma.' : 'nessun critico supplementare (margine fino a 30).') + '</div>' : '</div>');
+      }
     } else if (r.table && f.armor === '' && !r.fumble) {
       s += '<div class="hint">Scegli l\'armatura del bersaglio per leggere la tabella.</div>';
     } else if (!r.table) {
@@ -134,12 +142,14 @@
   }
 
   function critBlock(f, st, k, title) {
+    var aimed = f.mods && f.mods.mira;
     var cts = [['', '(nessuna: leggo io)']].concat(critList(st).filter(function (t) { return !/^TTM-/.test(t.id); }).map(function (t) { return [t.id, t.name]; }));
     var res = f['cres' + k];
     var h = '<h3>' + title + '</h3><div class="grid g3">' +
       U.field('Lettera', U.sel('data-t', 'cb.letter' + k, f['letter' + k], LETTERS.map(function (x) { return [x, x || '–']; }))) +
       U.field('Tabella critici', U.sel('data-t', 'cb.ct' + k, f['ct' + k], cts)) +
       U.field('Tiro già fatto (1–100)', U.inp('data-t', 'cb.croll' + k, f['croll' + k], { type: 'number' })) + '</div>' +
+      (aimed ? '<p class="hint">Con la mira (−30) il critico si legge sulle tabelle TCM-1…4 (gambe, braccia, petto, testa): solo con armi da tiro o da lancio che fanno critici da punta.</p>' : '') +
       '<div class="row"><button data-act="crit" data-k="' + k + '" ' + (f['letter' + k] ? '' : 'disabled') + '>Tira il critico</button></div>';
     if (res) {
       h += '<div class="res">Tiro ' + res.raw + ' ' + R.fmt(res.mod) + ' (lettera ' + res.letter + ') = <b class="big">' + res.total + '</b>' +
@@ -178,7 +188,7 @@
 
   function render() {
     var st = S.get(), c = S.cur(), f = cb();
-    return attackHtml(f, st, c) + critHtml(f, st) + enemies(f, st) + logHtml(st);
+    return attackHtml(f, st, c) + critHtml(f, st) + (G.magicpage ? G.magicpage.html() : '') + enemies(f, st) + logHtml(st);
   }
 
   G.pages.combat = { weaponInfo: weaponInfo, capLetter: capLetter, secondaryLetter: secondaryLetter, taMod: taMod, TYPE_TC: TYPE_TC, render: render, resolveAttack: resolveAttack, modsSum: modsSum, cb: cb, tableById: tableById, atkList: atkList, critList: critList };

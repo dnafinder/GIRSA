@@ -24,4 +24,8 @@ Di conseguenza:
   `js/creationpdf.js` e `js/secdata.js` sono generati da `tools/extract-creation.py` (gradi di adolescenza e abilità secondarie). Valgono le stesse condizioni: uso personale, repository privato, niente vendita.
   La scelta di pubblicare con GitHub Pages rende il repository pubblico: è una decisione tua, non dell'app.
 
+- `js/combatdata.js` e `js/combatrules.js` sono generati dai PDF del compendio con `tools/extract-combat.py` e `tools/extract-combatrules.py` (TA-9, TRR, TSC-3/4/5 e il testo del Prospetto sul Combattimento).
+  Le tabelle dei tipi di incantesimi, delle classi, del TFI e il testo sulla Corruzione sono in immagini nel PDF e sono stati trascritti a mano in `js/refcombat.js`, così come le piccole tabelle del Prospetto sul Combattimento (modificatori al BO, parata, scudi, «Oltre il 150») e la TSC-2 degli animali.
+  I critici mirati da punta (TCM-1…4) stanno in `js/tabledata.js`, generato da `tools/extract-tables.py`. Valgono le stesse condizioni: uso personale, repository privato, niente vendita.
+
 GIRSA e «Il Signore degli Anelli» appartengono ai rispettivi titolari. Il progetto non è affiliato a nessuno di loro.

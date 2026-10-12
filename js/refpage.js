@@ -99,8 +99,8 @@
   };
 
   function render() {
-    return '<section class="card"><p class="hint">Guida al regolamento: il materiale del compendio Istaro Quettar per creare e sviluppare un personaggio. Sono pagine consultabili; per costruire il personaggio usa «Crea».</p></section>' +
-      peopleSec() + profSec() + tableSec() + secSec();
+    return '<section class="card"><p class="hint">Guida al regolamento: il materiale del compendio Istaro Quettar per creare e sviluppare un personaggio, per combattere e per la magia. Sono pagine consultabili; per costruire il personaggio usa «Crea».</p></section>' +
+      peopleSec() + profSec() + tableSec() + secSec() + (G.refcombat ? G.refcombat.html() : '');
   }
   G.pages.ref = { render: render };
 })(typeof window !== 'undefined' ? window : globalThis);

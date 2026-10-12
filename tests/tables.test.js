@@ -56,7 +56,7 @@ const byId = (l, id) => l.find(t => t.id === id);
 
 test('tabelle incluse: struttura e contiguità', () => {
   assert.strictEqual(TD.atk.length, 10);
-  assert.strictEqual(TD.crit.length, 20);
+  assert.strictEqual(TD.crit.length, 24);   // TC-1…13, TTM-1…7, TCM-1…4
   TD.atk.forEach(t => {
     T.validateAttackRows(t.rows);
     t.rows.forEach(r => assert.strictEqual(r.cells.length, 5, t.id));
@@ -140,7 +140,8 @@ test('armi: struttura e valori di controllo letti dal PDF', () => {
   assert.strictEqual(w('asta1-lancia').atk, 'TA-1');
   assert.strictEqual(w('tiro-arco-lungo').git, '33*');
   assert.strictEqual(w('due_mani-spada-bastarda').cm, 5); assert.strictEqual(w('taglio1-spada-bastarda').cm, 4);
-  assert.deepStrictEqual(w('contund1-frusta').mods, []); assert.strictEqual(w('contund1-frusta').manual.length, 1);
+  // Frusta: «-15 ½PF» solo nelle colonne piastre e maglie della tabella TA-2 con i modificatori delle armi
+  assert.deepStrictEqual(w('contund1-frusta').mods, [{ v: -15, arm: [0, 1] }]); assert.strictEqual(w('contund1-frusta').manual.length, 0);
 });
 
 test('armi: modificatore sulla TA, limite e critico secondario', () => {

@@ -7,8 +7,8 @@
   function tablesCard(st) {
     var im = U.tmp.imp || (U.tmp.imp = { name: '', armors: '', fumble: '', text: '', cname: '', ctext: '' });
     var bd = U.bundled();
-    var h = '<section class="card"><h2>Tabelle</h2><p class="hint"><b>Incluse nell\'app</b> (dal compendio): ' + bd.atk.length + ' tabelle di attacco (TA-1…TA-11, senza TA-9 che non è nel documento), ' +
-      bd.crit.filter(function (t) { return /^TC-/.test(t.id); }).length + ' tabelle dei colpi critici (TC-1…TC-13) e ' + bd.crit.filter(function (t) { return /^TTM-/.test(t.id); }).length +
+    var h = '<section class="card"><h2>Tabelle</h2><p class="hint"><b>Incluse nell\'app</b> (dal compendio): ' + bd.atk.length + ' tabelle di attacco (TA-1…TA-8, TA-10, TA-11; la TA-9 degli incantesimi base è nella pagina Combattimento), ' +
+      bd.crit.filter(function (t) { return /^TC-/.test(t.id); }).length + ' tabelle dei colpi critici (TC-1…TC-13), ' + bd.crit.filter(function (t) { return /^TCM-/.test(t.id); }).length + ' dei colpi critici mirati (TCM-1…TCM-4) e ' + bd.crit.filter(function (t) { return /^TTM-/.test(t.id); }).length +
       ' dei fallimenti (TTM-1…TTM-7). Qui sotto puoi aggiungerne altre tue, incollando il testo o importando un file JSON (formato in <code>data/README.md</code>).</p>';
     h += '<h3>Tue tabelle di attacco</h3>' + (st.atk.length ? st.atk.map(function (t, i) {
       return '<div class="li"><span><b>' + esc(t.name) + '</b> · ' + t.rows.length + ' righe · ' + t.armors.length + ' colonne</span><button class="mini" data-act="del" data-list="atk" data-i="' + i + '">✕</button></div>';

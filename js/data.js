@@ -126,18 +126,26 @@
     { max: Infinity, days: [1, 1, 1, 2, 2, 1] }
   ];
 
-  /* Modificatori al tiro di attacco elencati nei documenti. melee = non si applica ad armi da lancio o da tiro. */
+  /* Modificatori al Bonus Offensivo (Combattimento, «Modificatori al Bonus Offensivo»). melee: non valgono con armi da tiro o da lancio;
+     grp «pos»: si applica uno solo tra stordito, atterrato e prono (il più alto). */
   var ATK_MODS = [
     { id: 'fianco', label: 'Attacco sul fianco', v: 15, melee: true },
     { id: 'dietro', label: 'Attacco da dietro (oltre al fianco)', v: 20, melee: true },
-    { id: 'sorpreso', label: 'Difensore sorpreso', v: 20, melee: true },
-    { id: 'stordito', label: 'Difensore stordito o a terra', v: 20, melee: true },
-    { id: 'sfodera', label: "L'attaccante sfodera un'arma", v: -20 },
-    { id: 'cambia_arma', label: 'Cambia arma o impugna lo scudo', v: -50 },
-    { id: 'cambia_mano', label: "Cambia mano o lascia cadere un'arma o lo scudo", v: -10 },
-    { id: 'meta_pf', label: "L'attaccante ha subito più di metà dei suoi PF", v: -20 },
-    { id: 'mira', label: 'Mira a una parte del corpo (armi da tiro)', v: -30 }
+    { id: 'sorpreso', label: 'Attacco di sorpresa', v: 20, melee: true },
+    { id: 'stordito', label: 'Avversario stordito', v: 20, melee: true, grp: 'pos' },
+    { id: 'atterrato', label: 'Avversario atterrato', v: 30, melee: true, grp: 'pos' },
+    { id: 'prono', label: 'Avversario prono', v: 50, melee: true, grp: 'pos' },
+    { id: 'nondom', label: 'Arma impugnata con la mano non dominante', v: -20 },
+    { id: 'sfodera', label: "Sfoderare l'arma", v: -20 },
+    { id: 'cambia_arma', label: "Cambiare un'arma o impugnare uno scudo", v: -50 },
+    { id: 'cambia_mano', label: "Lasciare un'arma o lo scudo, cambiare mano", v: -10 },
+    { id: 'lancio_veloce', label: 'Arma lanciata come azione veloce', v: -20 },
+    { id: 'meta_pf', label: "L'attaccante ha perso più del 50% dei suoi PF", v: -20 },
+    { id: 'cambia_obiettivo', label: "Cambiare obiettivo all'ultimo", v: -30 },
+    { id: 'mira', label: 'Mirare, con armi da tiro o da lancio', v: -30 },
+    { id: 'cieco', label: 'Accecato, al buio completo', v: -100 }
   ];
+
 
   /* Modificatore al tiro del colpo critico secondo la lettera */
   var CRIT_MOD = { T: -50, A: -20, B: -10, C: 0, D: 10, E: 20 };
