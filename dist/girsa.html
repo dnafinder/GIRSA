@@ -391,7 +391,7 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
       altezza: '', capelli: '', occhi: '', lingue: '', temperamento: '', segni: '',
       pool: 400, stats: {}, skills: [], ps: {}, defs: {}, pf: { max: '', dmg: 0 },
       prot: { armatura: '', res: '', scudo: '', elmo: '', bracciali: '', schinieri: '', modbd: '', ingombro: '', mov: '' },
-      bonusVari: '', note: '', corruzione: '', spells: [], inv: [], weapons: [], reputazione: '', denaro: '', classi: '',
+      bonusVari: '', note: '', corruzione: '', spells: [], inv: [], erbario: [], weapons: [], reputazione: '', denaro: '', classi: '',
       diary: { book: '', par: '', log: [], flags: [] }, creation: {}
     };
     D.STATS.forEach(function (s) { c.stats[s[0]] = { score: '', bonus: '', razza: '' }; });
@@ -599,6 +599,860 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
   var G = root.GIRSA = root.GIRSA || {};
   G.weapondata = [{"id":"taglio1-daghetta-da-duello","n":"Daghetta da Duello","group":"taglio1","atk":"TA-1","cm":2,"c1":{"type":"PU","max":"D"},"c2":null,"git":"1","mods":[{"v":-10,"arm":null}],"manual":[],"note":"-10 sulla TA; Bonus alla Parata +15"},{"id":"taglio1-coltellaccio-storta","n":"Coltellaccio, Storta","group":"taglio1","atk":"TA-1","cm":3,"c1":{"type":"TA","max":null},"c2":null,"git":"3","mods":[{"v":-10,"arm":[0,1]}],"manual":[],"note":"-10 sulla TA (c. piastre/maglia)"},{"id":"taglio1-stocco-spada-da-lato","n":"Stocco, Spada da lato","group":"taglio1","atk":"TA-1","cm":4,"c1":{"type":"PU","max":null},"c2":null,"git":null,"mods":[{"v":-10,"arm":[0,2]},{"v":5,"arm":[1,3,4]}],"manual":[],"note":"-10 sulla TA (c. piastre/cuoio rinf.), +5 sulla TA (c. altre o NA). Iniziativa: +5"},{"id":"taglio1-spada","n":"Spada","group":"taglio1","atk":"TA-1","cm":3,"c1":{"type":"TA","max":null},"c2":null,"git":null,"mods":[],"manual":[],"note":""},{"id":"taglio1-spada-lunga","n":"Spada Lunga","group":"taglio1","atk":"TA-1","cm":3,"c1":{"type":"TA","max":null},"c2":null,"git":null,"mods":[{"v":5,"arm":[0,1]},{"v":-5,"arm":[2,3,4]}],"manual":[],"note":"+5 sulla TA (c. piastre/maglia); -5 sulla TA (c. cuoio o NA)"},{"id":"taglio1-spada-bastarda","n":"Spada bastarda","group":"taglio1","atk":"TA-1","cm":4,"c1":{"type":"TA","max":null},"c2":null,"git":null,"mods":[{"v":-5,"arm":null}],"manual":[],"note":"-5 sulla TA. Se usata a una mano"},{"id":"taglio1-falcione-mannarese","n":"Falcione, Mannarese","group":"taglio1","atk":"TA-1","cm":5,"c1":{"type":"TA","max":null},"c2":null,"git":null,"mods":[],"manual":[],"note":"provoca il 30% di PF in più"},{"id":"taglio1-spadino-fioretto","n":"Spadino, Fioretto","group":"taglio1","atk":"TA-1","cm":3,"c1":{"type":"PU","max":null},"c2":null,"git":null,"mods":[{"v":-10,"arm":[0,2]}],"manual":[],"note":"-10 sulla TA (c. piastre/cuoio rinf.); Provoca la metà dei PF. Iniziativa: +10"},{"id":"taglio1-pugnale","n":"Pugnale","group":"taglio1","atk":"TA-1","cm":1,"c1":{"type":"PU","max":"D"},"c2":null,"git":"5","mods":[{"v":-15,"arm":null}],"manual":[],"note":"-15 sulla TA"},{"id":"taglio1-accetta","n":"Accetta","group":"taglio1","atk":"TA-1","cm":4,"c1":{"type":"TA","max":null},"c2":null,"git":"5","mods":[{"v":5,"arm":[0,1]}],"manual":[],"note":"+5 sulla TA (c. piastre/maglia);"},{"id":"taglio1-scimitarra","n":"Scimitarra","group":"taglio1","atk":"TA-1","cm":4,"c1":{"type":"TA","max":null},"c2":null,"git":null,"mods":[{"v":-5,"arm":[0,1]},{"v":5,"arm":[2,3,4]}],"manual":[],"note":"-5 sulla TA (c. piastre/maglia), +5 sulla TA (c. cuoio o NA)"},{"id":"taglio1-spada-corta","n":"Spada corta","group":"taglio1","atk":"TA-1","cm":2,"c1":{"type":"TA","max":null},"c2":null,"git":"1","mods":[{"v":-10,"arm":[0,1]},{"v":10,"arm":[4]}],"manual":[],"note":"-10 sulla TA (c. piastre/maglia) +10 sulla TA (contro NA)"},{"id":"contund1-randello","n":"Randello","group":"contund1","atk":"TA-2","cm":1,"c1":{"type":"IM","max":"C"},"c2":null,"git":"3","mods":[{"v":-20,"arm":null}],"manual":[],"note":"-20 sulla TA"},{"id":"contund1-clava","n":"Clava","group":"contund1","atk":"TA-2","cm":4,"c1":{"type":"IM","max":"D"},"c2":null,"git":"3","mods":[{"v":-10,"arm":null}],"manual":[],"note":"-10 sulla TA"},{"id":"contund1-mazza","n":"Mazza","group":"contund1","atk":"TA-2","cm":2,"c1":{"type":"IM","max":null},"c2":null,"git":"1","mods":[],"manual":[],"note":""},{"id":"contund1-mazza-chiodata","n":"Mazza chiodata","group":"contund1","atk":"TA-2","cm":4,"c1":{"type":"IM","max":null},"c2":{"type":"PU","max":"B"},"git":"1","mods":[],"manual":[],"note":""},{"id":"contund1-mazzafrusto","n":"Mazzafrusto","group":"contund1","atk":"TA-2","cm":8,"c1":{"type":"IM","max":null},"c2":{"type":"PU","max":"A"},"git":null,"mods":[{"v":10,"arm":[0,1]}],"manual":[],"note":"+10 sulla TA (c. piastre/maglia); in caso di Colpo Mald. Procura un Critico B"},{"id":"contund1-martello-da-guerra","n":"Martello da guerra","group":"contund1","atk":"TA-2","cm":4,"c1":{"type":"IM","max":null},"c2":null,"git":"3","mods":[{"v":5,"arm":null}],"manual":[],"note":"+5 sulla TA"},{"id":"contund1-rete-da-gladiatore","n":"Rete (da gladiatore)","group":"contund1","atk":"TA-6","cm":6,"c1":{"type":"PR","max":null},"c2":null,"git":"3","mods":[{"v":10,"arm":[0,1]}],"manual":[],"note":"tabella TA-6, Attacco Medio, +10 sulla TA (c. piastre/maglia); provoca la metà dei PF","limit":"Medi"},{"id":"contund1-frusta","n":"Frusta","group":"contund1","atk":"TA-2","cm":6,"c1":{"type":"PR","max":"D"},"c2":{"type":"IM","max":"A"},"git":null,"mods":[{"v":-15,"arm":[0,1]}],"manual":[],"note":"-15 sulla TA ( e ½ PF c. piastre/maglia), non può essere usata a distanza minore di 3 m"},{"id":"contund1-gatto-a-nove-code","n":"Gatto a nove code","group":"contund1","atk":"TA-2","cm":7,"c1":{"type":"IM","max":"T"},"c2":null,"git":null,"mods":[{"v":5,"arm":null}],"manual":[],"note":"+5 sulla TA; Provoca la metà dei PF c. piastre/maglia"},{"id":"asta1-giavellotto","n":"Giavellotto","group":"asta1","atk":"TA-1","cm":4,"c1":{"type":"PU","max":null},"c2":null,"git":"10","mods":[{"v":-10,"arm":null}],"manual":[],"note":"-10 sulla TA"},{"id":"asta1-lancia","n":"Lancia","group":"asta1","atk":"TA-1","cm":5,"c1":{"type":"PU","max":null},"c2":{"type":"TA","max":"A"},"git":"7","mods":[],"manual":[],"note":""},{"id":"asta1-tridente","n":"Tridente","group":"asta1","atk":"TA-1","cm":6,"c1":{"type":"PU","max":null},"c2":null,"git":"3","mods":[{"v":5,"arm":null}],"manual":[],"note":"+5 sulla TA"},{"id":"asta2-arpione","n":"Arpione","group":"asta2","atk":"TA-10","cm":5,"c1":{"type":"PU","max":null},"c2":null,"git":"7","mods":[{"v":-10,"arm":null}],"manual":[],"note":"-10 sulla TA. Può rimanere conficcato nel bersaglio (15% di prob/ lv gravità del CC)"},{"id":"asta2-azza-bec-de-corbin","n":"Azza (Bec de Corbin)","group":"asta2","atk":"TA-10","cm":6,"c1":{"type":"PU","max":null},"c2":{"type":"IM","max":"B"},"git":null,"mods":[{"v":5,"arm":[0,1]},{"v":-10,"arm":[2,3,4]}],"manual":[],"note":"+5 sulla TA (c. piastre/maglia); -10 sulla TA (c. cuoio o NA)"},{"id":"asta2-berdica","n":"Berdica","group":"asta2","atk":"TA-10","cm":6,"c1":{"type":"TA","max":null},"c2":null,"git":null,"mods":[],"manual":[],"note":""},{"id":"asta2-lancia-pesante","n":"Lancia pesante","group":"asta2","atk":"TA-10","cm":6,"c1":{"type":"PU","max":null},"c2":{"type":"IM","max":"A"},"git":null,"mods":[],"manual":[],"note":""},{"id":"asta2-alabarda","n":"Alabarda","group":"asta2","atk":"TA-10","cm":7,"c1":{"type":"TA","max":null},"c2":{"type":"PU","max":null},"git":null,"mods":[{"v":-5,"arm":null}],"manual":[],"note":"-5 sulla TA"},{"id":"asta2-mazzapicchio","n":"Mazzapicchio","group":"asta2","atk":"TA-10","cm":7,"c1":{"type":"PU","max":null},"c2":{"type":"TA","max":null},"git":null,"mods":[{"v":-5,"arm":null}],"manual":[],"note":"-5 sulla TA"},{"id":"asta2-picca","n":"Picca","group":"asta2","atk":"TA-10","cm":6,"c1":{"type":"PU","max":null},"c2":null,"git":null,"mods":[],"manual":[],"note":"non può essere usata a distanza minore di 4 metri. Iniziativa a distanza: +40"},{"id":"asta2-lancia-da-cavaliere","n":"Lancia da cavaliere","group":"asta2","atk":"TA-10","cm":7,"c1":{"type":"PU","max":null},"c2":{"type":"PE","max":null},"git":null,"mods":[],"manual":[],"note":"-20 al BO in mischia, +15 al BO in carica a cavallo"},{"id":"asta2-usriev","n":"Usriev","group":"asta2","atk":"TA-10","cm":6,"c1":{"type":"PU","max":null},"c2":{"type":"TA","max":null},"git":null,"mods":[{"v":5,"arm":null}],"manual":[],"note":"+5 sulla TA; +10 al BO in carica a cavallo"},{"id":"due_mani-ascia-da-battaglia","n":"Ascia da battaglia","group":"due_mani","atk":"TA-3","cm":5,"c1":{"type":"TA","max":null},"c2":{"type":"IM","max":null},"git":null,"mods":[{"v":5,"arm":[0,1]},{"v":-5,"arm":[2,3,4]}],"manual":[],"note":"+5 sulla TA (c. piastre/maglia); -5 sulla TA (c. cuoio o NA)"},{"id":"due_mani-flagello","n":"Flagello","group":"due_mani","atk":"TA-3","cm":8,"c1":{"type":"IM","max":null},"c2":{"type":"PU","max":null},"git":null,"mods":[{"v":10,"arm":null}],"manual":[],"note":"+10 sulla TA; in caso di Colpo Mald. Procura un Critico D"},{"id":"due_mani-bastone-a-due-mani","n":"Bastone a due mani","group":"due_mani","atk":"TA-3","cm":3,"c1":{"type":"IM","max":null},"c2":null,"git":null,"mods":[{"v":-10,"arm":null}],"manual":[],"note":"-10 sulla TA"},{"id":"due_mani-spada-bastarda","n":"Spada bastarda","group":"due_mani","atk":"TA-3","cm":5,"c1":{"type":"TA","max":null},"c2":{"type":"IM","max":"B"},"git":null,"mods":[{"v":-5,"arm":null}],"manual":[],"note":"-5 sulla TA. Se usata a due mani"},{"id":"due_mani-claymore","n":"Claymore","group":"due_mani","atk":"TA-3","cm":4,"c1":{"type":"TA","max":null},"c2":{"type":"IM","max":"B"},"git":null,"mods":[{"v":-5,"arm":[0,1]},{"v":5,"arm":[2,3,4]}],"manual":[],"note":"-5 sulla TA (c. piastre/maglia); +5 sulla TA (c. cuoio o NA)"},{"id":"due_mani-spada-a-due-mani","n":"Spada a due mani","group":"due_mani","atk":"TA-3","cm":5,"c1":{"type":"TA","max":null},"c2":{"type":"IM","max":null},"git":null,"mods":[],"manual":[],"note":""},{"id":"due_mani-spadone-a-due-mani","n":"Spadone a due mani","group":"due_mani","atk":"TA-3","cm":6,"c1":{"type":"TA","max":null},"c2":{"type":"IM","max":null},"git":null,"mods":[{"v":5,"arm":[0,1]},{"v":-5,"arm":[2,3,4]}],"manual":[],"note":"+5 sulla TA (c. piastre/maglia); -5 sulla TA (c. cuoio o NA)"},{"id":"due_mani-piccone-da-guerra","n":"Piccone da guerra","group":"due_mani","atk":"TA-3","cm":6,"c1":{"type":"PU","max":null},"c2":{"type":"IM","max":"B"},"git":null,"mods":[{"v":5,"arm":[0,1]}],"manual":[],"note":"+5 sulla TA (c. piastre/maglia)"},{"id":"due_mani-scimitarra-a-due-mani","n":"Scimitarra a due mani","group":"due_mani","atk":"TA-3","cm":5,"c1":{"type":"TA","max":null},"c2":null,"git":null,"mods":[{"v":-5,"arm":null}],"manual":[],"note":"-5 sulla TA"},{"id":"due_mani-scure-ascia","n":"Scure, Ascia","group":"due_mani","atk":"TA-3","cm":5,"c1":{"type":"TA","max":null},"c2":{"type":"IM","max":null},"git":"1","mods":[{"v":-5,"arm":null}],"manual":[],"note":"-5 sulla TA. Può essere impugnata a una mano con -15 al BO."},{"id":"due_mani-maglio","n":"Maglio","group":"due_mani","atk":"TA-3","cm":6,"c1":{"type":"IM","max":null},"c2":{"type":"PE","max":null},"git":null,"mods":[{"v":-5,"arm":null}],"manual":[],"note":"-5 sulla TA; Iniziativa: -10"},{"id":"lancio-accetta-da-lancio","n":"Accetta da lancio","group":"lancio","atk":"TA-11","cm":2,"c1":{"type":"TA","max":"D"},"c2":null,"git":"7","mods":[],"manual":[],"note":"in mischia -10 sulla TA-1"},{"id":"lancio-coltelli-da-lancio","n":"Coltelli da lancio","group":"lancio","atk":"TA-11","cm":1,"c1":{"type":"PU","max":"C"},"c2":null,"git":"7","mods":[],"manual":[],"note":"in mischia -20 sulla TA-1, provoca la metà dei PF"},{"id":"lancio-bolas","n":"Bolas","group":"lancio","atk":"TA-11","cm":7,"c1":{"type":"PR","max":null},"c2":{"type":"IM","max":"A"},"git":"13","mods":[],"manual":[],"note":""},{"id":"lancio-boomerang","n":"Boomerang","group":"lancio","atk":"TA-11","cm":4,"c1":{"type":"IM","max":"C"},"c2":null,"git":"7","mods":[],"manual":[],"note":"-5 al BO; se lanciato per tornare -15 al BO ma se manca torna in mano al lanciatore."},{"id":"tiro-balestra-pesante","n":"Balestra pesante","group":"tiro","atk":"TA-4","cm":5,"c1":{"type":"PU","max":null},"c2":null,"git":"30","mods":[],"manual":[],"note":"Carica (2); fino a 10 metri +30 al BO"},{"id":"tiro-balestra-leggera","n":"Balestra leggera","group":"tiro","atk":"TA-4","cm":5,"c1":{"type":"PU","max":null},"c2":null,"git":"20","mods":[],"manual":[],"note":"Carica (2); oppure Ricarica (1) con –15 al BO; fino a 6 metri +15 al BO"},{"id":"tiro-balestrino","n":"Balestrino","group":"tiro","atk":"TA-4","cm":5,"c1":{"type":"PU","max":null},"c2":null,"git":"10","mods":[],"manual":[],"note":"Carica (1); provoca la metà dei PF. Usata a una mano, ricarica a due mani"},{"id":"tiro-arco-lungo","n":"Arco lungo","group":"tiro","atk":"TA-4","cm":5,"c1":{"type":"PU","max":null},"c2":null,"git":"33*","mods":[],"manual":[],"note":"Carica (1); oppure Ricarica (0) con –35 al BO; fino a 3 metri +20 al BO"},{"id":"tiro-arco-composito","n":"Arco composito","group":"tiro","atk":"TA-4","cm":4,"c1":{"type":"PU","max":null},"c2":null,"git":"25*","mods":[],"manual":[],"note":"Carica (1), oppure Ricarica (0) con –25 al BO; fino a 3 metri +25 al BO"},{"id":"tiro-arco-corto","n":"Arco corto","group":"tiro","atk":"TA-4","cm":4,"c1":{"type":"PU","max":null},"c2":null,"git":"20*","mods":[],"manual":[],"note":"Carica (1); oppure Ricarica (0) con –10 al BO; fino a 3 metri +10 al BO"},{"id":"tiro-fionda-frombola","n":"Fionda, Frombola","group":"tiro","atk":"TA-4","cm":6,"c1":{"type":"IM","max":"D"},"c2":null,"git":"17*","mods":[],"manual":[],"note":"Carica (1), compatibile con lo scudo"},{"id":"tiro-cerbottana","n":"Cerbottana","group":"tiro","atk":"TA-4","cm":4,"c1":{"type":"PU","max":"T"},"c2":null,"git":"3","mods":[],"manual":[],"note":"Carica (1); oppure Ricarica (0) con –10 al BO. Provoca ¼ dei PF."}];
   if (typeof module !== 'undefined') module.exports = G.weapondata;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* GENERATO da tools/extract-gear.py a partire dai PDF di Istaro Quettar (Armature, Equipaggiamento e prezzi, Metalli e Gemme,
+   Erbe/Veleni/Malattie). Non modificare a mano. Testi e numeri come nei PDF (refusi compresi); il campo «cat» delle erbe deriva dal colore
+   del nome secondo la legenda del PDF (cur: erba curativa, var: erba varia/d'utilità, vel: veleno, mal: malattia/effetto ambientale). */
+(function (root) {
+  var G = root.GIRSA = root.GIRSA || {};
+  G.geardata = {
+   "armature": {
+    "body": [
+     {"id":"NA","n":"Tessuti e pelle (NA)","rows":[{"n":"Pelle","mm":"","bom":"","bot":"","d":"Vestiario normale, semplice","res":"-","bd":""},{"n":"Abiti","mm":"","bom":"","bot":"","d":"Tuniche, tonache ecc.","res":"-","bd":""},{"n":"Copertura leggera","mm":"","bom":"","bot":"","d":"Pelle trattata di alcuni animali (cani, daini, lupi)*","res":"1","bd":""},{"n":"Copertura pesante","mm":"-10","bom":"","bot":"","d":"Pelle non trattata di alcuni animali (bufali, orsi, elefanti) *","res":"2","bd":"+5"}]},
+     {"id":"CG","n":"Cuoio grezzo (CG)","rows":[{"n":"Giustacuore di cuoio","mm":"","bom":"","bot":"","d":"Gilè senza maniche può arrivare fino a mezza coscia","res":"3","bd":""},{"n":"Giacca di cuoio","mm":"","bom":"","bot":"-5","d":"Giaccone lungo fino a metà coscia, protegge spalla e braccio","res":"4","bd":""},{"n":"Giacca rinforzata","mm":"-10","bom":"","bot":"-10","d":"Come sopra ma con aggiunta di rinforzi metallici","res":"6","bd":"+5"},{"n":"Giubbotto rinforzato","mm":"-15","bom":"","bot":"-10","d":"Come sopra ma arriva fino al polpaccio (con Sc)","res":"8","bd":"+5"}]},
+     {"id":"CR","n":"Cuoio rinforz. (CR)","rows":[{"n":"Corazza leggera","mm":"","bom":"","bot":"","d":"Pettorina che copre spalla, mezza coscia","res":"5","bd":""},{"n":"Corazza leggera lunga","mm":"-5","bom":"","bot":"-5","d":"Come sopra ma con protezioni fino al ginocchio e braccia","res":"6","bd":"+5"},{"n":"Corazza rigida","mm":"-10","bom":"","bot":"","d":"Pettorina rigida, copre solo il busto","res":"8","bd":"+5"},{"n":"Corazza pesante","mm":"-10","bom":"","bot":"-15","d":"Pettorina rinforzata con protezioni su spalla, coscia e braccia","res":"10","bd":"+10"}]},
+     {"id":"CM","n":"Cotte di maglia (CM)","rows":[{"n":"Cotta di maglia corta","mm":"","bom":"","bot":"","d":"Maniche corte e metà coscia","res":"8","bd":""},{"n":"Cotta di maglia","mm":"-5","bom":"","bot":"-10","d":"Come sopra ma con protezione fino al gomito e ginocchio","res":"9","bd":"+5"},{"n":"Cotta di maglia lunga","mm":"-10","bom":"-5","bot":"-20","d":"Come cotta normale ma a maniche lunghe e pantaloni (Br/Sc)","res":"11","bd":"+10"},{"n":"Usbergo con cotta","mm":"-15","bom":"-5","bot":"-20","d":"Abito completo in maglia fino ai piedi e mani (con Br/Sc)","res":"13","bd":"+10"}]},
+     {"id":"CP","n":"Corazze a piastre (CP)","rows":[{"n":"Corazza a piastre","mm":"","bom":"","bot":"","d":"Pettorina con piastre per l'addome, spalle, braccia e coscia","res":"9","bd":""},{"n":"Corazza rigida","mm":"-10","bom":"","bot":"-10","d":"Come sopra, con copritorace ampio per una maggior difesa","res":"9","bd":"+5"},{"n":"Corazza rinforzata","mm":"-20","bom":"","bot":"-30","d":"Come sopra con piastre metalliche e giunture di maglia","res":"12","bd":"+10"},{"n":"Armatura da cavaliere","mm":"-30","bom":"-5","bot":"-40","d":"Completa, giunture fatte in metallo sagomato (con Br/Sc)","res":"14","bd":"+15"}]}
+    ],
+    "elmi": [
+     {"n":"Cappuccio in pelle","prc":"","d":"Semplice cappuccio in pelle protegge dalla pioggia","res":"1","bdi":""},
+     {"n":"Elmo di cuoio","prc":"-5","d":"Semplice, copre la testa","res":"2","bdi":""},
+     {"n":"Elmo di cuoio rinforzato","prc":"-5","d":"Come sopra, di qualità superiore","res":"3","bdi":""},
+     {"n":"Camaglio, Maglia metallica*","prc":"-5","d":"Cappuccio in maglia, usato spesso con le cotte o armature","res":"3","bdi":""},
+     {"n":"Elmo a piastre","prc":"-5","d":"A scaglie sovrapposte di metallo, copre solo il cranio","res":"3","bdi":""},
+     {"n":"Elmo normanno","prc":"-5","d":"In metallo, copre la testa, con paranaso","res":"3","bdi":""},
+     {"n":"Elmo di metallo","prc":"-5","d":"Rinforzato, copre la testa, i lati e la nuca","res":"3","bdi":""},
+     {"n":"Elmo completo","prc":"-10","d":"In metallo, cilindrico con fori per occhi e per respirare","res":"4","bdi":"+5"},
+     {"n":"Celata","prc":"-10","d":"In metallo con celata per aprire l'elmo alla necessità","res":"4","bdi":"+5"}
+    ],
+    "scudi": [
+     {"n":"Brocchiero","bdm":"+20","bdt":"+10","bdi":"+5","d":"Piccolo scudo da parata, solitamente in metallo","res":"6"},
+     {"n":"Rotella (Rotondo)","bdm":"+20","bdt":"+20","bdi":"+15","d":"Scudo comune, in metallo o legno","res":"5/8"},
+     {"n":"Scapezzato","bdm":"+25","bdt":"+25","bdi":"+20","d":"Scudo in metallo di forma triangolare arrotondata o a goccia","res":"10"},
+     {"n":"Palvese (a Torre)","bdm":"+30","bdt":"+40","bdi":"+30","d":"Scudo alto 2 metri in legno rinforzato, rettangolare, pesante","res":"9"}
+    ],
+    "note": {
+     "NA": "*valgono come protezione da armatura in caso di critici subiti (perdono però resistenza)",
+     "elmi": "*Può essere usata anche come copertura al collo in aggiunta ad altri elmi metallici"
+    },
+    "bracciali": {
+     "titolo": "BRACCIALI E SCHINIERI (-5 ai BO o alle MM)",
+     "righe": ["Cuoio: Res 1 Metallo: Res 2","Coprono Avanbraccia e Gambe, ma non Braccia, Gomiti, Cosce e Ginocchia"]
+    },
+    "legenda": "Note: BO-M = Penalità al Bonus Offensivo in mischia; BO-T = Penalità al Bonus Offensivo da Lancio/Tiro; BD = Bonus Difensivo; BD-M = Bonus Difensivo contro armi da mischia; BD-T = Bonus Difensivo contro armi da Tiro/Lancio; BD-I = Bonus Difensivo contro Incantesimi Diretti (*Nel caso degli elmi, il bonus si conta anche per gli Incantesimi Elementali ad Area); PRC = Penalità al Tiro Percezione; MM = Penalità alle Manovre in movimento; Res = Resistenza ai colpi."
+   },
+   "equip": {
+    "armi": [
+     {"n":"Accetta","costo":"5MA","peso":"2,1kg","tp":"1"},
+     {"n":"Accetta da Lancio","costo":"1MA","peso":"1,3kg","tp":"1"},
+     {"n":"Alabarda","costo":"14MA","peso":"3,7kg","tp":"2"},
+     {"n":"Arco composito","costo":"17MA","peso":"1,3kg","tp":"14"},
+     {"n":"Arco corto","costo":"6MA","peso":"0,9kg","tp":"3"},
+     {"n":"Arco lungo","costo":"10MA","peso":"1,3kg","tp":"9"},
+     {"n":"Arpione","costo":"25MB","peso":"2,7kg","tp":"1"},
+     {"n":"Ascia da battaglia","costo":"13MA","peso":"3kg","tp":"2"},
+     {"n":"Azza","costo":"12MA","peso":"3,7kg","tp":"2"},
+     {"n":"Balestra leggera","costo":"11MA","peso":"2,9kg","tp":"7"},
+     {"n":"Balestra pesante","costo":"25MA","peso":"4,5kg","tp":"16"},
+     {"n":"Balestrino","costo":"18MA","peso":"1,2kg","tp":"6"},
+     {"n":"Bastone a due mani","costo":"5MR","peso":"1,8kg","tp":"1"},
+     {"n":"Berdica","costo":"13MA","peso":"5,5kg","tp":"2"},
+     {"n":"Bolas","costo":"5MA","peso":"0,8kg","tp":"1"},
+     {"n":"Boomerang","costo":"2MA","peso":"0,9kg","tp":"1"},
+     {"n":"Cerbottana","costo":"12MA","peso":"0,6kg","tp":"1"},
+     {"n":"Claymore","costo":"20MA","peso":"3,4kg","tp":"3"},
+     {"n":"Clava","costo":"1MR","peso":"1kg","tp":"0,2"},
+     {"n":"Coltellaccio, Storta","costo":"8MA","peso":"1,4kg","tp":"2"},
+     {"n":"Coltelli da Lancio","costo":"4MA","peso":"0,3kg","tp":"1"},
+     {"n":"Daghetta da duello","costo":"12MA","peso":"0,5kg","tp":"3"},
+     {"n":"Falcione, Mannarese","costo":"15MA","peso":"2kg","tp":"3"},
+     {"n":"Fionda, Frombola","costo":"9MB","peso":"0,3kg","tp":"0,5"},
+     {"n":"Flagello","costo":"19MA","peso":"2,7kg","tp":"5"},
+     {"n":"Frusta","costo":"2MA","peso":"1,3kg","tp":"0,5"},
+     {"n":"Gatto a nove code","costo":"1MA","peso":"1,8kg","tp":"1"},
+     {"n":"Giavellotto","costo":"3MA","peso":"1,8kg","tp":"1"},
+     {"n":"Lancia","costo":"23MB","peso":"2,5kg","tp":"1"},
+     {"n":"Lancia da cavaliere","costo":"5MA","peso":"5,5kg","tp":"1"},
+     {"n":"Lancia pesante","costo":"5MA","peso":"4,8kg","tp":"1"},
+     {"n":"Maglio","costo":"5MA","peso":"3,5kg","tp":"1"},
+     {"n":"Martello da guerra","costo":"15MA","peso":"2kg","tp":"2"},
+     {"n":"Mazza","costo":"6MA","peso":"2,2kg","tp":"2"},
+     {"n":"Mazza chiodata","costo":"3MA","peso":"1,9kg","tp":"1"},
+     {"n":"Mazzafrusto","costo":"16MA","peso":"2,6kg","tp":"2"},
+     {"n":"Mazzapicchio","costo":"14MA","peso":"5kg","tp":"2"},
+     {"n":"Picca","costo":"4MA","peso":"5kg","tp":"2"},
+     {"n":"Piccone da guerra","costo":"15MA","peso":"1,8kg","tp":"2"},
+     {"n":"Pugnale","costo":"3MA","peso":"0,4kg","tp":"1"},
+     {"n":"Randello","costo":"2MR","peso":"0,3kg","tp":"1"},
+     {"n":"Rete da gladiatore","costo":"7MA","peso":"3kg","tp":"7"},
+     {"n":"Scimitarra","costo":"10MA","peso":"1,5kg","tp":"3"},
+     {"n":"Scimitarra a due mani","costo":"22MA","peso":"2,8kg","tp":"4"},
+     {"n":"Scure, Ascia","costo":"8MA","peso":"3,2kg","tp":"1"},
+     {"n":"Spada","costo":"10MA","peso":"1,8kg","tp":"3"},
+     {"n":"Spada bastarda","costo":"20MA","peso":"2,7kg","tp":"5"},
+     {"n":"Spada corta","costo":"7MA","peso":"1,3kg","tp":"2"},
+     {"n":"Spada a due mani","costo":"20MA","peso":"3,6kg","tp":"5"},
+     {"n":"Spada lunga","costo":"18MA","peso":"2,2kg","tp":"4"},
+     {"n":"Spadino, Fioretto","costo":"21MA","peso":"1,2kg","tp":"5"},
+     {"n":"Spadone a due mani","costo":"21MA","peso":"4,2kg","tp":"5"},
+     {"n":"Stocco, Spada da lato","costo":"22MA","peso":"1,5kg","tp":"5"},
+     {"n":"Tridente","costo":"4MA","peso":"2,8kg","tp":"2"},
+     {"n":"Usriev","costo":"18MA","peso":"6kg","tp":"5"}
+    ],
+    "prot": [
+     {"n":"Scudo Brocchiero","costo":"35MB","peso":"2,9kg","tp":"3"},
+     {"n":"Scudo Rotondo in legno","costo":"30MB","peso":"4kg","tp":"4"},
+     {"n":"Scudo rotondo in metallo","costo":"55MB","peso":"6,8kg","tp":"5"},
+     {"n":"Scudo Scapezzato in metallo","costo":"7MA","peso":"10kg","tp":"6"},
+     {"n":"Scudo Palvese, a Torre","costo":"9MA","peso":"18kg","tp":"7"},
+     {"n":"Bracciali di cuoio","costo":"2MA","peso":"0,9kg","tp":"2"},
+     {"n":"Schinieri di cuoio","costo":"2MA","peso":"1.3kg","tp":"2"},
+     {"n":"Bracciali di metallo","costo":"4MA","peso":"1,3kg","tp":"2"},
+     {"n":"Schinieri di metallo","costo":"4MA","peso":"1,8kg","tp":"2"},
+     {"n":"Cappuccio in pelle","costo":"10MB","peso":"0,6kg","tp":"1"},
+     {"n":"Elmo di cuoio","costo":"15MB","peso":"0,9kg","tp":"1"},
+     {"n":"Elmo di cuoio rinforzato","costo":"25MB","peso":"1,1kg","tp":"1,5"},
+     {"n":"Camaglio, Maglia metallica","costo":"5MA","peso":"0,8kg","tp":"6"},
+     {"n":"Elmo normanno","costo":"3MA","peso":"1,2kg","tp":"2"},
+     {"n":"Elmo a piastre","costo":"35MB","peso":"1,3kg","tp":"1"},
+     {"n":"Elmo di metallo","costo":"4MA","peso":"1,3kg","tp":"3"},
+     {"n":"Elmo completo","costo":"9MA","peso":"2,2kg","tp":"8"},
+     {"n":"Elmo con celata","costo":"125MB","peso":"2,2kg","tp":"10"},
+     {"n":"Giustacuore in cuoio (C.G)","costo":"3MA","peso":"5,4kg","tp":"3"},
+     {"n":"Giacca di cuoio (C.G)","costo":"6MA","peso":"7,7kg","tp":"6"},
+     {"n":"Giacca rinforzata (C.G)","costo":"9MA","peso":"9,8kg","tp":"14"},
+     {"n":"Giubbotto rinforzato (C.G)","costo":"11MA","peso":"11kg","tp":"16"},
+     {"n":"Corazza leggera (C.R)","costo":"10MA","peso":"6,3kg","tp":"4"},
+     {"n":"Corazza leggera lunga (C.R)","costo":"15MA","peso":"8kg","tp":"7"},
+     {"n":"Corazza rigida (C.R)","costo":"17MA","peso":"7,5kg","tp":"12"},
+     {"n":"Corazza pesante (C.R)","costo":"30MA","peso":"12kg","tp":"16"},
+     {"n":"Cotta di maglia corta (C.M.)","costo":"35MA","peso":"9kg","tp":"21"},
+     {"n":"Cotta di maglia (C.M.)","costo":"45MA","peso":"12kg","tp":"26"},
+     {"n":"Cotta di maglia lunga (C.M.)","costo":"65MA","peso":"19kg","tp":"60"},
+     {"n":"Usbergo con cotta (C.M.)*","costo":"55MA","peso":"16kg","tp":"35"},
+     {"n":"Corazza a piastre (C.P.)","costo":"5MO","peso":"11,3kg","tp":"21"},
+     {"n":"Corazza rigida (C.P.)","costo":"7MO","peso":"14kg","tp":"28"},
+     {"n":"Corazza rinforzata (C.P.)","costo":"10MO","peso":"27kg","tp":"70"},
+     {"n":"Armatura da cavaliere (C.P.)*","costo":"20MO","peso":"33kg","tp":"130"},
+     {"n":"Bardatura di cuoio (C.G.) ‡","costo":"35MA","peso":"45kg","tp":"14"},
+     {"n":"Bardatura Rinforzata (C.R.) ‡","costo":"6MO","peso":"55kg","tp":"20"},
+     {"n":"Bardatura di maglia (C.M.) ‡","costo":"15MO","peso":"70kg","tp":"40"},
+     {"n":"Bardatura di piastre (C.P.) ‡","costo":"30MO","peso":"86kg","tp":"130"},
+     {"n":"Testiera di cuoio‡","costo":"6MA","peso":"6,8kg","tp":"7"},
+     {"n":"Testiera di metallo‡","costo":"9MA","peso":"11kg","tp":"9"},
+     {"n":"Guardacollo di cuoio‡","costo":"5MA","peso":"11kg","tp":"6"},
+     {"n":"Guardacollo di maglia‡","costo":"27MA","peso":"14kg","tp":"10"},
+     {"n":"Guardacollo di piastre‡","costo":"6MO","peso":"17kg","tp":"20"}
+    ],
+    "prot_note": ["Tutte le armature vengono considerate come “Carico” solo se","trasportate, non se indossate. I pesi si riferiscono a pezzi per umani","(per nani 1/2, hobbit 1/3) e le bardature per cavalli medio-grandi.","Per bracciali e schinieri, i valori indicano la coppia (dx, sx).","*Nel prezzo e peso di queste armature è compreso un elmo a scelta.","‡Penalità alle manovre con la cavalcatura per le Bardature:","di cuoio/rinf: -15; di maglia: -20; di piastre: -30; Guardacollo: -5.","Considerare la Testiera come un elmo. Ogni pezzo aggiuntivo","oltre la Bardatura garantisce un +5 al Bonus Difensivo.","T.P.: Tempo di Produzione espresso in giorni. Può variare in base","ai mezzi a disposizione e al materiale usato."],
+    "accessori": [
+     {"n":"Acciarino e pietra focaia","costo":"1MB","peso":"0,2kg","tp":"-","note":"Accende un fuoco in 3 minuti"},
+     {"n":"Alambicco","costo":"1MA","peso":"0,2kg","tp":"","note":"Di vetro"},
+     {"n":"Amaca","costo":"1MB","peso":"0,8/1,3kg","tp":"3","note":"Di corda, con 3 uncini di metallo"},
+     {"n":"Archetto per il fuoco","costo":"8MS","peso":"0,2kg","tp":"1 ora","note":"Accende un fuoco in 5 minuti"},
+     {"n":"Attrezzi da scasso","costo":"1MA","peso":"0,2kg","tp":"2","note":"+5 a Scassinare Serrature"},
+     {"n":"Bende (10)","costo":"1MR","peso":"0,1kg","tp":"1 ora","note":"Bende mediche, di lino"},
+     {"n":"Borraccia da 0,5 litri","costo":"1MR","peso":"0,1kg","tp":"6 ore","note":"Piena pesa 0,5kg"},
+     {"n":"Borraccia da 1 litro","costo":"2MR","peso":"0,1kg","tp":"6 ore","note":"Piena pesa 1kg"},
+     {"n":"Borraccia da 2 litri","costo":"4MR","peso":"0,2kg","tp":"1","note":"Otre, piena pesa 2kg"},
+     {"n":"Briglie","costo":"1MA","peso":"1,6/2,2kg","tp":"2","note":"Di ferro e cuoio. Includono morso e redini"},
+     {"n":"Candela","costo":"4MR","peso":"0,1kg","tp":"0,5","note":"Di cera o sego, Luce per 1,5 m. di raggio per 2 ore"},
+     {"n":"Catena","costo":"6MB","peso":"3/5kg","tp":"1","note":"Di ferro, 3 metri."},
+     {"n":"Carbone da legna","costo":"22MR","peso":"0,5kg","tp":"0,5","note":"Fuoco per 4 ore"},
+     {"n":"Carta (10)","costo":"12MB","peso":"0,1kg","tp":"1","note":"10 fogli, 12 x 6 cm"},
+     {"n":"Chiodi (20)","costo":"9MS","peso":"0,2kg","tp":"3 ore","note":"Di ferro. 7,5 cm"},
+     {"n":"Chiodi a 3 punte (5)","costo":"8MB","peso":"0,9kg","tp":"1","note":"Triboli"},
+     {"n":"Corda","costo":"4MB","peso":"2,5/3kg","tp":"3","note":"16 metri"},
+     {"n":"Corda rinforzata","costo":"12MB","peso":"1/2kg","tp":"5","note":"16 metri"},
+     {"n":"Corno di legno","costo":"7MA","peso":"1,5/2kg","tp":"2","note":"Tiro + Bonus a CO per entità del suono"},
+     {"n":"Corno d’osso","costo":"1MO","peso":"1/1,5kg","tp":"3","note":"Tiro + Bonus a CO per entità del suono"},
+     {"n":"Cuneo/Scalpello","costo":"3MR","peso":"1,3kg","tp":"2 ore","note":"Cuneo di ferro per dividere o spaccare"},
+     {"n":"Faretra","costo":"1MB","peso":"0,2kg","tp":"2","note":"Per frecce o dardi. Capienza 20"},
+     {"n":"Fiala","costo":"2MB","peso":"0,1kg","tp":"2 ore","note":"Di vetro. Capienza 60 grammi"},
+     {"n":"Fiasca d’olio per lanterna","costo":"3MB","peso":"0,4kg","tp":"1","note":"6 ore"},
+     {"n":"Fischietto","costo":"2MA","peso":"0,2kg","tp":"1","note":"Di legno o ferro. 10 cm"},
+     {"n":"Flauto di pan","costo":"7MA","peso":"0,2kg","tp":"2","note":"Di legno"},
+     {"n":"Fodero da cintura","costo":"25MB","peso":"0,2/0,5kg","tp":"1","note":"Per armi a una mano"},
+     {"n":"Fodero da spalla","costo":"3MA","peso":"0,6/0,9kg","tp":"1","note":"Per armi a due mani"},
+     {"n":"Gesso (10)","costo":"2MB","peso":"0,1kg","tp":"2 ore","note":"Gessetti bianchi, lunghi 12 cm"},
+     {"n":"Inchiostro","costo":"14MR","peso":"0,1kg","tp":"-","note":"Nero, non solubile."},
+     {"n":"Lanterna","costo":"12MB","peso":"0,7/1kg","tp":"4","note":"Luce per 6 metri di raggio"},
+     {"n":"Lente di ingrandimento","costo":"3MO","peso":"0,3kg","tp":"5","note":"Di vetro, 7/10 cm di diametro"},
+     {"n":"Liuto","costo":"4MO","peso":"1,5/1,8kg","tp":"5","note":"Di legno, strumento musicale"},
+     {"n":"Martello","costo":"1MA","peso":"0,3/0,6kg","tp":"1","note":"Di ferro. Come arma: mazza -30."},
+     {"n":"Meridiana","costo":"3MA","peso":"0,4kg","tp":"2","note":"Di ferro, segnala l’ora approssimativamente"},
+     {"n":"Mortaio con pestello","costo":"5MR","peso":"0,8/1kg","tp":"1","note":"Per ridurre in poltiglia erbe, bacche o altro"},
+     {"n":"Pergamena (10)","costo":"2MA","peso":"0,1kg","tp":"1","note":"10 fogli, 12 x 6 cm. Molto resistente. Non è carta runica"},
+     {"n":"Pertica/Palo","costo":"5MR","peso":"3,2/4kg","tp":"3","note":"Di legno. 3 m"},
+     {"n":"Pentola da cucina","costo":"7MB","peso":"1/1,5kg","tp":"1","note":"Di ferro, capacità 7 litri"},
+     {"n":"Pentolino da infuso","costo":"2MB","peso":"0,2kg","tp":"1","note":"Per infusi di erbe"},
+     {"n":"Pioli (10)","costo":"9MS","peso":"0,9kg","tp":"2 ore","note":"Di legno"},
+     {"n":"Penne d’oca (10)","costo":"4MR","peso":"0,1kg","tp":"2 ore","note":"Penne di piuma d’oca per scrivere"},
+     {"n":"Pennello (per scrivere)","costo":"5MR","peso":"0,1kg","tp":"4 ore","note":"Pennello di legno con setole, con cappuccio"},
+     {"n":"Picchetti (10)","costo":"2MB","peso":"1,3kg","tp":"1","note":"Di ferro"},
+     {"n":"Piccone","costo":"8MB","peso":"2/3kg","tp":"1","note":"Di ferro con manico in legno. Arma: martello -10 PU(C)"},
+     {"n":"Piccozza da arrampicata","costo":"28MB","peso":"0,7/1kg","tp":"1","note":"+10 ad Arrampicarsi. Arma: martello -15 PU(C)"},
+     {"n":"Polveriera","costo":"2MR","peso":"0,1kg","tp":"0,5","note":"Esca per l’acciarino. Abbastanza per 7 fuochi"},
+     {"n":"Rampino","costo":"1MA","peso":"0,3/0,6kg","tp":"1","note":"Di ferro. La presa fallisce con 02-03 sulla manovra"},
+     {"n":"Sacco a pelo leggero","costo":"2MB","peso":"2/2,5kg","tp":"0,5","note":"Coperta di lana, per 2 stagioni"},
+     {"n":"Sacco a pelo pesante","costo":"7MB","peso":"4/4,5kg","tp":"1","note":"Coperta di lana e pelo, per 4 stagioni"},
+     {"n":"Scala","costo":"32MR","peso":"6,5/7kg","tp":"2","note":"Di legno, 3 metri. Può sostenere 180kg"},
+     {"n":"Scalpello","costo":"9MB","peso":"0,4kg","tp":"1","note":"Di ferro. Come arma: pugnale -40"},
+     {"n":"Secchio","costo":"4MB","peso":"1/1,4kg","tp":"1","note":"Di rame, capienza 11 litri"},
+     {"n":"Sega","costo":"23MB","peso":"1/1,3kg","tp":"2","note":"Di ferro, attrezzo da falegname. 60 cm"},
+     {"n":"Sella","costo":"5MA","peso":"4,5/5,5kg","tp":"6","note":"Include coperta e staffe"},
+     {"n":"Specchio","costo":"35MB","peso":"0,2kg","tp":"1","note":"Vetro argentato. 15 x 20 cm"},
+     {"n":"Telo impermeabile","costo":"1MB","peso":"1,8kg","tp":"2 ore","note":"Di tela. 1,5 x 2,5 m"},
+     {"n":"Tenda piccola","costo":"1,5MA","peso":"3kg","tp":"2","note":"Di tela. 1 x 2,2 m, per una persona"},
+     {"n":"Tenda media","costo":"2MA","peso":"4kg","tp":"2","note":"Di tela. 1,5 x 2,5 m, per due persone"},
+     {"n":"Tenda grande","costo":"5MA","peso":"8kg","tp":"3","note":"Di tela. 3 x 2,5 m, per quattro persone"},
+     {"n":"Torcia","costo":"3MS","peso":"0,4kg","tp":"1 ora","note":"Luce per 3 metri di raggio"},
+     {"n":"Torcia trattata","costo":"2MR","peso":"0,6kg","tp":"2 ore","note":"Luce per 3 metri di raggio"},
+     {"n":"Trapano","costo":"4MA","peso":"0,8/1,4kg","tp":"1","note":"Di ferro, a due mani per bucare tramite rotazione"},
+     {"n":"Vanga/Badile","costo":"16MB","peso":"1,2/2kg","tp":"1","note":"Di ferro, con manico in legno"},
+     {"n":"Dardi per balestra (20)","costo":"11MB","peso":"1,3kg","tp":"2","note":"Probabilità di rottura 15%"},
+     {"n":"Frecce (20)","costo":"4MB","peso":"1,3kg","tp":"1","note":"Probabilità di rottura 40%"},
+     {"n":"Dardi per cerbottana (10)","costo":"5MB","peso":"0,5kg","tp":"1","note":"Probabilità di rottura 3%"},
+     {"n":"Pietre per fionda (20)","costo":"-","peso":"1,3kg","tp":"-","note":"Normali pietre arrotondate"}
+    ],
+    "borse": [
+     {"n":"Astuccio","costo":"4MA","peso":"0,4kg","tp":"2","note":"Impermeabile, di cuoio. 30 x 15 x 7cm"},
+     {"n":"Bisaccia da sella","costo":"8MB","peso":"2,2kg","tp":"2","note":"Capienza 7 kg"},
+     {"n":"Borsa di cuoio","costo":"16MR","peso":"0,6kg","tp":"1","note":"Capienza 4 kg"},
+     {"n":"Borsa impermeabile","costo":"25MR","peso":"0,7kg","tp":"3","note":"Capienza 4 kg"},
+     {"n":"Borsello","costo":"2MR","peso":"0,1kg","tp":"1","note":"Borsello da cintura, capienza 0,4 kg"},
+     {"n":"Sacco","costo":"8MR","peso":"0,8kg","tp":"2 ore","note":"Capienza 22kg"},
+     {"n":"Zaino","costo":"2MB","peso":"0,9kg","tp":"1","note":"Di cuoio o tela. Capienza 9kg"},
+     {"n":"Zaino con telaio","costo":"33MR","peso":"1,3kg","tp":"1,5","note":"Di tela. Capienza 20kg"}
+    ],
+    "vestiti": [
+     {"n":"Camicia","costo":"8MB","peso":"0,4/0,6kg","tp":"2","note":"Di lino"},
+     {"n":"Cappotto","costo":"15MB","peso":"1,3/2,9kg","tp":"2","note":"Di cuoio o lino"},
+     {"n":"Cappotto in pelliccia","costo":"6MA","peso":"3/4kg","tp":"3","note":"Di pelliccia animale"},
+     {"n":"Cintura per armi","costo":"5MB","peso":"0,2/0,5kg","tp":"0,5","note":"Può sostenere 2 foderi e 3 borselli"},
+     {"n":"Maglia","costo":"3MB","peso":"0,3/0,4kg","tp":"1,5","note":"Di lino"},
+     {"n":"Mantello","costo":"9MB","peso":"0,5/1kg","tp":"1","note":"Di lino o lana"},
+     {"n":"Soprabito","costo":"9MB","peso":"0,5/0,8kg","tp":"1,5","note":"Di lino"},
+     {"n":"Stivali","costo":"1MA","peso":"1/1,4kg","tp":"3","note":"Di cuoio"},
+     {"n":"Guanti","costo":"2MB","peso":"0,2kg","tp":"1","note":"Di cuoio, foderati"},
+     {"n":"Cappello","costo":"6MB","peso":"0,4kg","tp":"1","note":"Di cuoio"},
+     {"n":"Cappuccio","costo":"16MR","peso":"0,2kg","tp":"0,5","note":"Copre testa e spalle"},
+     {"n":"Pantaloni","costo":"25MR","peso":"0,5/0,8kg","tp":"1","note":"Di lino"}
+    ],
+    "vitto": [
+     {"n":"Birra","costo":"2MS","note":"½ litro (una pinta)"},
+     {"n":"Brandy","costo":"10MS","note":"¼ litro (mezza pinta)"},
+     {"n":"Sidro","costo":"1MS","note":"½ litro (una pinta)"},
+     {"n":"Idromele","costo":"5MS","note":"½ litro (una pinta)"},
+     {"n":"Vino","costo":"6MS","note":"½ litro (una pinta)"},
+     {"n":"Pasto leggero","costo":"6MS","note":"1% possibilità di malore/intossicazione**"},
+     {"n":"Pasto normale","costo":"1MR","note":"1% possibilità di malore/intossicazione**"},
+     {"n":"Pasto abbondante","costo":"12MS","note":"1% possibilità di malore/intossicazione**"},
+     {"n":"Razioni normali","costo":"5MR","note":"7 giorni. Deperibili. Peso 8kg"},
+     {"n":"Razioni da viaggio","costo":"1MB","note":"7 giorni. In conserva. Peso 6,3kg"},
+     {"n":"Cram (Rimpinzimonio)","costo":"15/30MA*","note":"Torta di farina, miele e latte. 7 giorni, si conserva per 7 settimane. Peso 1,8kg"},
+     {"n":"Lembas, Pan di via","costo":"15MO*","note":"Pan di via elfico. 1,8kg, nutre per un mese. Si conserva per un anno."},
+     {"n":"Miruvor","costo":"-*","note":"Liquore elfico. +5 a CO e +10 a TR contro veleni e malattie per un giorno."},
+     {"n":"Alloggio scadente","costo":"1MR","note":"A notte. Dormitorio comune"},
+     {"n":"Alloggio normale","costo":"2MR","note":"A notte. Letti separati"},
+     {"n":"Buon alloggio","costo":"22MS","note":"A notte. Camere separate"},
+     {"n":"Stalla","costo":"2MS","note":"Al giorno, include la biada"},
+     {"n":"Ospedale","costo":"6MR","note":"Al giorno. x2 velocità di guarigione. Cibo e cure. Spesso viene richiesta un offerta"},
+     {"n":"Libreria","costo":"1MA","note":"Per l’accesso. 4 ore di visita. Non è possibile portare via i libri"},
+     {"n":"Bagno pubblico","costo":"5MS","note":"1% possibilità di malattia**. Sessi separati"},
+     {"n":"Bagno privato","costo":"1MR","note":"0% possibilità di malattia**. Pagamento extra per oli o profumi"},
+     {"n":"Spese legali","costo":"3MA","note":"Per una consulenza legale (3 ore circa di lavoro)"},
+     {"n":"Cura del cuoio","costo":"6MS","note":"Per ogni oggetto da sistemare (include pulizia e piccole riparazioni)"},
+     {"n":"Cura del metallo","costo":"12MS","note":"Per ogni oggetto da sistemare (include pulizia e piccole riparazioni)"},
+     {"n":"Riparazioni, cuoio","costo":"1MR","note":"Per ogni Punto Resistenza (un’ora di lavoro per punto recuperato)***"},
+     {"n":"Riparazioni, metallo","costo":"2MR","note":"Per ogni Punto Resistenza (un’ora di lavoro per punto recuperato)***"},
+     {"n":"Araldo, Annunciatore","costo":"5MS","note":"Per annuncio. Uno ogni ora per 4 ore"},
+     {"n":"Scrivano","costo":"1MR","note":"Per pagina o testo semplice"}
+    ],
+    "vitto_note": ["Costo: può variare in base alla disponibilità e alla zona.","*Venduti molto raramente. Il Cram è tipico degli uomini di Dale. Il Lembas viene concesso solo dai signori elfici nel regno di Lorien. Il","Miruvor è prodotto nei regni elfici con presenza di Noldor. La torta di miele dei Beorniani è simile al Cram, ma più gustosa.","** Il rischio può aumentare o diminuire a seconda delle circostanze (prudenza, pagamenti aggiuntivi, ecc.)","*** Se l’oggetto ha perso più del 50% della sua Resistenza c’è la possibilità che non possa essere riparato. In caso positivo il prezzo è 5","volte maggiore (5MR per cuoio, 1MB per metallo)"],
+    "trasporti": [
+     {"n":"Cammello da lavoro","costo":"12MO","vel":"7 km/h","cap":"180 kg","cav":"-15"},
+     {"n":"Cammello corridore","costo":"40MO^","vel":"10 km/h","cap":"100 kg","cav":"-5"},
+     {"n":"Elefante, Andamunda","costo":"50MO","vel":"12 km/h","cap":"450 kg","cav":"-10"},
+     {"n":"Elefante, Losandamunda","costo":"50MO","vel":"12 km/h","cap":"500 kg","cav":"-10"},
+     {"n":"Elefante Mùmakil","costo":"100MO^","vel":"14 km/h","cap":"650 kg","cav":"-"},
+     {"n":"Cavallo piccolo","costo":"45MA","vel":"11 km/h","cap":"90 kg","cav":"-"},
+     {"n":"Cavallo medio","costo":"60MA","vel":"12 km/h","cap":"135 kg","cav":"-"},
+     {"n":"Cavallo grande","costo":"80MA","vel":"8 km/h","cap":"180 kg","cav":"-"},
+     {"n":"Cavallo da guerra piccolo","costo":"20MO","vel":"10 km/h","cap":"160 kg","cav":"+15"},
+     {"n":"Cavallo da guerra grande","costo":"75MO^","vel":"8 km/h","cap":"170 kg","cav":"+30"},
+     {"n":"Cavallo elfico piccolo","costo":"•","vel":"14 km/h","cap":"175 kg","cav":"+30"},
+     {"n":"Cavallo elfico grande","costo":"•","vel":"16 km/h","cap":"200 kg","cav":"+50"},
+     {"n":"Mearh (pl. Mearas)","costo":"•","vel":"16 km/h","cap":"200 kg","cav":"+40"},
+     {"n":"Bue","costo":"95MA","vel":"6 km/h","cap":"180 kg","cav":"-"},
+     {"n":"Mulo/Somaro","costo":"32MA","vel":"10 km/h","cap":"110 kg","cav":"-10"},
+     {"n":"Pony adulto","costo":"40MA","vel":"7 km/h","cap":"80 kg","cav":"+5"},
+     {"n":"Cane da slitta","costo":"13MA","vel":"12 km/h","cap":"20 kg","cav":"-"},
+     {"n":"Slitta per cani","costo":"7MO","vel":"10 km/h","cap":"200 kg","cav":"-10"},
+     {"n":"Barca piccola (3m)","costo":"7MO","vel":"4 km/h #","cap":"450 kg","cav":"-"},
+     {"n":"Barca media (7m)","costo":"11MO","vel":"5 km/h #","cap":"1.400 kg","cav":"-"},
+     {"n":"Barca grande (10m)","costo":"40MO","vel":"4 km/h #","cap":"2.250 kg","cav":"-"},
+     {"n":"Canoa","costo":"8MO","vel":"6 km/h","cap":"320 kg","cav":"-"},
+     {"n":"Carretto, a mano","costo":"11MA","vel":"5 km/h","cap":"110 kg","cav":"-"},
+     {"n":"Carretto per cavallo","costo":"4MO","vel":"6 km/h","cap":"360 kg","cav":"-30"},
+     {"n":"Nave piccola","costo":"80MO","vel":"5 km/h #","cap":"9.000 kg","cav":"-"},
+     {"n":"Nave media","costo":"190MO","vel":"4 km/h #","cap":"16.000 kg","cav":"-"},
+     {"n":"Nave grande","costo":"650MO","vel":"4 km/h #","cap":"25.000 kg","cav":"-"},
+     {"n":"Scii","costo":"7MR","vel":"10 km/h","cap":"135 kg","cav":"-"},
+     {"n":"Slitta per cavallo","costo":"12MR","vel":"7 km/h","cap":"400 kg","cav":"-10"},
+     {"n":"Carro aperto","costo":"6MO","vel":"6 km/h","cap":"540 kg","cav":"-15"},
+     {"n":"Carro chiuso, coperto","costo":"9MO","vel":"5 km/h","cap":"590 kg","cav":"-20"},
+     {"n":"Diligenza","costo":"1MB + 1MR/km","vel":"6 km/h","cap":"-","cav":"-"},
+     {"n":"Servizio di traghetto","costo":"1MB + 2MR/km","vel":"4 km/h","cap":"-","cav":"-"},
+     {"n":"Passaggio in nave","costo":"5MB + 2MS/km","vel":"4 km/h #","cap":"-","cav":"-"},
+     {"n":"Pedaggio","costo":"1MR","vel":"-","cap":"-","cav":"-"}
+    ],
+    "trasporti_note": ["Costo: può variare in base alla disponibilità e alla zona. Velocità di viaggio: è la velocità media del mezzo di trasporto sulle lunghe","distanze. Per la velocità massima degli animali vedere le Statistiche degli Animali.","* Un animale molto intelligente concede +10 ma costa di più","^ Scarsamente reperibili.","• Questi animali non vengono mai venduti.","# Velocità in acque calme. Può aumentare o diminuire per effetto della corrente o dei venti."],
+    "oggetti_note": "Costo: può variare in base alla disponibilità e alla zona. T.P.: Tempo di Produzione espresso in giorni (se non indicato diversamente). Il materiale viene considerato già presente."
+   },
+   "metalli": {
+    "metalli": [
+     {"n":"Laen","bonus":"+25","valore":"1.000 MO","lav":"10 MO","tempo":"20","note":"Vetro magico"},
+     {"n":"Mithril","bonus":"+20","valore":"200 MO","lav":"5 MO","tempo":"10","note":"Metallo incantato, Vero Argento"},
+     {"n":"Celeb","bonus":"-20","valore":"5 MA","lav":"1 MB","tempo":"0,5","note":"Argento"},
+     {"n":"Ithilnaur","bonus":"+20","valore":"300 MO","lav":"20 MO","tempo":"36","note":"Lega magica (mithril/speciale)"},
+     {"n":"Ithildin","bonus":"-20","valore":"500 MO","lav":"20 MO","tempo":"36","note":"Lega magica (mithril/speciale)"},
+     {"n":"Eog","bonus":"+30","valore":"100 MM*","lav":"50 MO","tempo":"100","note":"Lega magica (mithril/titanio/speciale)"},
+     {"n":"Galvorn","bonus":"+40","valore":"900 MM*","lav":"300 MO","tempo":"300","note":"Lega magica (ferro meteorico/speciale)"},
+     {"n":"Mithrarian","bonus":"-20","valore":"1.500 MM*","lav":"10 MM","tempo":"900","note":"Lega magica (mithril/uranio/speciale)"},
+     {"n":"Kregora","bonus":"-20","valore":"660 MM*","lav":"6 MM","tempo":"60","note":"Lega magica (mithril/oro/uranio/speciale)"},
+     {"n":"Mal","bonus":"-25","valore":"5 MO","lav":"1 MB","tempo":"0,5","note":"Oro"},
+     {"n":"Mithin","bonus":"+15","valore":"10 MO","lav":"1 MA","tempo":"1","note":"Berillio"},
+     {"n":"Mithglin","bonus":"+20","valore":"30 MO","lav":"10 MO","tempo":"15","note":"Titanio (di solito legato con altri elementi)"},
+     {"n":"Alcam","bonus":"-20","valore":"4 MS","lav":"2 MR","tempo":"0,3","note":"Stagno"},
+     {"n":"Ang","bonus":"0","valore":"0,4 MS","lav":"2 MR","tempo":"0,5","note":"Ferro"},
+     {"n":"Borang","bonus":"+5","valore":"5 MR","lav":"5 MB","tempo":"1","note":"Lega (ferro/carbone), Acciaio normale"},
+     {"n":"Arborang","bonus":"+10","valore":"5 MB","lav":"15 MB","tempo":"1,5","note":"Lega (ferro/carbone/altri), Acciaio temprato"},
+     {"n":"Evyth","bonus":"-10","valore":"4 MB","lav":"1 MB","tempo":"0,5","note":"Lega (stagno/rame), Bronzo"},
+     {"n":"Galnin","bonus":"-15","valore":"2 MO","lav":"5 MB","tempo":"1","note":"Alluminio"},
+     {"n":"Paer","bonus":"-20","valore":"4 MR","lav":"1 MR","tempo":"0,3","note":"Rame"},
+     {"n":"Ogamur","bonus":"-20","valore":"150 MO","lav":"5 MO","tempo":"20","note":"Lega magica. Bonus per la lavorazione di corde d’archi: +5"},
+     {"n":"Heled","bonus":"(-50)","valore":"0,5 MS","lav":"1 MR","tempo":"0.1","note":"Vetro"},
+     {"n":"Arheled","bonus":"(+10)","valore":"1 MO","lav":"2 MA","tempo":"0,5","note":"Alto Vetro, resistente al calore, molto flessibile"},
+     {"n":"Tasarang","bonus":"-5","valore":"50 MO","lav":"15 MA","tempo":"8","note":"Metallo incantato. Bonus per la lavorazione di corde d’archi: +15"}
+    ],
+    "gemme": [
+     {"n":"Ambra","rarita":"Pregiata (11/50 MO)","tipo":"TR, da giallo pallido a rosso giacinto","prop":"Assorbe l’elettricità. Da un bonus ai TR contro elettricità"},
+     {"n":"Ametista","rarita":"Pregiata (11/50 MO)","tipo":"TR, rosa - violetto","prop":"Cura dagli effetti dell’ebbrezza e stordimento"},
+     {"n":"Berillo","rarita":"Preziosa (51/250 MO)","tipo":"TR, Incolore","prop":"Osservando attraverso la pietra si migliora la Percezione"},
+     {"n":"Corallo","rarita":"Pregiata (11/50 MO)","tipo":"OP, rosso","prop":"Ferma le emorragie"},
+     {"n":"Diamante","rarita":"Molto Preziosa (251+ MO)","tipo":"TR, bianco chiaro","prop":"Da bonus a tutte le azioni contro Fantasmi e Non Morti"},
+     {"n":"Eliotropio","rarita":"Pregiata (11/50 MO)","tipo":"TS, verde scuro macchiettato di rosso","prop":"Nell’acqua si illumina se è presente una fonte di luce esterna"},
+     {"n":"Giada","rarita":"Preziosa (51/250 MO)","tipo":"TS, verde","prop":"Effetto di biomantenimento"},
+     {"n":"Lapislazzuli","rarita":"Pregiata (11/50 MO)","tipo":"OP, celeste","prop":"Fatte indossare al proprio cavallo migliora le MM e Cavalcare"},
+     {"n":"Malachite","rarita":"Comune (1/10 MO)","tipo":"OP, verde scuro acceso","prop":"Da un bonus ai TR contro Calore."},
+     {"n":"Onice","rarita":"Pregiata (11/50 MO)","tipo":"OP, a strisce bianche e nere","prop":"Da un bonus alla Leadership. Raddoppia contro i nemici."},
+     {"n":"Perla","rarita":"Preziosa (51/250 MO)","tipo":"OP, vari colori","prop":"Agisce sulla vista. Se di colore chiaro la migliora, se scura la peggiora"},
+     {"n":"Quarzo","rarita":"Pregiata (11/50 MO)","tipo":"TR, vari colori","prop":"Guardando attraverso di essa si rivelano le illusioni"},
+     {"n":"Rubino","rarita":"Molto Preziosa (251+ MO)","tipo":"TR, rosso","prop":"Ridona la memoria"},
+     {"n":"Smeraldo","rarita":"Preziosa (51/250 MO)","tipo":"TR, verde","prop":"Permette di comunicare con gli spiriti dei morti"},
+     {"n":"Topazio","rarita":"Preziosa (51/250 MO)","tipo":"TR, giallo","prop":"Individua gli amici"},
+     {"n":"Turchese","rarita":"Comune (1/10 MO)","tipo":"TS, blu – verde","prop":"Annulla il buio magico"},
+     {"n":"Zaffiro","rarita":"Preziosa (51/250 MO)","tipo":"TR, varie tonalità di blu","prop":"Da bonus alle manovre di manualità (scassinare, destrezza…)"},
+     {"n":"Zircone","rarita":"Pregiata (11/50 MO)","tipo":"TR, incolore","prop":"Riflette gli incantesimi di luce"}
+    ],
+    "note_metalli": ["Bonus: è il bonus normale per le armi da mischia costruite col metallo indicato.","Valore: il costo di 30g di materiale. ( * = il materiale raramente o mai viene venduto).","Costo di lavorazione: Costo stimato di un oggetto (oltre al valore del materiale) per ogni 30g di materiale usato.","Tempo di lavorazione: espresso in ore, è una stima del tempo richiesto per costruire un oggetto per ogni 30g di materiale. A discrezione del master","può variare in base agli strumenti a disposizione del fabbro.","Costi e tempi sono naturalmente più elevati per lavori insoliti, elaborati o comunque “speciali”."],
+    "note_gemme": ["Rarità-Valore: Il valore è indicativo e dipende dalla grandezza della gemma e dalla purezza. Tipo: TR = Trasparente, TS = Traslucida, OP = Opaca. Proprietà: sono da riferirsi alla gemma lavorata e trasformata secondo vari procedimenti (amuleti, anelli, ecc.). Le pietre allo stato grezzo non hanno alcuna proprietà oltre al loro valore intrinseco. L’efficacia e l’effetto di una pietra lavorata restano a discrezione del master in base alla purezza e alla grandezza della pietra stessa."],
+    "descr": [
+     {"n":"Adamante","t":"costruito unicamente in Eregion, grazie all’abilità di Celebrimbor. E’ più duro del diamante e del Laen, ma può essere colorato durante la costruzione come il secondo ed essere sfaccettato come il primo. Somiglia al diamante, ed è trasparente e brillante, ma più luminoso. La gemma incastonata in Nenya è un Adamante."},
+     {"n":"Laen","t":"il nome (“Lungo Filo”) si riferisce alla struttura cristallina del materiale; tale struttura gli conferisce un’incredibile resistenza. Il Laen diventa sempre più rigido e resistente all’aumentare della temperatura e si ammorbidisce abbassandola considerevolmente. Allo stato grezzo il Laen è nero color fumo, ma può essere colorato con opportuni trattamenti."},
+     {"n":"Smeraldo","t":"sono le gemme preferite dai Primi Nati ed infatti i mortali le chiamano anche “Pietre degli Elfi”; il loro colore verde è una caratteristica comune delle gioiellerie elfiche."},
+     {"n":"Opale","t":"questa pietra opaca e dai riflessi iridescenti ha incontrato il favore di alcuni elfi, e viene spesso usata per gli anelli e le impugnature delle armi. L’opale del Fuoco, il più raro, di color rosso-blu-violetto, è anche il più costoso. Ancor meno comune è il favoloso Opale Nero."},
+     {"n":"Zaffiro","t":"la specie di zaffiro più apprezzata è quella color azzurro puro (è la pietra di Vilya), ma anche la varietà gialla è apprezzata. Alcuni fabbri prediligono lo Zaffiro Nero, di color nero-bluastro con sinistre sfumature."},
+     {"n":"Granato Viola","t":"è l’unico granato che i Noldor prendano sul serio, di color viola pallido, molto delicato e di bell’aspetto."},
+     {"n":"Rubino","t":"altra gemma prediletta (usata per Narya); i Fabbri preferiscono la varietà rossa scura."},
+     {"n":"Diamante","t":"anche se questa gemma è considerata la più preziosa dalle altre civiltà, i Mìrdain ritengono che anche i più puri siano troppo opachi. Anche loro sono però attratti dalle rare varietà colorate, specie da quella azzurre e violette."},
+     {"n":"Mithril","t":"(“Grigio Splendore”) il Mithril puro è simile all’argento, bianco, brillante, molto malleabile, ma non si ossida e si lega con altri materiali con risultati eccezionali."},
+     {"n":"Celeb","t":"(“Argento”) è solo un misero surrogato del Mithril, ma i Noldor lo apprezzano ugualmente e lo usano per costruire utensili, coppe, piatti ed altri oggetti d’uso comune."},
+     {"n":"Ithilnaur","t":"(“Fuoco di Luna”) è una lega straordinariamente forte di Mithril, Titanio ed altri metalli, che brilla come il Mithril puro, ma è molto più resistente e mantiene benissimo il filo, pur essendo più flessibile. L’ideale per armi e armature."},
+     {"n":"Ithildin","t":"(“Stella-Luna”) metallo leggero ed argentato, inventato da Celebrimbor, che viene impiegato esclusivamente per le iscrizioni. Durante il giorno appare opaco e privo di lucentezza, tanto che è spesso impossibile distinguerlo dal metallo circostante; sotto la luce della Luna e delle Stelle recupera tutta la sua luminosità argentata, anzi risplende anche più dell’argento, con toni bianchi e delicatamente luminosi."},
+     {"n":"Eog","t":"(“Ferro di Eol”) è un metallo raro, una lega di Mithril, Durang ed altri materiali arcani. La lega risulta perfino più forte dell’Adarcer nanico e del mitico Ithilnaur. Ha anche altre proprietà, come l’essere inibitore per alcuni tipi di incantesimi. I poteri dipendono dal colore che può essere nero, rosso, bianco, blu o grigio."},
+     {"n":"Galvorn","t":"(“Nero Brillante”) il metallo più raro nella Terra di Mezzo. Malleabile, resistente ai colpi di taglio e di punta. Se viene mescolato con certi elementi può formare le leghe più resistenti che si conoscano. Si narra che sia composto da ferro meteorico, un metallo incredibilmente denso piovuto dal cielo."},
+     {"n":"Mithrarian","t":"(“Abisso dell’Alto Argento”) lega leggendaria costituita da Mithril, Eog e Celebur (“Argento Infuocato”, Uranio). Il materiale risulterebbe in grado di vincere la gravità di Arda e sarebbe refrattario a qualsiasi contro incantesimo. Ideata da Annatar, non fu mai prodotta dai Fabbri."},
+     {"n":"Mal","t":"(“Oro”) il supporto dei gioielli dei Fabbri, che conoscono ogni sistema per tagliarlo e modellarlo; mescolato con il Mithglin diventa oro-bianco. Altri elementi consentono di rinforzarlo e di impiegarlo in armature e utensili vari. Notevolmente resistente alla corrosione, proprietà che si evidenzia mescolandolo con altri metalli nobili."},
+     {"n":"Mithin","t":"(“Grigio Pallore”, Berillio) metallo raro e resistente, anche se leggero. Viene usato soprattutto per i gioielli."},
+     {"n":"Mithglin","t":"(“Grigio Brillante” Titanio) raro, apprezzato per la lucentezza, anche se non paragonabile al Mithril."},
+     {"n":"Alcan","t":"(“Stagno”) gli Elfi fanno usa di questo metallo, così come del Paer, per rivestire le facciate o i tetti."},
+     {"n":"Ang","t":"(“Ferro”) i Noldor lo usano principalmente per produrre Borang."},
+     {"n":"Borang","t":"(“Acciaio”) metallo forte e duraturo, adatto a numerosi usi comuni."},
+     {"n":"Evyth","t":"(“Bronzo”) gli Elfi amano questa lega con la quale rivestono colonne, porte e soffitti e che usano per realizzare statue. Tra i metalli comuni è il loro preferito."},
+     {"n":"Galnin","t":"(“Bianco Lucente”, Alluminio) malleabile, molto leggero e immune alla corrosione. Usato come materiale da costruzione."},
+     {"n":"Paer","t":"(“Rame”)apprezzato come copertura di tetti e per condutture d’acqua. Usato per la fabbricazione dell’Evyth"},
+     {"n":"Ogamur","t":"metallo nero, insolitamente elastico e flessibile. I Noldor lo usano in grandi quantità per i loro marchingegni."},
+     {"n":"Tasarang","t":"(“Ferro Salice”) leggerissimo e flessibile, ma molto resistente. Usato per la fabbricazione di potenti archi anche se costoso."}
+    ]
+   },
+   "erbe": [
+    {"cod":1,"dif":"Difficile","n":"Argsbargie","uso":"Fiore/Ingestione","costo":"38mo","eff":"Antidoto per veleni muscolari","af":"7","lv":"4","cat":"var","cl":0,"te":0},
+    {"cod":2,"dif":"Media","n":"Carnegurth","uso":"Fiore/Liquido","costo":"53mo","eff":"Massiccia coagulazione del sangue e morte in 1D100 Ore.","af":"--","lv":"1","cat":"vel","cl":0,"te":0},
+    {"cod":3,"dif":"Media","n":"Culkas","uso":"Foglia/Applicaz.","costo":"35mo","eff":"Cura 90dm2 di ogni tipo di scottatura.","af":"0","lv":"1","cat":"cur","cl":0,"te":0},
+    {"cod":4,"dif":"Difficile","n":"Dragul","uso":"Radice/Infuso","costo":"320mo","eff":"+10 al Combattimento e Percezione per 1 ora, poi –75/azione per 1 ora.","af":"45","lv":"6","cat":"var","cl":0,"te":0},
+    {"cod":5,"dif":"Normale","n":"Gariig","uso":"Cactus/Ingestione","costo":"55mo","eff":"Cura 30 PF","af":"3","lv":"2","cat":"cur","cl":0,"te":0},
+    {"cod":6,"dif":"Difficile","n":"Juth","uso":"Scorpione/Liquido","costo":"41mo","eff":"Causa una graduale insanità mentale in 1D100settimane.","af":"--","lv":"2","cat":"vel","cl":0,"te":0},
+    {"cod":7,"dif":"Assurdo","n":"Lestagii","uso":"Germogl./Ingest.","costo":"520mo","eff":"Recupera ogni punto caratt. Perso. Tranne x vecchiaia. Solo una caratt.","af":"45","lv":"10","cat":"var","cl":0,"te":0},
+    {"cod":8,"dif":"M. Diff","n":"Sharduvark","uso":"Bacca/Liquido","costo":"36mo","eff":"Liquido marrone rallenta flusso sanguigno. -50 e sonno x2.","af":"--","lv":"3","cat":"vel","cl":0,"te":0},
+    {"cod":9,"dif":"Diff.ssim","n":"Swigmakril","uso":"Fiore/Infuso","costo":"50mo","eff":"Rilassante. 100% antidolorifico. -30 alle azioni per 1ora.","af":"25","lv":"6","cat":"var","cl":0,"te":0},
+    {"cod":10,"dif":"Media","n":"Wuchyga","uso":"Ossa/Polvere","costo":"12mo","eff":"Leggera sensibilità. –25 a tutte le azioni per 1 ora.","af":"--","lv":"10","cat":"vel","cl":0,"te":0},
+    {"cod":11,"dif":"Media","n":"Pathur","uso":"Nodulo/Infuso","costo":"35mo","eff":"Biomantenimento per 1 ora","af":"7","lv":"3","cat":"cur","cl":0,"te":1},
+    {"cod":12,"dif":"Difficile","n":"Ricino","uso":"Foglia/Infuso","costo":"70mo","eff":"Causa un cambio di allineamento morale per 1d100 round","af":"--","lv":"3","cat":"var","cl":0,"te":1},
+    {"cod":13,"dif":"Facile","n":"Draaf","uso":"Foglia/Ingestione","costo":"7ma","eff":"Cura 1D10 ogni 2 round consecutivi.","af":"1","lv":"2","cat":"cur","cl":0,"te":2},
+    {"cod":14,"dif":"Normale","n":"Girasole","uso":"Seme/Ingestione","costo":"4mo","eff":"1 sacchetto con 24 semi permette di riconoscere la posizione del sole rispetto al nord, anche in un luogo chiuso. Non ha effetto di notte","af":"--","lv":"2","cat":"var","cl":0,"te":3},
+    {"cod":15,"dif":"Media","n":"Klytun","uso":"Radice/Pasta","costo":"4mo","eff":"Catatonia 1D10 giorni","af":"--","lv":"5","cat":"vel","cl":0,"te":3},
+    {"cod":16,"dif":"Media","n":"Zulsendura","uso":"Fungo","costo":"70mo","eff":"Rapidità x 3 Round.","af":"22","lv":"1","cat":"var","cl":0,"te":4},
+    {"cod":17,"dif":"Diff.ssim","n":"Galenaana","uso":"Foglia/Polvere","costo":"179mo","eff":"Polvere verde che uccide elfi. Altre razze in coma x 1D100 settimane.","af":"--","lv":"9","cat":"vel","cl":1,"te":5},
+    {"cod":18,"dif":"Difficile","n":"Gorfon","uso":"Frutto/Ingestione","costo":"120mo","eff":"Cura i nervi danneggiati. Se TS fallito, sonno x 1D10+10 ore","af":"7","lv":"5","cat":"cur","cl":1,"te":5},
+    {"cod":19,"dif":"M.Diff.","n":"Shem","uso":"Bacca/Ingestione","costo":"-","eff":"Antidoto per veleni a effetto nervoso","af":"--","lv":"4","cat":"var","cl":1,"te":5},
+    {"cod":20,"dif":"Assurdo","n":"Vite Nera","uso":"Foglia/Liquido","costo":"205mo","eff":"TS fallito euforia e inattività x 1D100 ore.","af":"--","lv":"7","cat":"vel","cl":1,"te":6},
+    {"cod":21,"dif":"Folle","n":"Bragolith","uso":"Succo/Ingestione","costo":"120mo","eff":"Succo di lucciola fosforscente verde. Causa combustione spontanea.","af":"--","lv":"5","cat":"vel","cl":1,"te":6},
+    {"cod":22,"dif":"Facile","n":"Delrean","uso":"Cortec./Applicaz","costo":"3ma","eff":"Repellente per insetti. Odore puzzolente per 15 m di raggio.","af":"1","lv":"2","cat":"var","cl":1,"te":6},
+    {"cod":23,"dif":"Folle","n":"Henuial","uso":"Liquido/Iniez.","costo":"80mo","eff":"Ape gialla velenosa trasforma il liquido ottico di 1 o 2 occhi in miele.","af":"--","lv":"6","cat":"vel","cl":1,"te":6},
+    {"cod":24,"dif":"Banale","n":"Kirtir","uso":"Gemme/Inalaz.","costo":"45mo","eff":"+10 MM, +5 Ag per 1 ora, poi –30 Co per 1D10 ore.","af":"5","lv":"7","cat":"var","cl":1,"te":6},
+    {"cod":25,"dif":"Normale","n":"Larice","uso":"Resina/Pasta","costo":"23mo","eff":"Spalmata sul legno e assorbita diminuisce del 10% la poss. di rottura. Sw usata per uno scudo da bonus contro elettricità.","af":"--","lv":"2","cat":"var","cl":1,"te":6},
+    {"cod":26,"dif":"Facile","n":"Lauro","uso":"Foglia/Pasta","costo":"3mo","eff":"Cura dal prurito","af":"--","lv":"1","cat":"cur","cl":1,"te":6},
+    {"cod":27,"dif":"Difficile","n":"Menelar","uso":"Pigna/Infuso","costo":"65mo","eff":"Cura infezioni.","af":"3","lv":"2","cat":"cur","cl":1,"te":6},
+    {"cod":28,"dif":"Difficile","n":"Numenelos","uso":"Muschio/Polvere","costo":"200mo","eff":"Nervi rigenerati/riparati in 1D100 min.","af":"15","lv":"10","cat":"cur","cl":1,"te":6},
+    {"cod":29,"dif":"Difficile","n":"Taynaga","uso":"Corteccia/Polvere","costo":"27mo","eff":"Polvere marrone che rende sterili e infligge 5D10 PF.","af":"--","lv":"8","cat":"vel","cl":1,"te":6},
+    {"cod":30,"dif":"M. Diff","n":"Winclamit","uso":"Frutto/Ingestione","costo":"100mo","eff":"Cura 3D100 PF.","af":"12","lv":"3","cat":"cur","cl":1,"te":6},
+    {"cod":31,"dif":"Banale","n":"Berterin","uso":"Muschio/Infuso","costo":"19mo","eff":"Biomantenimento per 1 giorno.","af":"6","lv":"3","cat":"cur","cl":1,"te":7},
+    {"cod":32,"dif":"Media","n":"Angelica","uso":"Fiore/Infuso","costo":"30mo","eff":"Cura i polmoni, +10 contro i Gas","af":"--","lv":"3","cat":"cur","cl":1,"te":8},
+    {"cod":33,"dif":"Diff.ssim","n":"Arfeas","uso":"Stelo/Applicaz.","costo":"2ma","eff":"X 2 velocità di cura delle fratture.","af":"1","lv":"2","cat":"cur","cl":1,"te":8},
+    {"cod":34,"dif":"Folle","n":"Edram","uso":"Muschio/Ingest.","costo":"31mo","eff":"Ripara le ossa fratturate.","af":"10","lv":"3","cat":"cur","cl":1,"te":8},
+    {"cod":35,"dif":"M. Diff","n":"Falsereg","uso":"Sangue/Pasta","costo":"90mo","eff":"Pesce. Dur. 1D100 sett. TS fall. 1-50 = -25, 51+ =-25+3PF/rd 1D10 min.","af":"--","lv":"1","cat":"vel","cl":1,"te":8},
+    {"cod":36,"dif":"Media","n":"Febfendu","uso":"Radice/Infuso","costo":"90mo","eff":"Recupera udito.","af":"24","lv":"6","cat":"cur","cl":1,"te":8},
+    {"cod":37,"dif":"Diff.ssim","n":"Jitsutyr","uso":"Vongole/Pasta","costo":"145mo","eff":"Pasta rossiccia che distrugge i polmoni e uccide in 1D100 rnd.","af":"--","lv":"2","cat":"vel","cl":1,"te":8},
+    {"cod":38,"dif":"Media","n":"Trudurs","uso":"Muschio/Infuso","costo":"12ma","eff":"+10 ai TS x malattie per 1D10 giorni. (Chiamato anche Melandar)","af":"8","lv":"3","cat":"var","cl":1,"te":8},
+    {"cod":39,"dif":"Banale","n":"Arunya","uso":"Radice/Infuso","costo":"38mo","eff":"Profondo sonno/non cosciente per 1D4 ore.","af":"6","lv":"20","cat":"var","cl":1,"te":1},
+    {"cod":40,"dif":"M. Diff","n":"Cusamar","uso":"Fiore/Ingestione","costo":"30mo","eff":"Cura 10 + (5 D10) PF.","af":"3","lv":"2","cat":"cur","cl":1,"te":1},
+    {"cod":41,"dif":"Diff.ssim","n":"Flur-rort","uso":"Fiore/Liquido","costo":"21mo","eff":"Antidoto contro i veleni che attaccano i nervi.","af":"0","lv":"12","cat":"var","cl":1,"te":1},
+    {"cod":42,"dif":"Diff.ssim","n":"Seregmor","uso":"Fiore/Pasta","costo":"180mo","eff":"Caratt. perse fino a 50 punti sono recuperate nel tempo di 1 al giorno.","af":"--","lv":"1","cat":"var","cl":1,"te":1},
+    {"cod":43,"dif":"Banale","n":"Witch-Hazel","uso":"Fiore/Infuso","costo":"20ma","eff":"Lozione astringente.","af":"0","lv":"1","cat":"var","cl":1,"te":1},
+    {"cod":44,"dif":"Media","n":"Kirsemal","uso":"Corteccia/Infuso","costo":"110mo","eff":"Permette manovre adrenaliniche per 3 rnd.","af":"12","lv":"4","cat":"var","cl":1,"te":9},
+    {"cod":45,"dif":"Diff.ssim","n":"Belan","uso":"Noce/Ingestione","costo":"40mo","eff":"Ferma emorragie in 1D10 rnd. No movim. per 1ora o ricomincia.","af":"5","lv":"1","cat":"cur","cl":1,"te":2},
+    {"cod":46,"dif":"Media","n":"Eldaana","uso":"Foglia/Infuso","costo":"99mo","eff":"Antidoto per ridurre veleni. Inverte ‘Bruttezza di Orn’.","af":"2","lv":"9","cat":"var","cl":1,"te":2},
+    {"cod":47,"dif":"Normale","n":"Ulginor","uso":"Pane/Ingestione","costo":"4ma","eff":"1Kg Nutrizione x 1 gg. Dur.1D2 mesi. Sapore di formaggio e spinaci.","af":"0","lv":"15","cat":"var","cl":1,"te":2},
+    {"cod":48,"dif":"Folle","n":"Worlclivur","uso":"Lichene/Pasta","costo":"133mo","eff":"TS fall. 01-30= -50 1D100 min, 31-60= -75 1D100 giorni, 61+= -100 1D100 settimane.","af":"--","lv":"2","cat":"vel","cl":1,"te":2},
+    {"cod":49,"dif":"Facile","n":"Arlan","uso":"Radice/Ingestione","costo":"5mb","eff":"Decongestionante.+20 TS Freddo comune., x 5 vel recup. malat. respir.","af":"3","lv":"2","cat":"var","cl":1,"te":10},
+    {"cod":50,"dif":"Folle","n":"Aldaka","uso":"Radice/Infuso","costo":"102mo","eff":"Guarisce la vista.","af":"7","lv":"3","cat":"cur","cl":1,"te":10},
+    {"cod":51,"dif":"Banale","n":"Darsurion","uso":"Foglia/Applicaz.","costo":"35mb","eff":"Cura 1d6 PF.","af":"1","lv":"2","cat":"cur","cl":1,"te":10},
+    {"cod":52,"dif":"Banale","n":"Hesguratu","uso":"Pane/Ingestione","costo":"45mo","eff":"1Kg. x2 Forza e colpi per 6 rnd. +10 BO. Durata 1 mese.","af":"10","lv":"4","cat":"var","cl":1,"te":10},
+    {"cod":53,"dif":"Banale","n":"Megillos","uso":"Foglia/Ingestione","costo":"12ma","eff":"Aumenta la percezione visiva (x 2 distanza e potere) per 10 min.","af":"19","lv":"5","cat":"var","cl":1,"te":10},
+    {"cod":54,"dif":"Banale","n":"Mirenna","uso":"Bacca/Ingestione","costo":"10mo","eff":"Cura 10 PF. Effetti istantanei.","af":"1","lv":"2","cat":"cur","cl":1,"te":10},
+    {"cod":55,"dif":"Folle","n":"Ul-acaana","uso":"Fiore/Pasta","costo":"12mm","eff":"Paralizza istant. e distrugge il sistema nervoso. Morto 1D10 min.","af":"--","lv":"20","cat":"vel","cl":1,"te":10},
+    {"cod":56,"dif":"Assurda","n":"Faghiu","uso":"Fiore/Infuso","costo":"330mo","eff":"Obbliga a obbedire a colui che ha servito la bevanda per 1100 giorni.","af":"","lv":"","cat":"var","cl":1,"te":10},
+    {"cod":57,"dif":"M.Diff.","n":"Ancalthur","uso":"Erba/Liquido","costo":"240mo","eff":"Incapacità per 2D2 ore. TS fall. (01-50 = -75) (51+ = -100) x 1D100 ore.","af":"--","lv":"2","cat":"vel","cl":1,"te":3},
+    {"cod":58,"dif":"Difficile","n":"Carmeren","uso":"Foglia/Applicaz.","costo":"-","eff":"Antidoto contro i veleni","af":"--","lv":"10","cat":"var","cl":1,"te":3},
+    {"cod":59,"dif":"Diff.ssim","n":"Corona Miretar","uso":"Fiore/Applicaz.","costo":"125mo","eff":"Ferma le emorragie e cura ogni ferita.","af":"4","lv":"2","cat":"cur","cl":1,"te":3},
+    {"cod":60,"dif":"Diff.ssim..","n":"Gingseng","uso":"Radice/Infuso","costo":"500mo","eff":"Panacea universale","af":"--","lv":"5","cat":"cur","cl":1,"te":3},
+    {"cod":61,"dif":"Media","n":"Tuxlaxar","uso":"Foglia/Infuso","costo":"75mo","eff":"Ferma tutte le emorragie dopo 1D10 rnd.","af":"0","lv":"1","cat":"cur","cl":1,"te":3},
+    {"cod":62,"dif":"M.Diff.","n":"Asgurash","uso":"Serpente/Pasta","costo":"31mo","eff":"Veleno di serpente marrone. Parte superiore del corpo. Paralizza","af":"--","lv":"3","cat":"vel","cl":1,"te":11},
+    {"cod":63,"dif":"Diff.ssim","n":"Tulaxar","uso":"Foglie/Infuso","costo":"110mo","eff":"Ferma tutte le emorragie.","af":"2","lv":"2","cat":"cur","cl":1,"te":11},
+    {"cod":64,"dif":"Banale","n":"Ondokamba","uso":"Pipistrello/Liquid","costo":"29mo","eff":"Veleno verde. 1D4 turni. –75 alle azioni.","af":"--","lv":"2","cat":"vel","cl":1,"te":4},
+    {"cod":65,"dif":"Media","n":"Zur","uso":"Fungo/Infuso","costo":"12mo","eff":"Aumento olfatto e udito per 1 ora. (x 3 distanza e +50 alla percezione).","af":"8","lv":"3","cat":"var","cl":1,"te":4},
+    {"cod":66,"dif":"Assurda","n":"Camadarch","uso":"Fungo/Succo","costo":"175mo","eff":"La pelle diventa blu x 24 ore.TS fall = marcisce,cade in 1D10 ore","af":"","lv":"15","cat":"vel","cl":1,"te":4},
+    {"cod":67,"dif":"Media","n":"Lichene","uso":"Muschio/Infuso","costo":"30mo","eff":"+10 ai TR contro malattie per 1d10 di ore","af":"--","lv":"1","cat":"var","cl":2,"te":5},
+    {"cod":68,"dif":"Difficile","n":"Ondohithui","uso":"Lichene/Pasta","costo":"60mo","eff":"Pasta blu-grigio causa una fatale disidratazione in 1D10 min.","af":"--","lv":"3","cat":"vel","cl":2,"te":5},
+    {"cod":69,"dif":"Facile","n":"Agaarth","uso":"Bacca/Ingestione","costo":"5mo","eff":"Respirare con poco ossigeno (25%) per 12 ore, una volta ogni 2 giorni.","af":"3","lv":"2","cat":"var","cl":2,"te":12},
+    {"cod":70,"dif":"Assurdo","n":"Chebkuile","uso":"Muschio/Ingest.","costo":"630mo","eff":"Biomantenimento con il 75% di possibilità di amnesia.","af":"20","lv":"4","cat":"cur","cl":2,"te":12},
+    {"cod":71,"dif":"Folle","n":"Kalmogs Spoor","uso":"Foglie/Pasta","costo":"107mo","eff":"Cura 2D10 PF. I PF curati x5 danno un Malus alle azioni per 24 ore.","af":"--","lv":"5","cat":"cur","cl":2,"te":12},
+    {"cod":72,"dif":"Diff.ssim","n":"Telek","uso":"Bacca/Liquido","costo":"27mo","eff":"Cura il congelamento in 10 rnd. Cura 3D10 Pf da freddo. Crea arsura.","af":"--","lv":"8","cat":"cur","cl":2,"te":12},
+    {"cod":73,"dif":"Diff.ssim","n":"Lhugruth","uso":"Drago/Liquido","costo":"300mo","eff":"Sangue dissolve sia metalli che sostanze organiche in 1D10 rnd.","af":"--","lv":"10","cat":"vel","cl":2,"te":4},
+    {"cod":74,"dif":"Difficile","n":"Genful","uso":"Lichene/Ingest.","costo":"90mo","eff":"Cura 100 PF","af":"10","lv":"4","cat":"cur","cl":2,"te":13},
+    {"cod":75,"dif":"Assurdo","n":"Naza","uso":"Foglia/Ingestione","costo":"68mm","eff":"Antidoto Universale. Effetti immediati.","af":"17","lv":"5","cat":"var","cl":2,"te":14},
+    {"cod":76,"dif":"M.Diffic.","n":"Lu-jy-Mirenna","uso":"Bacca/Ingestione","costo":"100mo","eff":"Potente allucinogeno.","af":"50","lv":"10","cat":"var","cl":3,"te":5},
+    {"cod":77,"dif":"Assurdo","n":"Tyr-fira","uso":"Foglia/Applicaz.","costo":"12mm","eff":"Resuscita se preso entro 56 giorni.","af":"33","lv":"8","cat":"cur","cl":3,"te":5},
+    {"cod":78,"dif":"Difficile","n":"Menelar","uso":"Pigna/Infuso","costo":"65mo","eff":"Antidoto per veleni che agiscono sulla circolazione.","af":"4","lv":"7","cat":"var","cl":3,"te":6},
+    {"cod":79,"dif":"Folle","n":"Brithagurth","uso":"Pesce/Liquido","costo":"25mo","eff":"Veleno che causa irrigidimento dei tendini a 1D4appendici -100 per area.","af":"--","lv":"2","cat":"vel","cl":3,"te":15},
+    {"cod":80,"dif":"Folle","n":"Nur-oiolosse","uso":"Chiodo/Ingestione","costo":"200mo","eff":"Resuscita da 1 giorno. No se ha ingerito la noce di Sorule","af":"13","lv":"4","cat":"cur","cl":3,"te":15},
+    {"cod":81,"dif":"Folle","n":"Oiolosse","uso":"Chiodo/Ingestione","costo":"600mo","eff":"Resuscita gli elfi se ingerita entro 7 giorni dalla morte.","af":"22","lv":"5","cat":"cur","cl":3,"te":15},
+    {"cod":82,"dif":"Media","n":"Atigax","uso":"Radice/Infuso","costo":"40mo","eff":"Previene cecità dovuta a improvvisa luce accecante. Solo x 9 ore.","af":"12","lv":"3","cat":"var","cl":3,"te":1},
+    {"cod":83,"dif":"Banale","n":"Cesto di Elendil","uso":"Radice/Infuso","costo":"8mo","eff":"Purifica acqua. Rallenta veleni x10. Solo x 12 ore. Solo 1dose/giorno.","af":"0","lv":"2","cat":"var","cl":3,"te":1},
+    {"cod":84,"dif":"Media","n":"Ukur/Ur","uso":"Noce/Ingestione","costo":"3mo","eff":"1giorno di nutrizione.","af":"1","lv":"1","cat":"var","cl":3,"te":1},
+    {"cod":85,"dif":"M.Diff.","n":"Acaana","uso":"Fiore/Pasta","costo":"600mo","eff":"Pasta nera che distrugge il sistema nervoso. Morte istantanea.","af":"--","lv":"10","cat":"vel","cl":3,"te":10},
+    {"cod":86,"dif":"Difficile","n":"Hith-i-girith","uso":"Foglia/Liquido","costo":"12mo","eff":"Foschia/esalazione da un albero vivo causa sonno immediato e continuo.","af":"--","lv":"4","cat":"mal","cl":3,"te":10},
+    {"cod":87,"dif":"Media","n":"Jojojopo","uso":"Foglia/Applicaz","costo":"9ma","eff":"Cura le “bruciature” da gelo. Guarisce 2D10 PF subiti a causa del freddo.","af":"0","lv":"1","cat":"cur","cl":3,"te":10},
+    {"cod":88,"dif":"Assurdo","n":"Morgurth","uso":"Sangue/Ingestione","costo":"60mm","eff":"Dissolve il cervello. TS riuscito coma per 1D100 anni.","af":"--","lv":"60","cat":"vel","cl":3,"te":10},
+    {"cod":89,"dif":"Diff.ssim","n":"Olvar","uso":"Fiore/Ingestione","costo":"200mo","eff":"Biomantenimento per 2D10 giorni.","af":"20","lv":"5","cat":"cur","cl":3,"te":2},
+    {"cod":90,"dif":"M.Diff","n":"Ruthin","uso":"Cristallo./Liquido","costo":"88mo","eff":"TS fallito. Contenuto stomaco diventa vetro frantumato. Morte 1D12 rd.","af":"--","lv":"2","cat":"vel","cl":3,"te":4},
+    {"cod":91,"dif":"Difficile","n":"Acque del fuoco","uso":"Acido/Liquido","costo":"80mo","eff":"TS fall 01-50= +10 pirosfe.,51+= +100 pirosfe.. Vesti dissolte in 1D6 rd","af":"--","lv":"3","cat":"var","cl":3,"te":4},
+    {"cod":92,"dif":"Assurdo","n":"Laurre","uso":"Fiore/Ingestione","costo":"295m","eff":"Cura dal sangue di Morgurth","af":"23","lv":"8","cat":"cur","cl":3,"te":13},
+    {"cod":93,"dif":"Banale","n":"Kathcusa","uso":"Foglia/Ingestione","costo":"50mo","eff":"+10 BO Forza e danno x2 per 1D10 rnd.","af":"35","lv":"8","cat":"var","cl":3,"te":14},
+    {"cod":94,"dif":"Diff.ssim","n":"Kleun","uso":"Felce/Ingestione","costo":"300mo","eff":"Cura la thryniis e altri tipi di paralisi.","af":"3","lv":"2","cat":"cur","cl":4,"te":16},
+    {"cod":95,"dif":"Media","n":"Belladonna","uso":"Frutto/Ingestione","costo":"30mo","eff":"Veleno (2d20 di pf)","af":"--","lv":"3","cat":"vel","cl":4,"te":7},
+    {"cod":96,"dif":"Facile","n":"Ciclamino","uso":"Foglia/Ingestione","costo":"5mo","eff":"Stordisce 1d6 round","af":"--","lv":"2","cat":"vel","cl":4,"te":7},
+    {"cod":97,"dif":"Assurdo","n":"Koleor","uso":"Foglie/Applicaz","costo":"150m","eff":"Rigenera gli arti in 6 mesi.","af":"10","lv":"3","cat":"cur","cl":4,"te":7},
+    {"cod":98,"dif":"Media","n":"Salice","uso":"Radice/Infuso","costo":"50mo","eff":"Per 1d10 round dà la capacità di prevedere esattamente le conseguenze delle proprie azioni","af":"--","lv":"4","cat":"var","cl":4,"te":7},
+    {"cod":99,"dif":"Banale","n":"Dynallca","uso":"Foglia/Pasta","costo":"14mo","eff":"Pasta rossiccia distrugge l’udito e causa 1d10 PF.","af":"--","lv":"3","cat":"vel","cl":4,"te":15},
+    {"cod":100,"dif":"Banale","n":"Abaas","uso":"Foglia/Ingestione","costo":"1mo","eff":"Cura 2D6 PF.","af":"3","lv":"2","cat":"cur","cl":4,"te":2},
+    {"cod":101,"dif":"Diff.ssim","n":"Anserke","uso":"Radice/Applicaz.","costo":"75mo","eff":"Ferma emorragie in 3 rnd. Immobilità per 5 min o l’emorragia riprende.","af":"7","lv":"3","cat":"cur","cl":4,"te":2},
+    {"cod":102,"dif":"Folle","n":"Baalak","uso":"Canna/Infuso","costo":"160mo","eff":"Ripara fratture.","af":"12","lv":"4","cat":"cur","cl":4,"te":2},
+    {"cod":103,"dif":"M.Diff.","n":"Carcatu","uso":"Erba/Appl.","costo":"89mo","eff":"Biomantenimento per 1 giorno.","af":"25","lv":"6","cat":"cur","cl":4,"te":2},
+    {"cod":104,"dif":"M.Diff.","n":"Carneyar","uso":"Fiore/Infuso","costo":"400mo","eff":"Cura tutti i PF e ferma le emorragie.","af":"5","lv":"5","cat":"cur","cl":4,"te":2},
+    {"cod":105,"dif":"Difficile","n":"Degiik","uso":"Foglia/Ingestione","costo":"100mo","eff":"Biomantenimento per 1 giorno.","af":"12","lv":"3","cat":"cur","cl":4,"te":2},
+    {"cod":106,"dif":"Folle","n":"Durad","uso":"Radice/Ingestione","costo":"20mm","eff":"Rallenta il Morgurth dal 50 – 85 %.","af":"1","lv":"5","cat":"cur","cl":4,"te":2},
+    {"cod":107,"dif":"Diff.ssim","n":"Fek","uso":"Noce/Infuso","costo":"50mo","eff":"Ferma emorragie in 10 rnd. Immobilità o emorragia riprende.","af":"5","lv":"3","cat":"cur","cl":4,"te":2},
+    {"cod":108,"dif":"Media","n":"Hugar","uso":"Radice/Ingestione","costo":"1ma","eff":"Causa sonno e incoscienza. 1 ora di sonno equivale a 6.","af":"33","lv":"7","cat":"var","cl":4,"te":2},
+    {"cod":109,"dif":"Difficile","n":"Swuth","uso":"Foglia/Ingestione","costo":"4ma","eff":"Rilassante da un –75 per 1D10 rnd.","af":"3","lv":"2","cat":"var","cl":4,"te":2},
+    {"cod":110,"dif":"Diff.ssim","n":"Tarfeg","uso":"Fiore/Ingestione","costo":"23mo","eff":"Ripara slogature.","af":"3","lv":"2","cat":"cur","cl":4,"te":2},
+    {"cod":111,"dif":"Assurdo","n":"Valanar","uso":"Foglia/Ingestione","costo":"10mm","eff":"Antidoto per Karfar","af":"14","lv":"4","cat":"var","cl":4,"te":2},
+    {"cod":112,"dif":"Difficile","n":"Veldurak","uso":"Fuco/Applicaz.","costo":"8ma","eff":"Cura le “bruciature” da gelo. Guarisce 1D50 PF subiti a causa del freddo.","af":"2","lv":"2","cat":"cur","cl":4,"te":2},
+    {"cod":113,"dif":"Assurdo","n":"Wek-baas","uso":"Pesce/Liquido","costo":"70mo","eff":"Agisce1D100rnd.TS fall 1-15=sonno,16-30= -75x1D10giorni,31+=morte","af":"--","lv":"5","cat":"vel","cl":4,"te":2},
+    {"cod":114,"dif":"Media","n":"Ajkara","uso":"Incenso/Fumo","costo":"35mo","eff":"TS fallito 1-20= -10 x 1D10 ore, 21+= l’obbiettivo rivela segreti.","af":"--","lv":"10","cat":"var","cl":4,"te":17},
+    {"cod":115,"dif":"M.Diff","n":"Curfalka","uso":"Frutto/Ingestione","costo":"40mo","eff":"I muscoli danneggiati vengono riparati.","af":"6","lv":"3","cat":"cur","cl":4,"te":17},
+    {"cod":116,"dif":"Media","n":"Etarka","uso":"Radice/Pasta","costo":"45mo","eff":"Morte in 1D100 giorni.","af":"--","lv":"2","cat":"vel","cl":4,"te":17},
+    {"cod":117,"dif":"M.Diff.","n":"Gildarion","uso":"Foglia/Pasta","costo":"350mo","eff":"Ripara gli organi maggiori. Tempo di recupero 1D10 giorni.","af":"15","lv":"5","cat":"cur","cl":4,"te":17},
+    {"cod":118,"dif":"Difficile","n":"Gort","uso":"Foglia/Ingestione","costo":"10mo","eff":"+10 alla PR x2 ore, dopo si subisce un –50 x1D10 ore.","af":"20","lv":"5","cat":"var","cl":4,"te":17},
+    {"cod":119,"dif":"M.Diff.","n":"Incenso","uso":"Resina/Inalazione","costo":"50mo","eff":"Dopo 2 round il pg entra in trance mistica per un’ora. Può entrare in contatto con il proprio vala per 1d10 di round.","af":"--","lv":"5","cat":"var","cl":4,"te":17},
+    {"cod":120,"dif":"M.Diff.","n":"Kakduram","uso":"Frutto/Ingestione","costo":"90mo","eff":"Guarisce l’udito.","af":"6","lv":"3","cat":"cur","cl":4,"te":17},
+    {"cod":121,"dif":"Media","n":"Karfar","uso":"Foglia/Pasta","costo":"142mo","eff":"Pasta rossa causa attacco cardiaco e morte in 2D6 rnd.","af":"--","lv":"7","cat":"vel","cl":4,"te":17},
+    {"cod":122,"dif":"Facile","n":"Margath","uso":"Foglia/Pasta","costo":"1mo","eff":"Anestetico.","af":"20","lv":"2","cat":"cur","cl":4,"te":17},
+    {"cod":123,"dif":"Diff.ssim","n":"Orn","uso":"Linfa/Applicaz.","costo":"48mo","eff":"Cura 1D10 PF , causa verruche e cicatrici","af":"--","lv":"5","cat":"cur","cl":4,"te":17},
+    {"cod":124,"dif":"Media","n":"Pawlun","uso":"Linfa/Applicaz.","costo":"15mo","eff":"Perdita di denti.","af":"--","lv":"1","cat":"vel","cl":4,"te":17},
+    {"cod":125,"dif":"Diff.ssim","n":"Rud-tekma","uso":"Frutto/Ingestione","costo":"25mo","eff":"+20 a lanciare incantesimi x1 ora. MM e BO a –20.","af":"10","lv":"3","cat":"var","cl":4,"te":17},
+    {"cod":126,"dif":"Folle","n":"Slird","uso":"Frutto/Pasta","costo":"13mo","eff":"Agisce1D2 rnd. Vittima perde sens. in 1D6 estremità –25 x1D100 giorni.","af":"--","lv":"2","cat":"vel","cl":4,"te":17},
+    {"cod":127,"dif":"Diff.ssim","n":"Tarnas","uso":"Nodulo/Infuso","costo":"220mo","eff":"Ripara organi danneggiati. Causa nausea per 50 x1D10 ore.","af":"60","lv":"13","cat":"cur","cl":4,"te":17},
+    {"cod":128,"dif":"Media","n":"Thrang","uso":"Pantera/Pasta","costo":"86mo","eff":"Perdita visiva dei colori.","af":"--","lv":"10","cat":"vel","cl":4,"te":17},
+    {"cod":129,"dif":"Folle","n":"Trusa","uso":"Rana/Pasta","costo":"31mo","eff":"Agisce1D10rd.TS fall 1-10= cecità 1D2 occhi, 11-20= coma, 21+=morte","af":"--","lv":"4","cat":"vel","cl":4,"te":17},
+    {"cod":130,"dif":"Assurdo","n":"Vulcurax","uso":"Bacca/Applicaz.","costo":"10mm","eff":"Biomantenimento se dato da almeno 30 giorni.","af":"0","lv":"5","cat":"cur","cl":4,"te":17},
+    {"cod":131,"dif":"Folle","n":"Wek-wek","uso":"Nodulo/Infuso","costo":"220mo","eff":"Ripara organi danneggiati","af":"50","lv":"11","cat":"cur","cl":4,"te":17},
+    {"cod":132,"dif":"Diff.ssim","n":"Welwal","uso":"Foglia/Ingestione","costo":"12mo","eff":"Risolleva da 3 rnd di stordimento","af":"3","lv":"15","cat":"cur","cl":4,"te":17},
+    {"cod":133,"dif":"Diff.ssim","n":"Witan","uso":"Foglia/Ingestione","costo":"12mo","eff":"Risolleva da 2 rnd di stordimento","af":"5","lv":"10","cat":"cur","cl":4,"te":17},
+    {"cod":134,"dif":"Media","n":"Yake Felces","uso":"Linfa/Ingestione","costo":"57mo","eff":"Marcisce la lingua in 1D100 rnd","af":"--","lv":"30","cat":"vel","cl":4,"te":17},
+    {"cod":135,"dif":"Folle","n":"Yuth","uso":"Fiore/Ingestione","costo":"29mo","eff":"Ripara fratture.","af":"8","lv":"3","cat":"cur","cl":4,"te":17},
+    {"cod":136,"dif":"Folle","n":"Pargen","uso":"Bacca/Ingestione","costo":"800mo","eff":"Resurrezione, se ingerita entro 4 giorni dalla morte.","af":"","lv":"","cat":"cur","cl":4,"te":17},
+    {"cod":137,"dif":"Folle","n":"Hegheg","uso":"Radice/Pasta","costo":"25mo","eff":"Cura la cartilagine danneggiata","af":"5","lv":"2","cat":"cur","cl":4,"te":3},
+    {"cod":138,"dif":"M.Diff.","n":"Kilmakur","uso":"Radice/Infuso","costo":"65mo","eff":"Protegge (+30 BD) contro fiamme e calore per 1D10 ore.","af":"33","lv":"8","cat":"var","cl":4,"te":3},
+    {"cod":139,"dif":"Folle","n":"Pasamar","uso":"Erba/Infuso","costo":"75mo","eff":"Preserva il materiale organico.","af":"40","lv":"9","cat":"var","cl":4,"te":3},
+    {"cod":140,"dif":"Media","n":"Culan","uso":"Foglia/Infuso","costo":"15mo","eff":"Antispasmodico","af":"1","lv":"2","cat":"var","cl":4,"te":11},
+    {"cod":141,"dif":"Media","n":"Vuraana","uso":"Fiore/Pasta","costo":"42mo","eff":"Causa 1D100 PF","af":"--","lv":"2","cat":"vel","cl":4,"te":11},
+    {"cod":142,"dif":"Media","n":"Gariig","uso":"Foglia/Ingestione","costo":"60mo","eff":"Cura 30 PF","af":"5","lv":"2","cat":"cur","cl":4,"te":13},
+    {"cod":143,"dif":"Difficile","n":"Crfree Mustard","uso":"Foglie/Applicaz.","costo":"10mo","eff":"Cura tutte le contusioni in 1 ora.","af":"3","lv":"4","cat":"cur","cl":5,"te":6},
+    {"cod":144,"dif":"Diff.ssim","n":"Faggio screpol.","uso":"Noce/Ingestione","costo":"5mo","eff":"1 giorno di nutrizione.","af":"0","lv":"1","cat":"var","cl":5,"te":6},
+    {"cod":145,"dif":"Media","n":"FurryOak Acorn","uso":"Noce/Ingestione","costo":"3mb","eff":"1 giorno di nutrizione","af":"0","lv":"1","cat":"var","cl":5,"te":6},
+    {"cod":146,"dif":"M.Diff.","n":"Quilmufur","uso":"Radice/Infuso","costo":"49mo","eff":"Antidoto per convertire i veleni.","af":"1","lv":"8","cat":"var","cl":5,"te":6},
+    {"cod":147,"dif":"Normale","n":"Sarah-P-H-head","uso":"Radice/Ingestione","costo":"5mo","eff":"3 settimane di nutrizione. Assorbe 1 mese di vita.","af":"0","lv":"1","cat":"var","cl":5,"te":6},
+    {"cod":148,"dif":"Diff.ssim","n":"Sharkasar","uso":"Radice/Pasta","costo":"2mo","eff":"Causa 1D10 PF.","af":"--","lv":"10","cat":"vel","cl":5,"te":6},
+    {"cod":149,"dif":"Banale","n":"Teldalion","uso":"Cortec./Applicaz.","costo":"2mo","eff":"Cura le infezioni e le infiammazioni.","af":"0","lv":"2","cat":"cur","cl":5,"te":6},
+    {"cod":150,"dif":"M.Diff.","n":"Aspide","uso":"Veleno/Pasta","costo":"75mo","eff":"Uccide in 5 rnd. TS riuscito paralisi per 1D100 rnd.","af":"--","lv":"10","cat":"vel","cl":5,"te":8},
+    {"cod":151,"dif":"Media","n":"Caranan","uso":"Foglie/Ingestione","costo":"3mo","eff":"Cura 2D4 PF. Riduce i gonfiori. Max 10 dosi/giorno.","af":"2","lv":"2","cat":"cur","cl":5,"te":8},
+    {"cod":152,"dif":"Diff.ssim","n":"Cresta dorata","uso":"Felce/Applicaz.","costo":"30mo","eff":"Cura le emorragie non superiori a 5 PF/rnd. Permanente in 1D5 rnd.","af":"0","lv":"1","cat":"cur","cl":5,"te":8},
+    {"cod":153,"dif":"Diff.ssim","n":"Lama Hemlock","uso":"Pianta/Pasta","costo":"34mo","eff":"Incapacità x1D10 ore. TS fall morte in 1D10 rnd.","af":"--","lv":"6","cat":"vel","cl":5,"te":8},
+    {"cod":154,"dif":"Diff.ssim","n":"Acqua Emlock","uso":"Pianta/Liquido","costo":"18mo","eff":"-100 x1D10 ore. TS fall morte in 1D10 rnd.","af":"--","lv":"3","cat":"vel","cl":5,"te":8},
+    {"cod":155,"dif":"Diff.ssim","n":"Himros","uso":"Foglie/Applicaz.","costo":"55mo","eff":"Cura le bruciature di 2° grado e riduce le infiammazioni da Pangwood.","af":"0","lv":"1","cat":"cur","cl":5,"te":8},
+    {"cod":156,"dif":"Facile","n":"Oleandro","uso":"Legno","costo":"8mo*","eff":"Il legno ha proprietà magiche di purificare l’acqua e cibo","af":"--","lv":"1","cat":"var","cl":5,"te":8},
+    {"cod":157,"dif":"Folle","n":"Phacalus","uso":"Radice/Ingestione","costo":"800mo","eff":"PR e IN incr. di 1 permanent.. 50% coma x4 giorni e tutte le caratt. –15","af":"35","lv":"17","cat":"var","cl":5,"te":8},
+    {"cod":158,"dif":"Diff.ssim","n":"Sarnumen","uso":"Anguilla/Liquido","costo":"40mo","eff":"-50 per 1D10 min.","af":"--","lv":"30","cat":"vel","cl":5,"te":8},
+    {"cod":159,"dif":"Diff.ssim","n":"Sha","uso":"Fiore/Infuso","costo":"60mo","eff":"Infravisione x15 rnd fino a 300m. Poi diarrea x1D5 giorni a –25.","af":"0","lv":"1","cat":"var","cl":5,"te":8},
+    {"cod":160,"dif":"Media","n":"Splayfoot","uso":"Semi/Infuso","costo":"23mo","eff":"+25 x1D4 ore contro creature non malvagie.","af":"16","lv":"4","cat":"var","cl":5,"te":8},
+    {"cod":161,"dif":"Banale","n":"Tartiella","uso":"Foglia/Fumo","costo":"4ma","eff":"Euforia. Tutte le caratteristiche calano di 10 x1D10 ore.","af":"10","lv":"1","cat":"var","cl":5,"te":8},
+    {"cod":162,"dif":"Media","n":"Umakilis","uso":"Rana/Liquido","costo":"33mo","eff":"Morte istantanea.","af":"--","lv":"50","cat":"vel","cl":5,"te":8},
+    {"cod":163,"dif":"Facile","n":"Baranie","uso":"Foglie/Infuso","costo":"3mb","eff":"Riduce la nausea","af":"0","lv":"1","cat":"cur","cl":5,"te":7},
+    {"cod":164,"dif":"Banale","n":"Berterin","uso":"Muschio/Infuso","costo":"19mo","eff":"Conserva materiale organico x quantità = ad un uomo x1 giorno","af":"20","lv":"5","cat":"var","cl":5,"te":7},
+    {"cod":165,"dif":"Diff.ssima","n":"Cathaana","uso":"Noce/Ingestione","costo":"36mo","eff":"-50 per 1D10 rnd. Cervello distrutto dopo 1D10 min.","af":"--","lv":"1","cat":"vel","cl":5,"te":7},
+    {"cod":166,"dif":"Diff.ssima","n":"Cicino","uso":"Foglia/Infuso","costo":"25mo","eff":"+40 ai TS contro malattie.","af":"12","lv":"9","cat":"var","cl":5,"te":7},
+    {"cod":167,"dif":"Difficile","n":"Din-fuinen","uso":"Muschio","costo":"111mo","eff":"-30 per 1D10 ore. TS fallito totale amnesia.","af":"--","lv":"8","cat":"vel","cl":5,"te":7},
+    {"cod":168,"dif":"Diff.ssim","n":"Eledena","uso":"Olio/Ingestione","costo":"21mo","eff":"Velocità.x1ora. TS fall 1-20=incon,21-40=-100 6mes.41+ morte","af":"25","lv":"20","cat":"var","cl":5,"te":7},
+    {"cod":169,"dif":"Difficile","n":"Feduilas","uso":"Bocciolo/Ingest","costo":"11ma","eff":"+20 a TS per MENT. e ESS. –10 a AG per 1D5 ore.","af":"15","lv":"2","cat":"var","cl":5,"te":7},
+    {"cod":170,"dif":"Diff.ssima","n":"Grapeleaf","uso":"Fiore/Fumo","costo":"7mo","eff":"1 giorno di nutrizione. Intossicazione (–50) per 2 ore","af":"18","lv":"5","cat":"var","cl":5,"te":7},
+    {"cod":171,"dif":"Diff.ssima","n":"Harwite","uso":"Nettare/Ingest.","costo":"52mo","eff":"Cura 1 D50 PF.","af":"4","lv":"2","cat":"cur","cl":5,"te":7},
+    {"cod":172,"dif":"Difficile","n":"Hiam","uso":"Muschio/Ingest.","costo":"20mo","eff":"1 giorno di cibo. Max 4 giorni. –75 x sec. uso. 5% di morte /dose","af":"0","lv":"10","cat":"var","cl":5,"te":7},
+    {"cod":173,"dif":"Media","n":"Hluif Bagms","uso":"Noce/Ingestione","costo":"44mo","eff":"1 giorno di nutrizione.","af":"0","lv":"1","cat":"var","cl":5,"te":7},
+    {"cod":174,"dif":"Media","n":"Kuwurn Yorf","uso":"Muffa/Ingest.","costo":"57mo","eff":"Morte in 3 giorni.","af":"--","lv":"5","cat":"vel","cl":5,"te":7},
+    {"cod":175,"dif":"Facile","n":"Kykykyl","uso":"Pane/Ingestione","costo":"50mo","eff":"Perfetta visione x 1 ora a stimare il territorio o i danni. Durata 2D10 sett.","af":"6","lv":"3","cat":"var","cl":5,"te":7},
+    {"cod":176,"dif":"Diff.ssima","n":"Lichene","uso":"Lichene/Applicaz.","costo":"10mo","eff":"Affila spade può tagliare anche la pietra. (un solo colpo)","af":"0","lv":"1","cat":"var","cl":5,"te":7},
+    {"cod":177,"dif":"Folle","n":"Gloriosa","uso":"Fiore/Ingestione","costo":"42mo","eff":"Nausea e cefalea (- 15 ) per 1D10 ore.","af":"--","lv":"4","cat":"vel","cl":5,"te":7},
+    {"cod":178,"dif":"M.Diff.","n":"Magnolia","uso":"Nettare/Ingestione","costo":"100mo","eff":"Allucinogeno, -20 alle attività per 2 ore. Nutre per un giorno","af":"--","lv":"6","cat":"var","cl":5,"te":7},
+    {"cod":179,"dif":"Diff.ssima","n":"Mandorlo","uso":"Fiore/Infuso","costo":"300mo","eff":"L’infuso può far cambiare sesso al pg (20%)","af":"--","lv":"5","cat":"var","cl":5,"te":7},
+    {"cod":180,"dif":"Folle","n":"Milk Trumpet","uso":"Seme/Ingestione","costo":"87mo","eff":"Coma e morte in 1D10 giorni.","af":"--","lv":"10","cat":"vel","cl":5,"te":7},
+    {"cod":181,"dif":"Diff.ssima","n":"Mir-Melellen","uso":"Nettare/Applicaz.","costo":"350mo","eff":"Cura ogni veleno.","af":"9","lv":"45","cat":"var","cl":5,"te":7},
+    {"cod":182,"dif":"Diff.ssima","n":"Murnan","uso":"Linfa/Applicaz.","costo":"32mo","eff":"Febbre –100 x4 giorni. TS fallito totale paralisi x4 giorni.","af":"--","lv":"10","cat":"vel","cl":5,"te":7},
+    {"cod":183,"dif":"Normale","n":"Nocciolo","uso":"Legno","costo":"10mo*","eff":"Il legno ha proprietà magiche di cercametalli. Dev’essere lavorato","af":"--","lv":"1","cat":"var","cl":5,"te":7},
+    {"cod":184,"dif":"Media","n":"Sulimquelote","uso":"Fiore/Sfregare","costo":"5mo","eff":"Fragrante profumo per 1D4 ore.","af":"0","lv":"1","cat":"var","cl":5,"te":7},
+    {"cod":185,"dif":"Difficile","n":"Sweet Sorrel","uso":"Foglie/Inalaz.","costo":"32mo","eff":"Antidoti per veleni gassosi.","af":"6","lv":"1","cat":"var","cl":5,"te":7},
+    {"cod":186,"dif":"Banale","n":"Terbas","uso":"Foglia/Applicaz.","costo":"2mo","eff":"x2 la velocità di cura dei nervi danneggiati e del sistema nervoso.","af":"4","lv":"2","cat":"cur","cl":5,"te":7},
+    {"cod":187,"dif":"Facile","n":"Timo","uso":"Fiore/Polvere","costo":"13ma","eff":"Antiparassitario","af":"--","lv":"1","cat":"var","cl":5,"te":7},
+    {"cod":188,"dif":"Diff.ssima","n":"Wolfstooth","uso":"Radice/Pasta","costo":"82mo","eff":"TS fall 1-25= -100 per 10D2 rnd, 26-50= -15-20 pnt CO, 51+= morte","af":"--","lv":"7","cat":"vel","cl":5,"te":7},
+    {"cod":189,"dif":"Media","n":"Wt Berried Yew","uso":"Bacca/Ingest.","costo":"67mo","eff":"Morte in 1D10 rnd.","af":"--","lv":"10","cat":"vel","cl":5,"te":7},
+    {"cod":190,"dif":"Diff.ssima","n":"Yavin Girith","uso":"Frutto/Ingestione","costo":"8ma","eff":"-25 per 1D10 giorni.","af":"--","lv":"10","cat":"vel","cl":5,"te":7},
+    {"cod":191,"dif":"Banale","n":"Aglio","uso":"Radice/Ingestione","costo":"10ma","eff":"Cura veleni (Lv. 2) se ingerito entro 10 round, repellente per vampiri.","af":"--","lv":"2","cat":"var","cl":5,"te":1},
+    {"cod":192,"dif":"Media","n":"Athanar","uso":"Serpente/Liquido","costo":"42mo","eff":"Riduce la costituzione del 50%","af":"--","lv":"15","cat":"vel","cl":5,"te":1},
+    {"cod":193,"dif":"Media","n":"Camomile","uso":"Fiore/Infuso","costo":"5ma","eff":"x3 guarigione e sonno x2D6 ore. 2 dosi in 3 giorni e –50 x1D4 giorni.","af":"25","lv":"3","cat":"cur","cl":5,"te":1},
+    {"cod":194,"dif":"Normale","n":"Cinquefoglie","uso":"Radice/Ingestione","costo":"13mo","eff":"Ferma la diarrea","af":"--","lv":"2","cat":"cur","cl":5,"te":1},
+    {"cod":195,"dif":"Diff.ssim","n":"Ecsasse","uso":"Chiodo/Infuso","costo":"20mo","eff":"Immune a malattie/attacchi mentali e –30 x5D2 ore poi –75 x5D2 ore.","af":"25","lv":"8","cat":"var","cl":5,"te":1},
+    {"cod":196,"dif":"Media","n":"Galenas","uso":"Foglia/Fumo","costo":"5ma","eff":"-75 a tutti nel raggio di 6 m per 1D10 rnd.","af":"10","lv":"7","cat":"mal","cl":5,"te":1},
+    {"cod":197,"dif":"Difficile","n":"Greneldar","uso":"Fiore/Applicaz.","costo":"38mo","eff":"TS fall per contatto –15 x 1D5 giorni, per ingestione –50 x1D10 giorni.","af":"--","lv":"2/5","cat":"vel","cl":5,"te":1},
+    {"cod":198,"dif":"M.Diff.","n":"Kargijak","uso":"Bacca/Pasta","costo":"30mo","eff":"Cura 20. Stordito per 1D10 rnd.","af":"15","lv":"3","cat":"cur","cl":5,"te":1},
+    {"cod":199,"dif":"Facile","n":"Lavanda","uso":"Fiore/Liquido","costo":"1mo","eff":"Ottimo profumo e buon sapore","af":"--","lv":"1","cat":"var","cl":5,"te":1},
+    {"cod":200,"dif":"M.Diff.","n":"Lothnimgil","uso":"Fiore/Ingestione","costo":"120mo","eff":"Cura 1D10 PF. +5 per 24 ore.","af":"25","lv":"6","cat":"cur","cl":5,"te":1},
+    {"cod":201,"dif":"Normale","n":"Olivo","uso":"Resina/Inalazione","costo":"12mo","eff":"+10 a Lettura Rune","af":"--","lv":"2","cat":"var","cl":5,"te":1},
+    {"cod":202,"dif":"Facile","n":"Phoroz","uso":"Fiore/Infuso","costo":"35mo","eff":"-40 per 1D10 ore. TS fall morte in 1D10 min.","af":"--","lv":"4","cat":"vel","cl":5,"te":1},
+    {"cod":203,"dif":"Banale","n":"Prezzemolo","uso":"Foglia/Ingestione","costo":"1mb","eff":"Ottimo condimento","af":"--","lv":"1","cat":"var","cl":5,"te":1},
+    {"cod":204,"dif":"Folle","n":"Shirilos","uso":"Semi/Infuso","costo":"84mo","eff":"-100 e suggestionabile per 1D100 rnd","af":"--","lv":"10","cat":"vel","cl":5,"te":1},
+    {"cod":205,"dif":"Facile","n":"Sweet Galenas","uso":"Foglia/Fumo","costo":"5ma","eff":"-75 a tutti nel raggio di 6 m per 1D10 rnd.","af":"33","lv":"3","cat":"mal","cl":5,"te":1},
+    {"cod":206,"dif":"Media","n":"Vipersweed","uso":"Radice/Infuso","costo":"15mo","eff":"Antidoto per Asgurath.","af":"17","lv":"5","cat":"var","cl":5,"te":1},
+    {"cod":207,"dif":"Media","n":"Ebur","uso":"Fiore/Ingestione","costo":"22mo","eff":"Ripara le distorsioni.","af":"18","lv":"4","cat":"cur","cl":5,"te":2},
+    {"cod":208,"dif":"Difficile","n":"Felmather","uso":"Foglia/Ingestione","costo":"105mo","eff":"Contatto mentale di 1 amico (pers. o anim.) 9Km/liv. Risolleva dal coma.","af":"15","lv":"4","cat":"var","cl":5,"te":2},
+    {"cod":209,"dif":"Diff.ssim","n":"Gylvir","uso":"Alga/Ingestione","costo":"45mo","eff":"Permette di respirare (solo) sott’acqua per 4 ore.","af":"20","lv":"5","cat":"var","cl":5,"te":2},
+    {"cod":210,"dif":"Media","n":"Jitsu","uso":"Vongole/Ingest.","costo":"34mo","eff":"Causa 5D10 PF.","af":"--","lv":"5","cat":"vel","cl":5,"te":2},
+    {"cod":211,"dif":"M.Diff.","n":"Jitsukar","uso":"Vongole/Ingest.","costo":"125mo","eff":"Uccide in 1D100 rnd","af":"--","lv":"40","cat":"vel","cl":5,"te":2},
+    {"cod":212,"dif":"Facile","n":"Klynyk","uso":"Ostrica/Applicaz.","costo":"25mb","eff":"Rimuove i capelli per parecchi giorni.","af":"0","lv":"2","cat":"vel","cl":5,"te":2},
+    {"cod":213,"dif":"Assurdo","n":"Laurelin","uso":"Foglia/Ingestione","costo":"999mo","eff":"Biomantenimento x gli elfi se dato entro 28 giorni dalla morte","af":"21","lv":"5","cat":"var","cl":5,"te":2},
+    {"cod":214,"dif":"Normale","n":"Pentanoth","uso":"Fuco/Infuso","costo":"220mo","eff":"Perdita di volontà x2D6 ore. TS fall coma x1D4 giorni.","af":"--","lv":"40","cat":"vel","cl":5,"te":2},
+    {"cod":215,"dif":"Media","n":"Surlok","uso":"PescDors/Iniez.","costo":"46mo","eff":"Le dita del corpo marciscono. –75 a MM e BO.","af":"--","lv":"10","cat":"vel","cl":5,"te":2},
+    {"cod":216,"dif":"Diff.ssim","n":"Symk-Arg-Wy","uso":"Pesce/Ingestione","costo":"2mo","eff":"Capelli persi per 1D10 giorni.","af":"--","lv":"10","cat":"vel","cl":5,"te":2},
+    {"cod":217,"dif":"Normale","n":"Tharm","uso":"Fuco/Appl.","costo":"5mr","eff":"Lozione abbronzante.","af":"0","lv":"5","cat":"var","cl":5,"te":2},
+    {"cod":218,"dif":"Diff.ssim","n":"Ucason","uso":"Erba/Fumo","costo":"75mo","eff":"Cura cecità.","af":"12","lv":"4","cat":"var","cl":5,"te":2},
+    {"cod":219,"dif":"Folle","n":"Ul-Ucason","uso":"Erba/Fumo","costo":"250mo","eff":"Ristora gli occhi.","af":"17","lv":"6","cat":"cur","cl":5,"te":2},
+    {"cod":220,"dif":"Difficile","n":"Vessin","uso":"Vongole/Appl.","costo":"30mo","eff":"Cura scottatura di 2° grado in 1D4 rnd e 3° grado in 1 giorno.","af":"0","lv":"0","cat":"cur","cl":5,"te":2},
+    {"cod":221,"dif":"Difficile","n":"Yavethalion","uso":"Frutto/Ingestione","costo":"45mo","eff":"Cura 5D10 PF.","af":"4","lv":"2","cat":"cur","cl":5,"te":2},
+    {"cod":222,"dif":"Diff.ssim","n":"Craeg-Curfluin","uso":"Pianta/Liquido","costo":"110mo","eff":"TS fall 1-25=sonno1D10rnd,26-50=coma1D10min,51+ trasforma pietra.","af":"--","lv":"7","cat":"vel","cl":5,"te":10},
+    {"cod":223,"dif":"Folle","n":"Daxamas","uso":"Foglie/Ingestione","costo":"72mo","eff":"Causa una malattia al cuore. Morte in 1D100 giorni.","af":"--","lv":"15","cat":"vel","cl":5,"te":10},
+    {"cod":224,"dif":"Diff.ssim","n":"Faghui","uso":"Fiore/Infuso","costo":"10mm","eff":"Pozione d’amore. Devoto e lussurioso per 1D100 giorni.","af":"10","lv":"5","cat":"var","cl":5,"te":10},
+    {"cod":225,"dif":"Media","n":"Lawrim","uso":"Lichene/Pasta","costo":"20mo","eff":"-25 atutte le attività per 1D2 giorni.","af":"--","lv":"1","cat":"vel","cl":5,"te":10},
+    {"cod":226,"dif":"Media","n":"Madwort","uso":"Foglie/Pasta","costo":"32mo","eff":"TS falll 1-25= -30x1D10+10rnd,26-50= -50, 51+= -(1D10+10) pt all’IN.","af":"--","lv":"4","cat":"vel","cl":5,"te":10},
+    {"cod":227,"dif":"Difficile","n":"Orchid. Coragg.","uso":"Gambo/Ingestione","costo":"210mo","eff":"Viagg. Astr.x16Km. TS fall/Km 1-25= fermo, 26-50=ritorna, 50+=morte.","af":"30","lv":"1","cat":"var","cl":5,"te":10},
+    {"cod":228,"dif":"Facile","n":"Arnuminus","uso":"Foglia/Applicaz.","costo":"6mb","eff":"x2 velocità di guarigione x slogature, torsione legamenti e cartilagini.","af":"8","lv":"3","cat":"cur","cl":5,"te":3},
+    {"cod":229,"dif":"Banale","n":"Arunya","uso":"Radice/Infuso","costo":"2mb","eff":"Causa sonno e incoscienza. 1 ora di sonno equivale a 4ore.","af":"50","lv":"11","cat":"var","cl":5,"te":3},
+    {"cod":230,"dif":"Banale","n":"Basilico","uso":"Foglia/Applicaz.","costo":"20ma","eff":"Assorbe il veleno dalle ferite, +5 ai TR contro veleni","af":"--","lv":"1","cat":"var","cl":5,"te":3},
+    {"cod":231,"dif":"Media","n":"Erica","uso":"Fiore/Ingestione","costo":"80mo","eff":"10 ai TR contro Controllo Spirituale","af":"--","lv":"2","cat":"var","cl":5,"te":3},
+    {"cod":232,"dif":"M.Diff.","n":"Occhi blu","uso":"Fiore/Infuso","costo":"15mo","eff":"Vista x3 più infravisione x15m x3 gg. Usare solo 1 volta al giorno.","af":"25","lv":"6","cat":"var","cl":5,"te":3},
+    {"cod":233,"dif":"Media","n":"Arkasu","uso":"Linfa/Applicaz.","costo":"12mo","eff":"Cura 2D6 PF. x2 velocità di cura per le ferite gravi.","af":"2","lv":"2","cat":"cur","cl":5,"te":11},
+    {"cod":234,"dif":"Normale","n":"Crespino","uso":"Frutto/Pasta","costo":"20mo","eff":"Guarisce 1d10 di pf causati da ustioni","af":"--","lv":"2","cat":"cur","cl":5,"te":11},
+    {"cod":235,"dif":"Facile","n":"Edera","uso":"Foglia/Infuso","costo":"30ma","eff":"Provoca un delirio mistico per 1d10 di minuti","af":"--","lv":"3","cat":"var","cl":5,"te":11},
+    {"cod":236,"dif":"Media","n":"Jadaras","uso":"Erba/Infuso","costo":"21mo","eff":"-30 all’AG per 1D100 giorni.","af":"--","lv":"15","cat":"vel","cl":5,"te":11},
+    {"cod":237,"dif":"Diff.ssim","n":"Rumareth","uso":"Foglie/Infuso","costo":"125mo","eff":"Ferma le emorragie. Causa sonnolenza (-30) per 1 ora.","af":"7","lv":"3","cat":"cur","cl":5,"te":11},
+    {"cod":238,"dif":"Facile","n":"Silmana","uso":"Gambo/Applicaz.","costo":"4mo","eff":"Cura 2D10 PF. Causa cicatrici.","af":"--","lv":"9","cat":"cur","cl":5,"te":11},
+    {"cod":239,"dif":"Facile","n":"Sindoluin","uso":"Fiore/Ingestione","costo":"2ma","eff":"Anticoagulante.","af":"1","lv":"1","cat":"var","cl":5,"te":11},
+    {"cod":240,"dif":"Facile","n":"Arnuminas","uso":"Foglia/Applicaz.","costo":"2mb","eff":"x2 la velocità di guarigione di muscoli, tendini e cartilagini.","af":"--","lv":"","cat":"cur","cl":5,"te":11},
+    {"cod":241,"dif":"Media","n":"Gramursh","uso":"Muschio/Polvere","costo":"20mo","eff":"Conserva il cibo per 2 mesi. Sapore terribile.","af":"0","lv":"1","cat":"var","cl":5,"te":4},
+    {"cod":242,"dif":"Difficile","n":"Jeggarukh","uso":"Pipistrello/Pasta","costo":"71mo","eff":"Causa 10D10 PF.","af":"--","lv":"6","cat":"vel","cl":5,"te":4},
+    {"cod":243,"dif":"Difficile","n":"Jegga","uso":"Pipistrello/Pasta","costo":"92mo","eff":"Causa 1D100 PF.","af":"--","lv":"7","cat":"vel","cl":5,"te":4},
+    {"cod":244,"dif":"Media","n":"Kujanikapurd","uso":"Fungo/Ingestione","costo":"80mo","eff":"1gg di nutrizione, -30x1sett. Polverizzato dà nutrizione x3gg e no malus.","af":"0","lv":"1","cat":"var","cl":5,"te":4},
+    {"cod":245,"dif":"Media","n":"Breldiar","uso":"Fiore/Ingestione","costo":"25mo","eff":"-30 MM e attacchi in mischia. +50 a incantesimi e attacchi a distanza. Euforia x1 ora.","af":"7","lv":"3","cat":"var","cl":5,"te":13},
+    {"cod":246,"dif":"Banale","n":"Brorkwilb","uso":"Fiore/Ingestione","costo":"9mo","eff":"Permette di condividere i sogni con membri familiari fino a 160Km/Liv.","af":"45","lv":"10","cat":"var","cl":5,"te":13},
+    {"cod":247,"dif":"M.Diff.","n":"Pièsvelto","uso":"Seme/Infuso","costo":"-","eff":"Infonde coraggio e fiducia (+25 alle attività) per 1D4 ore","af":"--","lv":"1","cat":"var","cl":5,"te":18},
+    {"cod":248,"dif":"M.Diff.","n":"Ankii","uso":"Bacca/Ingestione","costo":"100mo","eff":"Eguaglia 8 ore di sonno.Volte 1=CO-1, 2=-5, 3=-25 pti persi nel tempo.","af":"9","lv":"3","cat":"var","cl":6,"te":16},
+    {"cod":249,"dif":"Media","n":"Klytun","uso":"Radice/Pasta","costo":"53mo","eff":"Pasta dorata causa 1D10 giorni di coma.","af":"--","lv":"5","cat":"vel","cl":6,"te":16},
+    {"cod":250,"dif":"Folle","n":"Mandragora","uso":"Radice/Liquido","costo":"700mo","eff":"Poche gocce sono un potente afrodisiaco. Una dose intera causa la morte","af":"--","lv":"20","cat":"var","cl":6,"te":16},
+    {"cod":251,"dif":"Diff.ssim","n":"Belramba","uso":"Lichene/Infuso","costo":"60mo","eff":"Ripara i nervi e il sistema nervoso.","af":"20","lv":"5","cat":"cur","cl":6,"te":6},
+    {"cod":252,"dif":"M.Diff.","n":"Telperion","uso":"Foglia/Ingestione","costo":"100mo","eff":"Cura 10D10 PF.","af":"5","lv":"3","cat":"cur","cl":6,"te":7},
+    {"cod":253,"dif":"Difficile","n":"Kly","uso":"Bacca/Pasta","costo":"154mo","eff":"Causa 3D100 PF.","af":"--","lv":"3","cat":"vel","cl":6,"te":1},
+    {"cod":254,"dif":"Diff.ssim","n":"Marku","uso":"Noce/Ingestione","costo":"30mo","eff":"Infravisione per 6 ore","af":"5","lv":"2","cat":"var","cl":6,"te":1},
+    {"cod":255,"dif":"Normale","n":"Neltheon","uso":"Pianta/Ingestione","costo":"1mb","eff":"Emetico. Induce il vomito in 20 minuti.","af":"5","lv":"2","cat":"vel","cl":6,"te":1},
+    {"cod":256,"dif":"Facile","n":"Silraen","uso":"Pianta/Infuso","costo":"1mb","eff":"Analgesico. Causa sonno.","af":"12","lv":"4","cat":"var","cl":6,"te":1},
+    {"cod":257,"dif":"Facile","n":"Akbutege","uso":"Foglia/Ingestione","costo":"3ma","eff":"Cura 1D10 PF.","af":"1","lv":"2","cat":"cur","cl":6,"te":2},
+    {"cod":258,"dif":"Media","n":"Alambas","uso":"Erba/Applicaz.","costo":"66ma","eff":"Cura 122cm² di scottatura.","af":"4","lv":"2","cat":"cur","cl":6,"te":2},
+    {"cod":259,"dif":"Facile","n":"Fiis","uso":"Resina/Applicaz.","costo":"8ma","eff":"Cura 1D6 PF.","af":"0","lv":"1","cat":"cur","cl":6,"te":2},
+    {"cod":260,"dif":"Media","n":"Amaranto","uso":"Foglia/Applicaz.","costo":"35mo","eff":"Interrompe l’emorragia dopo 1d10 round. Il pg poi non deve muoversi","af":"--","lv":"2","cat":"cur","cl":6,"te":3},
+    {"cod":261,"dif":"Difficile","n":"Dagmather","uso":"Spine/Infuso","costo":"28mo","eff":"Cura la cartilagine danneggiata.","af":"12","lv":"3","cat":"cur","cl":6,"te":3},
+    {"cod":262,"dif":"Diff.ssim","n":"Januk-ty","uso":"Radice/Infuso","costo":"110ma","eff":"Risolleva da stordimento di 3 round.","af":"2","lv":"15","cat":"cur","cl":6,"te":3},
+    {"cod":263,"dif":"Diff.ssim","n":"Harfy","uso":"Resina/Applicaz.","costo":"175mo","eff":"Ferma immediatamente ogni tipo di emorragia.","af":"9","lv":"2","cat":"cur","cl":6,"te":3},
+    {"cod":264,"dif":"Difficile","n":"Harlindar","uso":"Pianta/Infuso","costo":"50mo","eff":"Assicura una sana natività. Nutrizione bilanciata.","af":"1","lv":"1","cat":"var","cl":6,"te":3},
+    {"cod":265,"dif":"Facile","n":"Hoak-Foer","uso":"Fiore/Ingestione","costo":"67mo","eff":"Cura perdite di memor. e malatt. mentali. Causa malus MM 1D10/sett.","af":"30","lv":"7","cat":"vel","cl":6,"te":3},
+    {"cod":266,"dif":"M.Diff.","n":"Kaktu","uso":"Fiore/Liquido","costo":"29mo","eff":"-1D100 a MM in 1D4 appendici","af":"--","lv":"1","cat":"vel","cl":6,"te":3},
+    {"cod":267,"dif":"Banale","n":"Klagul","uso":"Bocciolo/Infuso","costo":"27mo","eff":"Infravisione x6 ore. Vista come gli elfi.","af":"7","lv":"2","cat":"var","cl":6,"te":3},
+    {"cod":268,"dif":"Folle","n":"Merrig","uso":"Spina/Infuso","costo":"90mo","eff":"Aumenta la PR e l’AP di 5, 1 solo uso giornaliero. Provoca assuefazione","af":"2","lv":"11","cat":"var","cl":6,"te":3},
+    {"cod":269,"dif":"Diff.ssim","n":"Siran","uso":"Chiodo/Ingestione","costo":"80mo","eff":"Ristoraz. di 1 org. Effetti coll. malattia della pelle PR ridotta del 10%.","af":"31","lv":"7","cat":"var","cl":6,"te":3},
+    {"cod":270,"dif":"Difficile","n":"Siriena","uso":"Erba/Infuso","costo":"70mo","eff":"conserva organi x quantità = dimensioni di un uomo x1 settimana.","af":"27","lv":"6","cat":"var","cl":6,"te":3},
+    {"cod":271,"dif":"Media","n":"Tukamur","uso":"Erba/Infuso","costo":"38ma","eff":"Permette di condividere i sogni con membri familiari fino a 80Km/Liv.","af":"100","lv":"20","cat":"var","cl":6,"te":3},
+    {"cod":272,"dif":"Media","n":"Vinuk","uso":"Radice/Infuso","costo":"12ma","eff":"Risolleva da stordimento di 1D10 round Dura per 1D10 di giorni","af":"4","lv":"20","cat":"cur","cl":6,"te":3},
+    {"cod":273,"dif":"M.Diff.","n":"Ruth-i-Iaur","uso":"Draghi/Liquido","costo":"56mo","eff":"Malus di 5D2x10 in 1D20 round. saliva di drago","af":"--","lv":"4","cat":"mal","cl":6,"te":4},
+    {"cod":274,"dif":"Difficile","n":"Nelisse","uso":"Foglia/Infuso","costo":"9ma","eff":"1 giorno di nutrimento. –50 per 1 ora.","af":"15","lv":"4","cat":"var","cl":6,"te":13},
+    {"cod":275,"dif":"Folle","n":"Thurviik","uso":"Gas/Gas","costo":"85mo","eff":"Sonno per 3 ore.","af":"--","lv":"20","cat":"mal","cl":6,"te":13},
+    {"cod":276,"dif":"M.Diff.","n":"Hulmiikak","uso":"Formiche/Pasta","costo":"39mo","eff":"Perdita della vista per 3D10 giorni.","af":"--","lv":"15","cat":"vel","cl":6,"te":14},
+    {"cod":277,"dif":"Assurdo","n":"Igturfas","uso":"Serpenti/Liquido","costo":"17mo","eff":"Il sangue causa -50 per 10D10 ore. / Malattia mentale –20 a IN","af":"--","lv":"25","cat":"vel","cl":6,"te":14},
+    {"cod":278,"dif":"Folle","n":"Ul-Naza","uso":"Foglia/Ingestione","costo":"430mo","eff":"Antidoto per ogni veleno se preso entro 1 giorno.","af":"9","lv":"3","cat":"var","cl":6,"te":14},
+    {"cod":279,"dif":"Assurdo","n":"Arduvaar","uso":"Pianta/Infuso","costo":"50mm","eff":"Antidoto universale.","af":"10","lv":"20","cat":"var","cl":6,"te":0},
+    {"cod":280,"dif":"Diff.ssim","n":"Hugburtun","uso":"Frutto/Applicaz.","costo":"180mo","eff":"Ferma immediatamente ogni tipo di emorragia.","af":"6","lv":"2","cat":"cur","cl":6,"te":0},
+    {"cod":281,"dif":"Banale","n":"Joef","uso":"Pianta/Ingestione","costo":"35mo","eff":"Permette un collegamento mentale a 1 amico fino a 30m/liv.","af":"23","lv":"6","cat":"var","cl":7,"te":16},
+    {"cod":282,"dif":"Difficile","n":"Athelas","uso":"Foglia/Infuso","costo":"200mo","eff":"Cura qualunque cosa sui vivi. Tanto efficace quanto l’abilità del curatore Può essere usata solo da Re “consacrati”.","af":"20","lv":"5","cat":"cur","cl":7,"te":6},
+    {"cod":283,"dif":"Normale","n":"Maiana","uso":"Foglia/Infuso","costo":"5mr","eff":"Decongestionante.","af":"1","lv":"1","cat":"cur","cl":7,"te":6},
+    {"cod":284,"dif":"Media","n":"Muilfana","uso":"Linfa/Liquido","costo":"52mo","eff":"Contatto con la saliva diventa acido. Distrugge l’esofago.","af":"--","lv":"2","cat":"vel","cl":7,"te":6},
+    {"cod":285,"dif":"Diff.ssim","n":"Slagen","uso":"Muschio/Applicaz","costo":"120mo","eff":"Conserva gli arti.","af":"12","lv":"4","cat":"var","cl":7,"te":6},
+    {"cod":286,"dif":"Assurdo","n":"Awn","uso":"Corteccia/Infuso","costo":"19mm","eff":"Riunisce gli arti.","af":"10","lv":"10","cat":"cur","cl":7,"te":7},
+    {"cod":287,"dif":"M.Diff.","n":"Bukeas Bulch","uso":"Lupi/Succo","costo":"16ma","eff":"Il succo induce attacchi d’asma.","af":"--","lv":"20","cat":"vel","cl":7,"te":7},
+    {"cod":288,"dif":"Diff.ssim","n":"Dolimor","uso":"Fungo/Ingestione","costo":"26mo","eff":"Morte in 1D3 ore.","af":"--","lv":"6","cat":"vel","cl":7,"te":7},
+    {"cod":289,"dif":"Folle","n":"Gwin-win-Rynd","uso":"Pipistrello/Liquid","costo":"300mo","eff":"TS fallito 1-50 = paralisi, 51+ = morte.","af":"--","lv":"2","cat":"vel","cl":7,"te":7},
+    {"cod":290,"dif":"Diff.ssim","n":"Hevik","uso":"Foglie/Ingestione","costo":"12ma","eff":"Induce sonno per 1D10+10 ore.","af":"--","lv":"30","cat":"vel","cl":7,"te":7},
+    {"cod":291,"dif":"Folle","n":"Mur","uso":"Resina/Applicaz.","costo":"102mo","eff":"Biomantenimento per 30 giorni.","af":"10","lv":"6","cat":"cur","cl":7,"te":7},
+    {"cod":292,"dif":"Difficile","n":"Nimnaur","uso":"Ragno/Liquido","costo":"23mo","eff":"Liquefa 1 organo in 1D10 minuti.","af":"--","lv":"3","cat":"vel","cl":7,"te":7},
+    {"cod":293,"dif":"Banale","n":"Rewk","uso":"Gemma/Infuso","costo":"9ma","eff":"Cura 2D10 PF.","af":"1","lv":"2","cat":"cur","cl":7,"te":7},
+    {"cod":294,"dif":"M.Diff.","n":"Slota","uso":"Ragno/Pasta","costo":"36mo","eff":"Paralisi in 1 giorno e morte dopo 1 D10 giorni.","af":"--","lv":"5","cat":"vel","cl":7,"te":7},
+    {"cod":295,"dif":"Folle","n":"Thembitul","uso":"Fiore/Ingestione","costo":"85mo","eff":"+50 alle malattie e TS. Cura malattie","af":"15","lv":"4","cat":"var","cl":7,"te":7},
+    {"cod":296,"dif":"Normale","n":"Thurl","uso":"Chiodo/Infuso","costo":"2ma","eff":"Cura 1D4 PF. L’infuso dura 1D2 settimane.","af":"1","lv":"2","cat":"cur","cl":7,"te":7},
+    {"cod":297,"dif":"Diff.ssima","n":"Vischio","uso":"Frutto/Pasta","costo":"400mo","eff":"Guarisce tutto, tanto efficace quanto l’abilità del curatore","af":"--","lv":"1","cat":"cur","cl":7,"te":7},
+    {"cod":298,"dif":"Media","n":"Attanar","uso":"Muschio/Applicaz","costo":"8mo","eff":"Cura la febbre.","af":"1","lv":"2","cat":"cur","cl":7,"te":15},
+    {"cod":299,"dif":"Difficile","n":"Arpusar","uso":"Gambo/Infuso","costo":"30mo","eff":"Aggiusta i muscoli danneggiati.","af":"15","lv":"4","cat":"cur","cl":7,"te":15},
+    {"cod":300,"dif":"Diff.ssim","n":"Cashdir","uso":"Fiore/Ingestione","costo":"32mo","eff":"Antidoto per veleni che agiscono sui muscoli.","af":"3","lv":"4","cat":"var","cl":7,"te":15},
+    {"cod":301,"dif":"Media","n":"Latha","uso":"Stelo/Infuso","costo":"9ma","eff":"+10 ai TS per malattie. Cura dal comune freddo. Cura 1D2 PF.","af":"4","lv":"2","cat":"var","cl":7,"te":15},
+    {"cod":302,"dif":"M.Diff.","n":"Narciso","uso":"Fiore/Infuso","costo":"160mo","eff":"Da la morte apparente per 1d10 round","af":"--","lv":"3","cat":"var","cl":7,"te":15},
+    {"cod":303,"dif":"Facile","n":"Salice rosso","uso":"Foglia/Infuso","costo":"5ma","eff":"Abbassa la febbre.","af":"1","lv":"1","cat":"cur","cl":7,"te":15},
+    {"cod":304,"dif":"Diff.ssim","n":"Shen","uso":"Foglia/Ingestione","costo":"27mo","eff":"Antidoto per veleni che agiscono sui nervi.","af":"3","lv":"4","cat":"var","cl":7,"te":15},
+    {"cod":305,"dif":"Banale","n":"Suranie","uso":"Bacca/Ingestione","costo":"2mo","eff":"Risolleva da stordimento di 1 rnd","af":"3","lv":"10","cat":"cur","cl":7,"te":15},
+    {"cod":306,"dif":"Difficile","n":"Arfandas","uso":"Stelo/Applicaz.","costo":"2ma","eff":"Raddoppia la velocità di guarigione delle fratture","af":"--","lv":"","cat":"cur","cl":7,"te":15},
+    {"cod":307,"dif":"Media","n":"Aloe","uso":"Foglia/Applicaz.","costo":"5mb","eff":"Raddoppia la velocità di guarigione di ustioni e piccoli tagli","af":"0","lv":"1","cat":"cur","cl":7,"te":1},
+    {"cod":308,"dif":"Folle","n":"Boskone","uso":"Polvere/Inalazione","costo":"78mo","eff":"Consapevolezza x1D10+10 rnd poi –30 x1D8 ore.","af":"18","lv":"6","cat":"var","cl":7,"te":1},
+    {"cod":309,"dif":"Folle","n":"Eddij","uso":"Bacca/Succo","costo":"900mo","eff":"Biomantenimento entro 30 giorni dalla morte.","af":"18","lv":"6","cat":"cur","cl":7,"te":1},
+    {"cod":310,"dif":"Media","n":"Klabas","uso":"Gemme/Ingest.","costo":"250mo","eff":"Induce una rottura dei nervi. –100 fino alla cura.","af":"--","lv":"10","cat":"vel","cl":7,"te":1},
+    {"cod":311,"dif":"Diff.ssim","n":"Fukavar","uso":"Fiore/Fumo","costo":"230mo","eff":"Permette il collegamento mentale con 1 amico fino a 33 Km.","af":"20","lv":"6","cat":"var","cl":7,"te":9},
+    {"cod":312,"dif":"Difficile","n":"Anemone","uso":"Fiore/Applicaz.","costo":"75mo","eff":"+10 ai TR contro elettricità e aria","af":"--","lv":"5","cat":"var","cl":7,"te":2},
+    {"cod":313,"dif":"Banale","n":"Tatharsul","uso":"Pane/Ingestione","costo":"75mo","eff":"Ripara il sistema nervoso in 1D10 rnd. Durata 1D2 mesi.","af":"15","lv":"5","cat":"cur","cl":7,"te":2},
+    {"cod":314,"dif":"Diff.ssim","n":"Ossaet","uso":"Radice/Ingestione","costo":"75mo","eff":"x3 velocità di guarigione delle fratture.","af":"8","lv":"1","cat":"cur","cl":7,"te":10},
+    {"cod":315,"dif":"Banale","n":"Dugmuthur","uso":"Bacca/Ingestione","costo":"9mo","eff":"Cura 10 PF istantaneamente.","af":"2","lv":"2","cat":"cur","cl":7,"te":10},
+    {"cod":316,"dif":"M.Diff.","n":"Fleabane","uso":"Foglie/Applicaz.","costo":"20ma","eff":"Respinge gli insetti che succhiano il sangue il 95% delle volte.","af":"0","lv":"1","cat":"var","cl":7,"te":10},
+    {"cod":317,"dif":"Folle","n":"Heen","uso":"Semi/Ingestione","costo":"30mo","eff":"Causa 5D10 PF e ulcera.","af":"--","lv":"20","cat":"vel","cl":7,"te":10},
+    {"cod":318,"dif":"Assurdo","n":"Kaskamak","uso":"Foglie/Applicaz.","costo":"100mo","eff":"Toglie il dolore. Toglie il malus alle caratteristiche per 1D10 minuti.","af":"--","lv":"12","cat":"var","cl":7,"te":10},
+    {"cod":319,"dif":"Banale","n":"Mook","uso":"Bacca/Ingestione","costo":"30mo","eff":"Antidoto per veleni che intaccano l’apparato respiratorio.","af":"5","lv":"3","cat":"var","cl":7,"te":10},
+    {"cod":320,"dif":"Banale","n":"Reglen","uso":"Muschio/Infuso","costo":"75mo","eff":"Cura 50 PF.","af":"7","lv":"3","cat":"cur","cl":7,"te":10},
+    {"cod":321,"dif":"Media","n":"Rorkeiis","uso":"Saliva/Pasta","costo":"23mo","eff":"Saliva di falco. Dissolve la cartilagine in un’area affetta. –75 all’area.","af":"--","lv":"5","cat":"vel","cl":7,"te":10},
+    {"cod":322,"dif":"M.Diff.","n":"Wifurwif","uso":"Lichene/Ingest.","costo":"55mo","eff":"Nervi riparati.","af":"15","lv":"4","cat":"cur","cl":7,"te":10},
+    {"cod":323,"dif":"Diff.ssim","n":"Zaganzar","uso":"Radice/Liquido","costo":"139mo","eff":"Causa 1D10 PF. Adatta il nervo ottico all’acqua e fa diventare ciechi.","af":"--","lv":"5","cat":"vel","cl":7,"te":10},
+    {"cod":324,"dif":"Folle","n":"Bursthelas","uso":"Gambo/Infuso","costo":"110mo","eff":"Ripara le ossa e le articolazioni frantumate","af":"22","lv":"5","cat":"cur","cl":7,"te":3},
+    {"cod":325,"dif":"Difficile","n":"Carnerem","uso":"Foglia/Applicaz.","costo":"40mo","eff":"Ritarda qualsiasi veleno per 2D4 ore.","af":"8","lv":"7","cat":"var","cl":7,"te":3},
+    {"cod":326,"dif":"M.Diff.","n":"Cesto di Elban","uso":"Radice/Infuso","costo":"10mo","eff":"Velocità x2 per 1rnd una/ora. Stimolante per il cuore.","af":"15","lv":"4","cat":"var","cl":7,"te":3},
+    {"cod":327,"dif":"M.Diff.","n":"Gursamel","uso":"Gambo/Applicaz.","costo":"30mo","eff":"Aggiusta le ossa.","af":"5","lv":"3","cat":"cur","cl":7,"te":3},
+    {"cod":328,"dif":"Folle","n":"Sailcha","uso":"Fiore/Indossare","costo":"50mo","eff":"+10 al morale e TS, +5 a BO per 1D6+2 giorni.","af":"0","lv":"1","cat":"var","cl":7,"te":3},
+    {"cod":329,"dif":"Facile","n":"Alshana","uso":"Pane/Ingestione","costo":"35mo","eff":"Infravisione per 90m per 1 ora. Durata 1D2 mesi.","af":"5","lv":"3","cat":"var","cl":7,"te":11},
+    {"cod":330,"dif":"Facile","n":"Arlan","uso":"Foglia/Applicaz.","costo":"13ma","eff":"Cura 1D6+3 PF.","af":"1","lv":"2","cat":"cur","cl":7,"te":11},
+    {"cod":331,"dif":"Banale","n":"Vel. di vipera","uso":"Vipera/Pasta","costo":"68mo","eff":"-50 all’arto infetto. TS fall= perdita dell’arto infetto.","af":"--","lv":"5","cat":"vel","cl":7,"te":11},
+    {"cod":332,"dif":"Banale","n":"Kelventari","uso":"Bacca/Sfregare","costo":"19mo","eff":"Cura 1D10 PF da bruciature. Cura ustioni di 1° e 2° grado.","af":"0","lv":"1","cat":"cur","cl":7,"te":11},
+    {"cod":333,"dif":"Banale","n":"Lus","uso":"Fiore/Pasta","costo":"31mo","eff":"TSfal1-10=cec.temp,11-20=cec.1D2 occhi,21-50=coma-cec.,51+=morte.","af":"--","lv":"4","cat":"vel","cl":7,"te":11},
+    {"cod":334,"dif":"Media","n":"Thrayniis","uso":"Liquido/Ingest.","costo":"230mo","eff":"Sangue di pulce paralizza dopo 3D10 min. per 10D10 min.","af":"--","lv":"10","cat":"vel","cl":7,"te":11},
+    {"cod":335,"dif":"Banale","n":"Uraana","uso":"Foglia/Pasta","costo":"12mo","eff":"Causa 3D10 PF.","af":"--","lv":"6","cat":"vel","cl":7,"te":11},
+    {"cod":336,"dif":"Folle","n":"Carcalen","uso":"Muschio/Infuso","costo":"100mo","eff":"TS fall 1-50=arti inutiliz.x1D100gg.,51-100=nervi distrutti,100+=morte.","af":"--","lv":"4","cat":"vel","cl":7,"te":4},
+    {"cod":337,"dif":"Media","n":"Chrume","uso":"Fungo/Ingestione","costo":"15ma","eff":"-20 a AG x1D10 ore. +20 a CO e PR.","af":"10","lv":"1","cat":"var","cl":7,"te":4},
+    {"cod":338,"dif":"Folle","n":"Gartaan","uso":"Acqua/Ingestione","costo":"54mo","eff":"Emofilia. x2 le emorragie finche curato.","af":"--","lv":"15","cat":"mal","cl":7,"te":4},
+    {"cod":339,"dif":"Folle","n":"Gorfang","uso":"Muschio/Liquido","costo":"210mo","eff":"TS fall 1-50 = -50 a 1D4 estremità, 51+ = nervi dissolti.","af":"--","lv":"3","cat":"vel","cl":7,"te":4},
+    {"cod":340,"dif":"Difficile","n":"Lemsang","uso":"Fungo/Ingestione","costo":"4mo","eff":"1 mese di nutrizione.","af":"0","lv":"1","cat":"var","cl":7,"te":4},
+    {"cod":341,"dif":"M.Diff.","n":"Lothfelag","uso":"Resina/Ingestione","costo":"70mo","eff":"TS fall 1-50 = sonno 1D10 ore, 51+ = coma per 7 mesi.","af":"--","lv":"1","cat":"vel","cl":7,"te":4},
+    {"cod":342,"dif":"M.Diff.","n":"Lothfelag","uso":"Fiore/Ingestione","costo":"490mo","eff":"Resuscita/biomantiene i nani per 7 mesi. Altri cura tutti PF/stordimento.","af":"5","lv":"5","cat":"cur","cl":7,"te":4},
+    {"cod":343,"dif":"Diff.ssim","n":"Madarch","uso":"Fungo/Infuso","costo":"42mo","eff":"Cura tutte le ferite e risana il sangue in 1D100 minuti.","af":"4","lv":"3","cat":"cur","cl":7,"te":4},
+    {"cod":344,"dif":"Assurdo","n":"Moourark","uso":"Veleno/Pasta","costo":"120mo","eff":"Veleno di pipistrello. Causa il dissolvimento delle ossa in 1D100 ore.","af":"--","lv":"5","cat":"vel","cl":7,"te":4},
+    {"cod":345,"dif":"Diff.ssim","n":"Nen Calgaien","uso":"Radice/Pasta","costo":"35mo","eff":"TS fall -25= -50x1D100rd,26-50= 1D100 PF,51+ = -1D100 to CO,IN,PR","af":"--","lv":"2","cat":"vel","cl":7,"te":4},
+    {"cod":346,"dif":"Diff.ssim","n":"Pelenor","uso":"Fungo/Pasta","costo":"80mo","eff":"TS fall 1-50=emorragia 2PF/rd. 51+= vasi sanguigni esplodono.","af":"--","lv":"2","cat":"vel","cl":7,"te":4},
+    {"cod":347,"dif":"Diff.ssim","n":"Veleno di ragno","uso":"Veleno/Pasta","costo":"12mm","eff":"Paralizza per 10D10 rnd. TS fallito morte istantanea.","af":"--","lv":"10","cat":"vel","cl":7,"te":13}
+   ],
+   "erbeClimi": ["Clima Arido","Clima Freddo","Clima Perennemente Freddo","Clima Freddissimo - Gelido","Clima Caldo e Umido","Clima Mediamente Temperato","Clima Semi-Arido","Clima Freddo/Temperato"],
+   "erbeTerreni": ["Deserto","Brughiera/Macchia","Coste di oceani e di specchi di acqua salata","Praterie (vegetazione bassa)","Sottosuolo (caverne ecc.)","Zone Alpestri","Foreste di conifere (sempreverde)","Foreste a foglie decidue/mista","Coste e banchine di corso d’acqua dolce","Isole","Montagne","Praterie (vegetazione alta)","Ghiacciaio/Nevai","Zone vulcaniche","Zone desolate","Coste e Rive D’acqua dolce","Forre e Crepacci","Giungla/Foresta piovosa","Zone alpestri"],
+   "malattie": [
+    {"dif":"Diff.ssim","n":"Frulowg","prov":"Batteri/Ingestione","luogo":"Giungla/Foresta","eff":"Perdita di olfatto ( -75 ).","cod":600,"lv":"5","cat":"mal","cl":0},
+    {"dif":"Media","n":"Igturfar","prov":"Serpenti/Morso","luogo":"Giungla/Foresta","eff":"Malattia mentale, -20 al’IN","cod":601,"lv":"5","cat":"mal","cl":0},
+    {"dif":"Media","n":"Lacrima gialla","prov":"Zanzara/Morso","luogo":"Giungla/Foresta","eff":"Vomita sangue per 4D4+2 giorni.","cod":602,"lv":"30","cat":"mal","cl":0},
+    {"dif":"Diff.ssim","n":"Marsh Flux","prov":"Germi/Ingestione","luogo":"Giungla/Foresta","eff":"TS fallimento 1-20= diarrea per 1D3 giorni, 21+= coma 2D3 giorni.","cod":603,"lv":"20","cat":"mal","cl":0},
+    {"dif":"Assurdo","n":"Pakiik","prov":"Batteri/Ingestione","luogo":"Giungla/Foresta","eff":"Blocca la crescita del corpo.","cod":604,"lv":"25","cat":"mal","cl":0},
+    {"dif":"Media","n":"Quaking Fever","prov":"Batteri/Ingestione","luogo":"Giungla/Foresta","eff":"Febbre/convulsioni/tosse per 5D2 giorni.","cod":605,"lv":"20","cat":"mal","cl":0},
+    {"dif":"Folle","n":"Vaxvarna","prov":"Virus/Contatto","luogo":"Giungla/Foresta","eff":"Crea una fatale miscela interna. –100 per 1D100 giorni.","cod":606,"lv":"20","cat":"mal","cl":0},
+    {"dif":"Folle","n":"Angurth","prov":"Pulci","luogo":"Brughiera","eff":"Febbre e nausea x2D10 giorni. TS fall: morte lenta e dolorosa","cod":607,"lv":"2","cat":"mal","cl":1},
+    {"dif":"Media","n":"Febbre Rossa","prov":"Batteri/Ingestione","luogo":"Rive acqua dolce","eff":"Vomito per 1D10 giorni.","cod":608,"lv":"25","cat":"mal","cl":1},
+    {"dif":"M.Diff.","n":"Gurth-nu-fuin","prov":"Virus/Anaerobico","luogo":"Rive acqua dolce","eff":"Forte nausea –75 x1D100 ore. TS fall morte in 1D100giorni.","cod":609,"lv":"3","cat":"mal","cl":1},
+    {"dif":"Normale","n":"Jaradas","prov":"Erba Janar","luogo":"Rive acqua dolce","eff":"L’Agilità diminuisce di 5 punti","cod":610,"lv":"2","cat":"mal","cl":1},
+    {"dif":"Banale","n":"Pangwood","prov":"Albero/Contatto","luogo":"Rive acqua dolce","eff":"-75 x1D10 giorni. Infiammazione nella parte colpita.","cod":611,"lv":"2","cat":"mal","cl":1},
+    {"dif":"Folle","n":"Shutinis","prov":"Germoglio di Hultif","luogo":"Foreste decidue","eff":"-75 x1D100 ore. TS fallito insanità mentale","cod":612,"lv":"3","cat":"mal","cl":1},
+    {"dif":"Media","n":"Febbre ciclica","prov":"Zecche","luogo":"Praterie veg. alta","eff":"3D4 cicli di febbre. (ogni 4 giorni a –75) 1D4 giorni di distanza.","cod":613,"lv":"15","cat":"mal","cl":2},
+    {"dif":"M.Diff.","n":"Bukandas","prov":"Lupi/Morso","luogo":"Foreste decidue","eff":"Il succo induce attacchi d’asma.","cod":614,"lv":"20","cat":"mal","cl":3},
+    {"dif":"Assurdo","n":"Grelnixar","prov":"Foglie di Vrel.","luogo":"Rive acqua dolce","eff":"Le vittime corrono fino alla morte (Morbo del piè veloce).","cod":615,"lv":"8","cat":"mal","cl":3},
+    {"dif":"Media","n":"Vemaak","prov":"Calabroni/Puntura","luogo":"Foreste decidue","eff":"-50 alla percezione basata sull’udito.","cod":616,"lv":"7","cat":"mal","cl":3},
+    {"dif":"Facile","n":"Yaran","prov":"Polline/Ingestione","luogo":"Praterie veg. bassa","eff":"+50 alla percezione basata su olfatto/tatto per 1 ora.","cod":617,"lv":"3","cat":"mal","cl":3}
+   ],
+   "malattieClimi": ["Clima Caldo e Umido","Clima Mediamente Temperato","Clima Semi Arido","Clima Freddo Temperato"],
+   "erbeUso": [
+    {"n":"Infuso","t":"Bollire in acqua e bere dopo 20 round"},
+    {"n":"Ingestione","t":"Può essere mangiata, masticata, bevuta o ingerita in qualunque altro modo."},
+    {"n":"Applicazione","t":"Deve essere prima ridotta in poltiglia (occorrono 1D10 round)."},
+    {"n":"Pasta","t":"Ridotta in questo stato può essere spalmata su lame e punte d’armi. Rimane efficace per una settimana, o fin quando non colpisce un avversario. Se infligge un Colpo Critico, la vittima deve effettuare un Tiro Resistenza: in caso di fallimento subirà completamente gli effetti indicati. Un colpo a segno senza critici non causa effetti. Può essere posta in cibi o bevande"},
+    {"n":"Liquido","t":"Come la pasta, ma rimane efficace soltanto per 1 ora."},
+    {"n":"Polvere","t":"Può essere messa nei cibi o nelle bevande."},
+    {"n":"PREZZO","t":"È il prezzo normale di mercato dell’erba o del veleno, quando esiste un mercato!"},
+    {"n":"EFFETTI","t":"In un round, una dose può agire su un solo personaggio. gli effetti indicati valgono per una normale dose da 10 grammi"},
+    {"n":"ASSUEFAZIONE","t":"Il GAME MASTER può fare derivare l’assuefazione da certe erbe. In tal caso, l’uso dell’erba diviene meno efficace, ed occorrono quantitativi sempre maggiori; l’assuefazione è indicata dal numero in AF ed indica dopo quante settimane. Se si smette di prenderla, una volta assuefatti, si possono subire le seguenti penalità: -10 alla CO, -5 all’IN e alla PR tranne se è indicato diversamente negli EFFETTI."}
+   ]
+  };
+  if (typeof module !== 'undefined') module.exports = G.geardata;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* Equipaggiamento, armature, metalli, gemme ed erbe: funzioni pure di ricerca e di formattazione sui dati del compendio
+   (js/geardata.js, generato dai PDF). Provate in tests/gear.test.js; l'interfaccia è in gearpage.js. */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+  var GD = G.geardata || (typeof require !== 'undefined' ? require('./geardata.js') : null);
+
+  var CAT = { cur: 'Curativa', var: 'Varia / d\'utilità', vel: 'Veleno', mal: 'Malattia / effetto ambientale' };
+
+  /* Testo su cui si cerca: tutti i campi di testo della riga. */
+  function hay(o) {
+    return Object.keys(o).map(function (k) { return typeof o[k] === 'string' ? o[k] : ''; }).join(' ').toLowerCase();
+  }
+  /* Righe filtrate per testo; ogni risultato porta l'indice originale (serve ai pulsanti «Aggiungi»). */
+  function filter(rows, q) {
+    q = String(q == null ? '' : q).toLowerCase().trim();
+    var out = [];
+    rows.forEach(function (r, i) { if (!q || hay(r).indexOf(q) >= 0) out.push({ r: r, i: i }); });
+    return out;
+  }
+  /* Erbe: testo, categoria ('' = tutte) e clima ('' = tutti, altrimenti indice in erbeClimi). */
+  function herbs(q, cat, cl) {
+    q = String(q == null ? '' : q).toLowerCase().trim();
+    var out = [];
+    GD.erbe.forEach(function (h, i) {
+      if (cat && h.cat !== cat) return;
+      if (cl !== '' && cl != null && h.cl !== +cl) return;
+      if (q && (hay(h) + ' ' + GD.erbeTerreni[h.te].toLowerCase() + ' ' + GD.erbeClimi[h.cl].toLowerCase()).indexOf(q) < 0) return;
+      out.push({ r: h, i: i });
+    });
+    return out;
+  }
+
+  /* ---- armature: ricerca per nome (come scritto da «Indossa»: «Nome (SIGLA)» per le armature) ---- */
+  function armorFind(name) {
+    var s = String(name == null ? '' : name).trim().toLowerCase();
+    if (!s) return null;
+    var A = GD.armature, m = s.match(/^(.*)\s\((na|cg|cr|cm|cp)\)$/), hits = [];
+    A.body.forEach(function (sec) {
+      sec.rows.forEach(function (r) {
+        if (m ? (sec.id.toLowerCase() === m[2] && r.n.toLowerCase() === m[1].trim()) : r.n.toLowerCase() === s) hits.push({ kind: 'body', sec: sec, row: r });
+      });
+    });
+    A.elmi.forEach(function (r) { if (r.n.toLowerCase() === s) hits.push({ kind: 'elmo', row: r }); });
+    A.scudi.forEach(function (r) { if (r.n.toLowerCase() === s) hits.push({ kind: 'scudo', row: r }); });
+    return hits.length === 1 ? hits[0] : null;
+  }
+  /* Nome da scrivere nella Scheda: le armature portano la sigla del gruppo, perché alcuni nomi si ripetono. */
+  function wornName(kind, sec, row) { return kind === 'body' ? row.n + ' (' + sec.id + ')' : row.n; }
+  function armorLine(f) {
+    if (!f) return '';
+    var r = f.row, p = [];
+    if (f.kind === 'body') {
+      if (r.mm) p.push('MM ' + r.mm);
+      if (r.bom) p.push('BO-M ' + r.bom);
+      if (r.bot) p.push('BO-T ' + r.bot);
+      p.push('Res ' + r.res);
+      if (r.bd) p.push('BD ' + r.bd);
+    } else if (f.kind === 'elmo') {
+      if (r.prc) p.push('PRC ' + r.prc);
+      p.push('Res ' + r.res);
+      if (r.bdi) p.push('BD-I ' + r.bdi);
+    } else {
+      p.push('BD-M ' + r.bdm, 'BD-T ' + r.bdt, 'BD-I ' + r.bdi, 'Res ' + r.res);
+    }
+    return p.join(' · ');
+  }
+
+  /* Voce d'inventario da una riga di catalogo: nome e nota (prezzo, peso, tempo di produzione). */
+  function invNote(parts) { return parts.filter(function (x) { return x; }).join(' · '); }
+
+  var Ge = { CAT: CAT, filter: filter, herbs: herbs, armorFind: armorFind, armorLine: armorLine, wornName: wornName, invNote: invNote, hay: hay };
+  G.gear = Ge;
+  if (typeof module !== 'undefined') module.exports = Ge;
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -2694,7 +3548,28 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
   function protection(c) {
     var f = function (l, p) { return U.field(l, U.inp('data-p', 'prot.' + p, c.prot[p])); };
     return '<section class="card"><h2>Protezioni</h2><div class="grid g3">' + f('Armatura', 'armatura') + f('Tipo / colonna armatura', 'res') + f('Scudo', 'scudo') + f('Elmo', 'elmo') +
-      f('Bracciali', 'bracciali') + f('Schinieri', 'schinieri') + f('Mod. al BD', 'modbd') + f('Ingombro', 'ingombro') + f('Movimento', 'mov') + '</div></section>';
+      f('Bracciali', 'bracciali') + f('Schinieri', 'schinieri') + f('Mod. al BD', 'modbd') + f('Ingombro', 'ingombro') + f('Movimento', 'mov') + '</div>' + protStats(c) + '</section>';
+  }
+  /* Statistiche dal compendio (TSC-4) per i pezzi scelti da «Oggetti» → «Indossa» (nome identico a quello del catalogo). */
+  function protStats(c) {
+    var out = '';
+    [['Armatura', c.prot.armatura], ['Elmo', c.prot.elmo], ['Scudo', c.prot.scudo]].forEach(function (x) {
+      var f = G.gear && G.gear.armorFind(x[1]);
+      if (f) out += '<p class="hint"><b>' + x[0] + '</b>, ' + esc(x[1]) + ': ' + esc(G.gear.armorLine(f)) + '</p>';
+    });
+    return out ? out + '<p class="hint">MM: penalità alle Manovre in movimento · BO-M / BO-T: penalità al BO in mischia / da lancio e tiro · BD: bonus difensivo (BD-M, BD-T, BD-I: contro mischia, tiro/lancio, incantesimi diretti) · PRC: penalità al Tiro Percezione · Res: resistenza ai colpi. Un pezzo perde un punto di Res ogni volta che protegge da un colpo critico; a zero è inutilizzabile. Il calcolo non è automatico: applica tu le penalità.</p>' : '';
+  }
+
+  /* Erbario: le erbe trovate e conosciute (come il modulo «Erbario» del compendio); «Oggetti» → Erbe le aggiunge. */
+  function erbario(c) {
+    var h = '<section class="card"><h2>Erbario</h2><p class="hint">Erbe trovate e conosciute. Cod = codice nella tabella «Erbe, veleni e malattie» (pagina Oggetti).</p>';
+    c.erbario.forEach(function (it, i) {
+      var p = 'erbario.' + i + '.';
+      h += '<div class="wp"><div class="li">' + U.inp('data-p', p + 'n', it.n, { ph: 'Erba', label: 'Erba' }) + U.inp('data-p', p + 'cod', it.cod, { ph: 'Cod', cls: 'sm', label: 'Codice' }) +
+        U.inp('data-p', p + 'q', it.q, { ph: 'Q.tà', cls: 'sm', label: 'Quantità' }) + '<button class="mini" data-act="del" data-list="erbario" data-i="' + i + '" aria-label="Elimina">✕</button></div>' +
+        '<div class="li">' + U.inp('data-p', p + 'uso', it.uso, { ph: 'Modalità d\'uso', label: 'Modalità d\'uso' }) + U.inp('data-p', p + 'note', it.note, { ph: 'Effetti / note', label: 'Effetti' }) + '</div></div>';
+    });
+    return h + '<button data-act="add" data-list="erbario">+ Erba</button></section>';
   }
 
   function list(c, key, title, cols, addLabel) {
@@ -2741,7 +3616,7 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
   function render() {
     var c = S.cur();
     return identity(c) + stats(c) + pf(c) + skills(c) + defenses(c) + protection(c) + weapons(c) +
-      list(c, 'inv', 'Inventario', [['n', 'Oggetto'], ['q', 'Quantità', 'sm'], ['note', 'Note']], '+ Oggetto') +
+      list(c, 'inv', 'Inventario', [['n', 'Oggetto'], ['q', 'Quantità', 'sm'], ['note', 'Note']], '+ Oggetto') + erbario(c) +
       list(c, 'spells', 'Incantesimi', [['n', 'Incantesimo'], ['lvl', 'Livello', 'sm'], ['note', 'Note']], '+ Incantesimo') +
       '<section class="card"><h2>Note</h2><textarea data-p="note" rows="5" aria-label="Note">' + esc(c.note) + '</textarea></section>';
   }
@@ -3654,6 +4529,169 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
 
 </script>
 <script>
+/* Pagina Oggetti: equipaggiamento e prezzi (TS-4), statistiche delle armature (TSC-4), metalli e gemme, erbe, veleni e malattie (TS-5).
+   Dati dal compendio (js/geardata.js); i pulsanti portano le voci nell'inventario, nelle protezioni o nell'erbario del personaggio. */
+(function (root) {
+  'use strict';
+  var G = root.GIRSA = root.GIRSA || {};
+  var U = G.ui, S = G.store, esc = U.esc, Ge = G.gear, GD = G.geardata;
+  G.acts = G.acts || {};
+
+  function T() { return U.tmp.gear || (U.tmp.gear = { sec: 'armi', q: '', cat: '', cl: '', lim: 60, sig: '' }); }
+
+  var SECS = [
+    ['armi', 'Armi: prezzi'], ['prot', 'Protezioni: prezzi'], ['arm', 'Armature, elmi e scudi: statistiche'], ['acc', 'Accessori e oggetti'], ['borse', 'Borse e zaini'],
+    ['vest', 'Indossati e vestiti'], ['vitto', 'Vitto, alloggio e servizi'], ['trasp', 'Trasporti'], ['met', 'Metalli'], ['gem', 'Gemme'], ['erbe', 'Erbe e veleni'], ['mal', 'Malattie']
+  ];
+
+  /* Tabelle di prezzi: colonne [intestazione, campo, classe] */
+  var PRICE = {
+    armi: { rows: function () { return GD.equip.armi; }, cols: [['Arma', 'n', 'l'], ['Costo', 'costo'], ['Peso', 'peso'], ['T.P.', 'tp']] },
+    prot: { rows: function () { return GD.equip.prot; }, cols: [['Equipaggiamento', 'n', 'l'], ['Costo', 'costo'], ['Peso', 'peso'], ['T.P.', 'tp']], notes: function () { return GD.equip.prot_note; } },
+    acc: { rows: function () { return GD.equip.accessori; }, cols: [['Oggetto', 'n', 'l'], ['Costo', 'costo'], ['Peso', 'peso'], ['T.P.', 'tp'], ['Note', 'note', 'l']], notes: function () { return [GD.equip.oggetti_note]; } },
+    borse: { rows: function () { return GD.equip.borse; }, cols: [['Oggetto', 'n', 'l'], ['Costo', 'costo'], ['Peso', 'peso'], ['T.P.', 'tp'], ['Note', 'note', 'l']], notes: function () { return [GD.equip.oggetti_note]; } },
+    vest: { rows: function () { return GD.equip.vestiti; }, cols: [['Oggetto', 'n', 'l'], ['Costo', 'costo'], ['Peso*', 'peso'], ['T.P.', 'tp'], ['Note', 'note', 'l']], notes: function () { return [GD.equip.oggetti_note, '*Il peso viene considerato come carico solo quando l’oggetto è trasportato, non quando è indossato']; } },
+    vitto: { rows: function () { return GD.equip.vitto; }, cols: [['Merce o servizio', 'n', 'l'], ['Costo', 'costo'], ['Note', 'note', 'l']], notes: function () { return GD.equip.vitto_note; } },
+    trasp: { rows: function () { return GD.equip.trasporti; }, cols: [['Mezzo di trasporto', 'n', 'l'], ['Costo', 'costo'], ['Velocità di viaggio', 'vel'], ['Capacità', 'cap'], ['Bonus Cavalcare*', 'cav']], notes: function () { return GD.equip.trasporti_note; } }
+  };
+
+  function table(head, rows) {
+    return '<div class="scroll"><table class="sk"><thead><tr>' + head.map(function (h) { return '<th' + (h[1] ? ' class="l"' : '') + '>' + esc(h[0]) + '</th>'; }).join('') + '</tr></thead><tbody>' + rows.join('') + '</tbody></table></div>';
+  }
+  function td(v, l) { return '<td' + (l ? ' class="l"' : '') + '>' + esc(v) + '</td>'; }
+  function notes(arr) { return arr.map(function (n) { return '<p class="hint">' + esc(n) + '</p>'; }).join(''); }
+  function more(t, total, shown) {
+    return total > shown ? '<p class="hint">Mostrate ' + shown + ' voci su ' + total + '. <button class="mini" data-act="gear_more">Mostra altre</button></p>' : '';
+  }
+
+  function priceSec(k) {
+    var t = T(), P = PRICE[k], res = Ge.filter(P.rows(), t.q), shown = res.slice(0, t.lim);
+    var head = P.cols.map(function (c) { return [c[0], c[2]]; }).concat([['', '']]);
+    var rows = shown.map(function (x) {
+      return '<tr>' + P.cols.map(function (c) { return td(x.r[c[1]], c[2]); }).join('') + '<td><button class="mini" data-act="gear_inv" data-k="' + k + '" data-i="' + x.i + '" aria-label="Aggiungi ' + esc(x.r.n) + ' all\'inventario">+ Inv.</button></td></tr>';
+    });
+    return (res.length ? table(head, rows) : '<p class="hint">Nessuna voce trovata.</p>') + more(t, res.length, shown.length) + (P.notes ? notes(P.notes()) : '');
+  }
+
+  /* ---- armature ---- */
+  function wearBtn(kind, sec, i, name) {
+    return '<td><button class="mini" data-act="gear_wear" data-kind="' + kind + '" data-sec="' + sec + '" data-i="' + i + '" aria-label="Indossa ' + esc(name) + '">Indossa</button></td>';
+  }
+  function armSec() {
+    var t = T(), q = (t.q || '').toLowerCase().trim(), A = GD.armature, h = '', any = false;
+    var ok = function (r) { return !q || Ge.hay(r).indexOf(q) >= 0; };
+    A.body.forEach(function (sec) {
+      var rows = [];
+      sec.rows.forEach(function (r, i) {
+        if (ok(r)) rows.push('<tr>' + td(r.n, 1) + td(r.mm) + td(r.bom) + td(r.bot) + td(r.d, 1) + td(r.res) + td(r.bd) + wearBtn('body', sec.id, i, r.n) + '</tr>');
+      });
+      if (!rows.length) return;
+      any = true;
+      h += '<h3>' + esc(sec.n) + '</h3>' + table([['Armatura', 1], ['MM', 0], ['BO-M', 0], ['BO-T', 0], ['Descrizione', 1], ['Res', 0], ['BD', 0], ['', 0]], rows) + (sec.id === 'NA' ? notes([A.note.NA]) : '');
+    });
+    var er = [];
+    A.elmi.forEach(function (r, i) { if (ok(r)) er.push('<tr>' + td(r.n, 1) + td(r.prc) + td(r.d, 1) + td(r.res) + td(r.bdi) + wearBtn('elmo', 'elmi', i, r.n) + '</tr>'); });
+    if (er.length) { any = true; h += '<h3>Elmi e copricapi</h3>' + table([['Elmo', 1], ['PRC', 0], ['Descrizione', 1], ['Res', 0], ['BD-I', 0], ['', 0]], er) + notes([A.note.elmi]); }
+    if (!q || /bracciali|schinieri|avambraccia|gambe|cuoio|metallo/.test(q)) { any = true; h += '<h3>' + esc(A.bracciali.titolo) + '</h3>' + notes(A.bracciali.righe); }
+    var sr = [];
+    A.scudi.forEach(function (r, i) { if (ok(r)) sr.push('<tr>' + td(r.n, 1) + td(r.bdm) + td(r.bdt) + td(r.bdi) + td(r.d, 1) + td(r.res) + wearBtn('scudo', 'scudi', i, r.n) + '</tr>'); });
+    if (sr.length) { any = true; h += '<h3>Scudi</h3>' + table([['Scudo', 1], ['BD-M', 0], ['BD-T', 0], ['BD-I', 0], ['Descrizione', 1], ['Res', 0], ['', 0]], sr); }
+    if (!any) return '<p class="hint">Nessuna voce trovata.</p>';
+    return h + notes([A.legenda]);
+  }
+
+  /* ---- metalli e gemme ---- */
+  function metSec() {
+    var t = T(), M = GD.metalli, res = Ge.filter(M.metalli, t.q);
+    var h = res.length ? table([['Metallo', 1], ['Bonus', 0], ['Valore', 0], ['Costo di lavorazione', 0], ['Tempo (ore)', 0], ['Note', 1]], res.map(function (x) {
+      return '<tr>' + td(x.r.n, 1) + td(x.r.bonus) + td(x.r.valore) + td(x.r.lav) + td(x.r.tempo) + td(x.r.note, 1) + '</tr>';
+    })) : '<p class="hint">Nessun metallo trovato.</p>';
+    return h + notes(M.note_metalli) + descr();
+  }
+  function gemSec() {
+    var t = T(), M = GD.metalli, res = Ge.filter(M.gemme, t.q);
+    var h = res.length ? table([['Gemma', 1], ['Rarità - Valore', 1], ['Tipo - Colore', 1], ['Proprietà', 1]], res.map(function (x) {
+      return '<tr>' + td(x.r.n, 1) + td(x.r.rarita, 1) + td(x.r.tipo, 1) + td(x.r.prop, 1) + '</tr>';
+    })) : '<p class="hint">Nessuna gemma trovata.</p>';
+    return h + notes(M.note_gemme) + descr();
+  }
+  function descr() {
+    var t = T(), q = (t.q || '').toLowerCase().trim(), M = GD.metalli;
+    var rows = M.descr.filter(function (d) { return !q || (d.n + ' ' + d.t).toLowerCase().indexOf(q) >= 0; });
+    if (!rows.length) return '';
+    return '<details' + (q ? ' open' : '') + '><summary>I metalli e le gemme usati dagli artigiani elfici (' + rows.length + ')</summary>' +
+      rows.map(function (d) { return '<p class="pl"><b>' + esc(d.n) + ':</b> ' + esc(d.t) + '</p>'; }).join('') + '</details>';
+  }
+
+  /* ---- erbe, veleni, malattie ---- */
+  var CATSHORT = { cur: 'Curativa', var: 'Varia', vel: 'Veleno', mal: 'Malattia' };
+  function herbSec() {
+    var t = T(), res = Ge.herbs(t.q, t.cat, t.cl), shown = res.slice(0, t.lim);
+    var h = '<div class="grid g3">' +
+      U.field('Tipo', U.sel('data-t', 'gear.cat', t.cat, [['', '(tutti)']].concat(Object.keys(Ge.CAT).map(function (k) { return [k, Ge.CAT[k]]; })), { re: 1, label: 'Tipo' })) +
+      U.field('Clima', U.sel('data-t', 'gear.cl', t.cl, [['', '(tutti)']].concat(GD.erbeClimi.map(function (c, i) { return [String(i), c.replace(/^Clima /, '')]; })), { re: 1, label: 'Clima' })) + '</div>';
+    h += '<p class="hint">' + res.length + ' erbe, veleni ed effetti trovati. Il tipo è quello dei colori della tabella del compendio: curativa, varia/d\'utilità, veleno, malattia/effetto ambientale. Mod. d\'uso, assuefazione e prezzo: vedi sotto.</p>';
+    if (res.length) {
+      h += table([['Cod', 0], ['Erba', 1], ['Dif.', 0], ['Parte / uso', 0], ['Costo', 0], ['Effetti', 1], ['AF', 0], ['Lv', 0], ['', 0]], shown.map(function (x) {
+        var e = x.r;
+        return '<tr><td>' + e.cod + '</td><td class="l"><b>' + esc(e.n) + '</b> <span class="tag" title="' + esc(Ge.CAT[e.cat]) + '">' + CATSHORT[e.cat] + '</span><br><span class="hint">' + esc(GD.erbeClimi[e.cl].replace(/^Clima /, '')) + ' · ' + esc(GD.erbeTerreni[e.te]) + '</span></td>' +
+          td(e.dif) + td(e.uso) + td(e.costo) + td(e.eff, 1) + td(e.af) + td(e.lv) + '<td><button class="mini" data-act="gear_herb" data-i="' + x.i + '" aria-label="Aggiungi ' + esc(e.n) + ' all\'erbario">+ Erbario</button></td></tr>';
+      })) + more(T(), res.length, shown.length);
+    } else h += '<p class="hint">Nessuna erba trovata.</p>';
+    h += '<details><summary>Modalità d\'uso, prezzo, effetti, assuefazione</summary>' + GD.erbeUso.map(function (u) { return '<p class="pl"><b>' + esc(u.n) + ':</b> ' + esc(u.t) + '</p>'; }).join('') + '</details>';
+    return h;
+  }
+  function malSec() {
+    var t = T(), res = Ge.filter(GD.malattie, t.q);
+    if (!res.length) return '<p class="hint">Nessuna malattia trovata.</p>';
+    return table([['Cod', 0], ['Malattia', 1], ['Dif.', 0], ['Provenienza', 0], ['Luogo', 0], ['Effetti', 1], ['Lv', 0], ['Clima', 0]], res.map(function (x) {
+      var d = x.r;
+      return '<tr><td>' + d.cod + '</td>' + td(d.n, 1) + td(d.dif) + td(d.prov) + td(d.luogo) + td(d.eff, 1) + td(d.lv) + td(GD.malattieClimi[d.cl].replace(/^Clima /, '')) + '</tr>';
+    })) + '<p class="hint">Le malattie e gli effetti ambientali non si comprano: servono al GM. Codici da 600.</p>';
+  }
+
+  function render() {
+    var t = T(), sig = [t.sec, t.q, t.cat, t.cl].join('|');
+    if (sig !== t.sig) { t.sig = sig; t.lim = 60; }
+    var body = PRICE[t.sec] ? priceSec(t.sec) : t.sec === 'arm' ? armSec() : t.sec === 'met' ? metSec() : t.sec === 'gem' ? gemSec() : t.sec === 'erbe' ? herbSec() : malSec();
+    return '<section class="card"><h2>Oggetti</h2><p class="hint">Equipaggiamento e prezzi, armature, metalli e gemme, erbe, veleni e malattie del compendio Istaro Quettar. Con «+ Inv.» la voce va nell\'inventario della Scheda, con «Indossa» nelle Protezioni, con «+ Erbario» nell\'erbario. ' +
+      'Le monete sono quelle del compendio (MO, MA, MB, MS, MR, MM): i testi non danno qui i rapporti di cambio, quindi l\'app non converte.</p>' +
+      '<div class="grid g2">' + U.field('Sezione', U.sel('data-t', 'gear.sec', t.sec, SECS, { re: 1, label: 'Sezione' })) +
+      U.field('Cerca', '<input type="search" data-t="gear.q" data-re="1" value="' + esc(t.q) + '" placeholder="es. spada, cotta, athelas, cura">') + '</div>' +
+      '<p class="hint">Scrivi e premi Invio per cercare.</p>' + body + '</section>';
+  }
+
+  /* ---- azioni ---- */
+  function addInv(c, name, note) {
+    var hit = null;
+    c.inv.forEach(function (x) { if (!hit && x.n === name && /^\d+$/.test(String(x.q))) hit = x; });
+    if (hit) hit.q = String(+hit.q + 1); else c.inv.push({ n: name, q: '1', note: note });
+  }
+  G.acts.gear_inv = function (b) {
+    var k = b.dataset.k, P = PRICE[k], r = P && P.rows()[+b.dataset.i], c = S.cur(); if (!r) return;
+    var parts = k === 'vitto' ? [r.costo, r.note] : k === 'trasp' ? [r.costo, r.vel, r.cap] : ['Costo ' + r.costo, r.peso && 'Peso ' + r.peso, r.tp && r.tp !== '-' && 'T.P. ' + r.tp, r.note];
+    addInv(c, r.n, Ge.invNote(parts)); S.save(); U.toast('«' + r.n + '» aggiunto all\'inventario.');
+  };
+  G.acts.gear_wear = function (b) {
+    var A = GD.armature, kind = b.dataset.kind, i = +b.dataset.i, c = S.cur(), r, sec = null;
+    if (kind === 'body') { A.body.forEach(function (s) { if (s.id === b.dataset.sec) sec = s; }); r = sec && sec.rows[i]; } else r = (kind === 'elmo' ? A.elmi : A.scudi)[i];
+    if (!r) return;
+    var name = Ge.wornName(kind, sec, r), slot = kind === 'body' ? 'armatura' : kind === 'elmo' ? 'elmo' : 'scudo';
+    c.prot[slot] = name; S.save(); U.toast('«' + name + '» indossato: lo trovi in Protezioni, nella Scheda.');
+  };
+  G.acts.gear_herb = function (b) {
+    var h = GD.erbe[+b.dataset.i], c = S.cur(); if (!h) return;
+    var hit = null; c.erbario.forEach(function (x) { if (!hit && String(x.cod) === String(h.cod) && /^\d+$/.test(String(x.q))) hit = x; });
+    if (hit) hit.q = String(+hit.q + 1); else c.erbario.push({ n: h.n, uso: h.uso, cod: String(h.cod), q: '1', note: h.eff });
+    S.save(); U.toast('«' + h.n + '» nell\'erbario.');
+  };
+  G.acts.gear_more = function () { T().lim += 60; G.app.render(); };
+
+  G.pages.gear = { render: render };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
 /* Pagina Combattimento: calcolo dell'attacco, colpo critico, avversari. */
 (function (root) {
   'use strict';
@@ -3970,7 +5008,7 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
   'use strict';
   var G = root.GIRSA, R = G.rules, D = G.data, U = G.ui, S = G.store, T = G.tables, dice = G.dice.dice;
   var P = G.pages, esc = U.esc;
-  var ROUTES = [['sheet', 'Scheda'], ['create', 'Crea'], ['dice', 'Dadi'], ['combat', 'Combattimento'], ['diary', 'Diario'], ['ref', 'Guida'], ['data', 'Dati']];
+  var ROUTES = [['sheet', 'Scheda'], ['create', 'Crea'], ['dice', 'Dadi'], ['combat', 'Combattimento'], ['gear', 'Oggetti'], ['diary', 'Diario'], ['ref', 'Guida'], ['data', 'Dati']];
   var STATE_LISTS = { enemies: 1, atk: 1, crit: 1 };
 
   function route() { var r = (location.hash || '').replace(/^#\/?/, ''); return P[r] ? r : 'sheet'; }
@@ -4077,7 +5115,7 @@ footer#lastbar{position:fixed;left:0;right:0;bottom:0;background:var(--acc);colo
     clearroll: function () { S.get().dlog = []; S.save(); render(); },
     add: function (b) {
       var l = b.dataset.list, c = S.cur();
-      c[l].push(l === 'inv' ? { n: '', q: '', note: '' } : l === 'weapons' ? { id: '', n: '', atk: '', skill: '', ct: '', fumble: '', git: '' } : { n: '', lvl: '', note: '' }); S.save(); render();
+      c[l].push(l === 'inv' ? { n: '', q: '', note: '' } : l === 'erbario' ? { n: '', uso: '', cod: '', q: '', note: '' } : l === 'weapons' ? { id: '', n: '', atk: '', skill: '', ct: '', fumble: '', git: '' } : { n: '', lvl: '', note: '' }); S.save(); render();
     },
     del: function (b) {
       var arr = listOf(b.dataset.list); if (!arr) return;

@@ -80,7 +80,28 @@
   function protection(c) {
     var f = function (l, p) { return U.field(l, U.inp('data-p', 'prot.' + p, c.prot[p])); };
     return '<section class="card"><h2>Protezioni</h2><div class="grid g3">' + f('Armatura', 'armatura') + f('Tipo / colonna armatura', 'res') + f('Scudo', 'scudo') + f('Elmo', 'elmo') +
-      f('Bracciali', 'bracciali') + f('Schinieri', 'schinieri') + f('Mod. al BD', 'modbd') + f('Ingombro', 'ingombro') + f('Movimento', 'mov') + '</div></section>';
+      f('Bracciali', 'bracciali') + f('Schinieri', 'schinieri') + f('Mod. al BD', 'modbd') + f('Ingombro', 'ingombro') + f('Movimento', 'mov') + '</div>' + protStats(c) + '</section>';
+  }
+  /* Statistiche dal compendio (TSC-4) per i pezzi scelti da «Oggetti» → «Indossa» (nome identico a quello del catalogo). */
+  function protStats(c) {
+    var out = '';
+    [['Armatura', c.prot.armatura], ['Elmo', c.prot.elmo], ['Scudo', c.prot.scudo]].forEach(function (x) {
+      var f = G.gear && G.gear.armorFind(x[1]);
+      if (f) out += '<p class="hint"><b>' + x[0] + '</b>, ' + esc(x[1]) + ': ' + esc(G.gear.armorLine(f)) + '</p>';
+    });
+    return out ? out + '<p class="hint">MM: penalità alle Manovre in movimento · BO-M / BO-T: penalità al BO in mischia / da lancio e tiro · BD: bonus difensivo (BD-M, BD-T, BD-I: contro mischia, tiro/lancio, incantesimi diretti) · PRC: penalità al Tiro Percezione · Res: resistenza ai colpi. Un pezzo perde un punto di Res ogni volta che protegge da un colpo critico; a zero è inutilizzabile. Il calcolo non è automatico: applica tu le penalità.</p>' : '';
+  }
+
+  /* Erbario: le erbe trovate e conosciute (come il modulo «Erbario» del compendio); «Oggetti» → Erbe le aggiunge. */
+  function erbario(c) {
+    var h = '<section class="card"><h2>Erbario</h2><p class="hint">Erbe trovate e conosciute. Cod = codice nella tabella «Erbe, veleni e malattie» (pagina Oggetti).</p>';
+    c.erbario.forEach(function (it, i) {
+      var p = 'erbario.' + i + '.';
+      h += '<div class="wp"><div class="li">' + U.inp('data-p', p + 'n', it.n, { ph: 'Erba', label: 'Erba' }) + U.inp('data-p', p + 'cod', it.cod, { ph: 'Cod', cls: 'sm', label: 'Codice' }) +
+        U.inp('data-p', p + 'q', it.q, { ph: 'Q.tà', cls: 'sm', label: 'Quantità' }) + '<button class="mini" data-act="del" data-list="erbario" data-i="' + i + '" aria-label="Elimina">✕</button></div>' +
+        '<div class="li">' + U.inp('data-p', p + 'uso', it.uso, { ph: 'Modalità d\'uso', label: 'Modalità d\'uso' }) + U.inp('data-p', p + 'note', it.note, { ph: 'Effetti / note', label: 'Effetti' }) + '</div></div>';
+    });
+    return h + '<button data-act="add" data-list="erbario">+ Erba</button></section>';
   }
 
   function list(c, key, title, cols, addLabel) {
@@ -127,7 +148,7 @@
   function render() {
     var c = S.cur();
     return identity(c) + stats(c) + pf(c) + skills(c) + defenses(c) + protection(c) + weapons(c) +
-      list(c, 'inv', 'Inventario', [['n', 'Oggetto'], ['q', 'Quantità', 'sm'], ['note', 'Note']], '+ Oggetto') +
+      list(c, 'inv', 'Inventario', [['n', 'Oggetto'], ['q', 'Quantità', 'sm'], ['note', 'Note']], '+ Oggetto') + erbario(c) +
       list(c, 'spells', 'Incantesimi', [['n', 'Incantesimo'], ['lvl', 'Livello', 'sm'], ['note', 'Note']], '+ Incantesimo') +
       '<section class="card"><h2>Note</h2><textarea data-p="note" rows="5" aria-label="Note">' + esc(c.note) + '</textarea></section>';
   }

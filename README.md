@@ -27,6 +27,7 @@ nel browser e funziona anche senza rete.
 - **Combattimento**: iniziativa, attacco (tiro + BO − BD + modificatori) con lettura della tabella di attacco dell'arma scelta dal catalogo,
   colpo maldestro o fallimento con la relativa tabella, colpo critico con il modificatore della lettera,
   elenco avversari con PF, registro. In più: **incantesimi di attacco base** (TA-9 e tiro resistenza sulla TRR), **incantesimi inoffensivi** (TFI) e **gittata** (TSC-5).
+- **Oggetti**: equipaggiamento e prezzi (TS-4: armi, protezioni, accessori, borse, vestiti, vitto e servizi, trasporti), statistiche delle armature, degli elmi e degli scudi (TSC-4), metalli e gemme, 347 erbe, veleni ed effetti e 18 malattie (TS-5), con ricerca. «+ Inv.» porta una voce nell'inventario, «Indossa» nelle Protezioni (la Scheda mostra poi MM, BO, BD e resistenza del pezzo), «+ Erbario» nell'erbario della Scheda.
 - **Diario**: paragrafo attuale, registro delle scelte e segnalini per il librogame.
 - **Dati**: impostazioni di calcolo, aiuto per la guarigione (TFC-2), tabelle aggiuntive tue,
   esportazione e importazione di una copia di sicurezza.
@@ -62,6 +63,14 @@ scegli l'arma: tabella di attacco, colpo maldestro, tabella e tipo massimo dei c
 - **Applicare una professione** sostituisce i valori già scritti nella colonna «Prof» delle abilità.
 - **PF per livello ed esperienza** non sono nei documenti caricati: non sono calcolati.
 - Le tabelle dei popoli, delle professioni, del background e della TB-6/TGP-4 sono in immagini nei PDF e sono state trascritte a mano e controllate con somme e confronti incrociati, non cella per cella da una macchina: se trovi un valore dubbio, controlla il PDF.
+
+## Oggetti: scelte dell'app
+
+- **Nessuna conversione di monete**: nei documenti caricati non ci sono i rapporti tra MO, MA, MB, MS, MR e MM, e l'app non li inventa. Prezzi, pesi e tempi sono riportati come nel compendio, refusi compresi.
+- **Tipo delle erbe** (curativa, varia/d'utilità, veleno, malattia/effetto ambientale): nel PDF è dato solo dal colore del nome, secondo la legenda in fondo alla tabella; l'app lo legge da lì.
+- **Armature**: le penalità (MM, BO-M, BO-T, PRC) e i bonus (BD) sono mostrati, non applicati ai tiri: la Scheda li ricorda, tu li somma dove serve. La resistenza non è tracciata punto per punto.
+- **Nomi delle armature**: alcuni si ripetono in gruppi diversi (per esempio «Corazza rigida» tra cuoio rinforzato e piastre); «Indossa» scrive il nome con la sigla del gruppo, per ritrovare le statistiche.
+- **Armi**: la tabella dei prezzi (TS-4) e il catalogo delle statistiche di combattimento (TSC-1) restano separati; le due fonti hanno nomi in parte diversi e l'app non li abbina a indovinare.
 
 ## Crediti
 
@@ -114,11 +123,14 @@ js/combatdata.js        TA-9, TRR, TSC-3/4/5, generato da tools/extract-combat.p
 js/combatrules.js       testo del Prospetto sul Combattimento, generato da tools/extract-combatrules.py
 js/magic.js, js/magicpage.js   incantesimi base, iniziativa, TFI, gittata
 js/refcombat.js         parti di combattimento e magia della Guida
+js/geardata.js          armature, equipaggiamento e prezzi, metalli, gemme, erbe e malattie, generato da tools/extract-gear.py
+js/gear.js, js/gearpage.js   ricerca e pagina «Oggetti»
 js/store.js             salvataggio locale
 tools/build.mjs         crea dist/girsa.html
 tools/extract-combat.py  rigenera combatdata.js (TA-9, TRR, TSC-3/4/5)
 tools/extract-combatrules.py rigenera combatrules.js (testo del Prospetto sul Combattimento)
 tools/extract-creation.py rigenera creationpdf.js e secdata.js dai PDF di adolescenza e abilità secondarie
+tools/extract-gear.py   rigenera geardata.js dai PDF di armature, equipaggiamento, metalli e gemme, erbe (con tools/pdfgrid.py)
 tools/extract-tables.py rigenera tabledata.js (con i critici mirati) e weapondata.js dai PDF (serve poppler e pdfplumber)
 tests/                  test
 ```

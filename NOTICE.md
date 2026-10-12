@@ -28,4 +28,6 @@ Di conseguenza:
   Le tabelle dei tipi di incantesimi, delle classi, del TFI e il testo sulla Corruzione sono in immagini nel PDF e sono stati trascritti a mano in `js/refcombat.js`, così come le piccole tabelle del Prospetto sul Combattimento (modificatori al BO, parata, scudi, «Oltre il 150») e la TSC-2 degli animali.
   I critici mirati da punta (TCM-1…4) stanno in `js/tabledata.js`, generato da `tools/extract-tables.py`. Valgono le stesse condizioni: uso personale, repository privato, niente vendita.
 
+- `js/geardata.js` è generato da `tools/extract-gear.py` (con `tools/pdfgrid.py`) dai PDF «Armature» (TSC-4), «Equipaggiamento e Prezzi» (TS-4), «Metalli e Gemme» ed «Erbe per Girsa» (TS-5): tabelle e testi come nei PDF, refusi compresi. La categoria delle erbe deriva dal colore del nome, secondo la legenda del PDF. Valgono le stesse condizioni: uso personale, repository privato, niente vendita.
+
 GIRSA e «Il Signore degli Anelli» appartengono ai rispettivi titolari. Il progetto non è affiliato a nessuno di loro.

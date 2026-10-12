@@ -3,3 +3,4 @@ node_modules/
 .DS_Store
 # Tabelle importate dal compendio: non vanno nel repository
 data/*.local.json
+__pycache__/

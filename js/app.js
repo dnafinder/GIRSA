@@ -3,7 +3,7 @@
   'use strict';
   var G = root.GIRSA, R = G.rules, D = G.data, U = G.ui, S = G.store, T = G.tables, dice = G.dice.dice;
   var P = G.pages, esc = U.esc;
-  var ROUTES = [['sheet', 'Scheda'], ['create', 'Crea'], ['dice', 'Dadi'], ['combat', 'Combattimento'], ['diary', 'Diario'], ['ref', 'Guida'], ['data', 'Dati']];
+  var ROUTES = [['sheet', 'Scheda'], ['create', 'Crea'], ['dice', 'Dadi'], ['combat', 'Combattimento'], ['gear', 'Oggetti'], ['diary', 'Diario'], ['ref', 'Guida'], ['data', 'Dati']];
   var STATE_LISTS = { enemies: 1, atk: 1, crit: 1 };
 
   function route() { var r = (location.hash || '').replace(/^#\/?/, ''); return P[r] ? r : 'sheet'; }
@@ -110,7 +110,7 @@
     clearroll: function () { S.get().dlog = []; S.save(); render(); },
     add: function (b) {
       var l = b.dataset.list, c = S.cur();
-      c[l].push(l === 'inv' ? { n: '', q: '', note: '' } : l === 'weapons' ? { id: '', n: '', atk: '', skill: '', ct: '', fumble: '', git: '' } : { n: '', lvl: '', note: '' }); S.save(); render();
+      c[l].push(l === 'inv' ? { n: '', q: '', note: '' } : l === 'erbario' ? { n: '', uso: '', cod: '', q: '', note: '' } : l === 'weapons' ? { id: '', n: '', atk: '', skill: '', ct: '', fumble: '', git: '' } : { n: '', lvl: '', note: '' }); S.save(); render();
     },
     del: function (b) {
       var arr = listOf(b.dataset.list); if (!arr) return;
