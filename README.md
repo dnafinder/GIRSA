@@ -53,7 +53,7 @@ scegli l'arma: tabella di attacco, colpo maldestro, tabella e tipo massimo dei c
 - **«Oltre il 150»**: è una concessione facoltativa del GM, quindi l'app mostra solo il margine e la lettera suggerita; non tira il critico supplementare.
 - **Modificatori al BO**: stordito (+20), atterrato (+30) e prono (+50) non si sommano tra loro: si applica il più alto. Le tabelle degli attacchi in mischia e a distanza dicono «stordito o a terra +20»: l'app segue il Prospetto sul Combattimento, che è più preciso.
 - **Frusta**: nel PDF con i modificatori delle armi il −15 sulla TA compare solo nelle colonne piastre e maglia (con ½ PF); l'app lo applica solo lì. L'app non dimezza i PF: è un'indicazione nelle note dell'arma.
-- **Azza (Bec de Corbin)**: due pagine del compendio non concordano. La tabella delle armi (TSC-1) dà −10 sulla TA contro cuoio e nessuna armatura; la tabella TA-10 con i modificatori dà −5. L'app segue la TSC-1: se vuoi il −5, cambia il modificatore a mano.
+- **Azza (Bec de Corbin)**: due pagine del compendio non concordano. La tabella delle armi (TSC-1) dà −10 sulla TA contro cuoio e nessuna armatura; la tabella TA-10 con i modificatori dà −5. Per scelta tua l'app usa il −5 (la nota dell'arma lo dice); il −10 stampato resta nella nota.
 - **Rete da gladiatore e armi che dimezzano i PF**: i PF dimezzati non sono calcolati, solo segnalati.
 
 ## Creazione del personaggio: scelte dell'app

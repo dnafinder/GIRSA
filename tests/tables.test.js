@@ -134,6 +134,7 @@ test('armi: struttura e valori di controllo letti dal PDF', () => {
   assert.deepStrictEqual(w('taglio1-stocco-spada-da-lato').mods, [{ v: -10, arm: [0, 2] }, { v: 5, arm: [1, 3, 4] }]);
   assert.deepStrictEqual(w('taglio1-pugnale').c1, { type: 'PU', max: 'D' });
   assert.deepStrictEqual(w('contund1-mazza-chiodata').c2, { type: 'PU', max: 'B' });
+  assert.deepStrictEqual(w('asta2-azza-bec-de-corbin').mods, [{ v: 5, arm: [0, 1] }, { v: -5, arm: [2, 3, 4] }]);   // scelta dell'utente: -5 della TA-10 (la TSC-1 stampa -10)
   assert.strictEqual(w('contund1-rete-da-gladiatore').atk, 'TA-6');
   assert.strictEqual(w('contund1-rete-da-gladiatore').limit, 'Medi');
   assert.strictEqual(w('asta2-lancia-da-cavaliere').atk, 'TA-10');

@@ -183,6 +183,10 @@ ROW = re.compile(r'^(?P<n>\S.*?)\s{2,}(?P<cm>\d+)\s+(?P<c1>[A-Z]{2,3}(?:\([TABCD
 # Nel PDF «Tabelle d'attacco con modificatori delle Armi» la Frusta ha «-15 ½PF» solo nelle colonne piastre e maglie:
 # il -15 sulla TA vale quindi solo contro quelle due armature (la tabella TSC-1 non lo diceva in modo chiaro).
 DALLA_TA = {'contund1-frusta': [{'v': -15, 'arm': [0, 1]}]}
+# Azza (Bec de Corbin): la TSC-1 dà -10 sulla TA contro cuoio e nessuna armatura, la TA-10 con i modificatori dà -5.
+# Scelta dell'utente (12/10/2026): vale il -5 della TA-10. Il testo stampato resta nella nota, con l'avvertenza.
+AZZA_ID = 'asta2-azza-bec-de-corbin'
+AZZA_MODS = [{'v': 5, 'arm': [0, 1]}, {'v': -5, 'arm': [2, 3, 4]}]
 ARM_IDX = {'piastre': [0], 'maglia': [1], 'maglie': [1], 'cuoio rinf.': [2], 'cuoio': [2, 3], 'na': [4]}
 
 
@@ -239,6 +243,9 @@ def weapons(pdf_path):
              'git': None if m.group('g') == '-' else m.group('g'), 'mods': mods, 'manual': manual, 'note': note}
         if w['id'] in DALLA_TA:   # colonne lette nella riga «Modificatori delle Armi» della tabella di attacco (PDF «con modificatori»)
             w['mods'], w['manual'] = DALLA_TA[w['id']], []
+        if w['id'] == AZZA_ID:
+            w['mods'] = AZZA_MODS
+            w['note'] = w['note'] + ' [App: contro cuoio o NA vale -5, come nella TA-10; la TSC-1 stampa -10]'
         t6 = re.search(r'tabella (TA-\d+), Attacco (Medio|Piccolo|Grande|Enorme|Minuscolo)', note)
         if t6:
             w['atk'] = t6.group(1)
