@@ -1,5 +1,5 @@
 /* Service worker: tiene l'app disponibile senza rete. Cambia VERSION a ogni rilascio. */
-var VERSION = 'girsa-v2';
+var VERSION = 'girsa-v3';
 var FILES = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon.svg', 'css/app.css',
   'js/data.js', 'js/rules.js', 'js/dice.js', 'js/tables.js', 'js/tabledata.js', 'js/weapondata.js', 'js/creationdata.js', 'js/creationpdf.js', 'js/secdata.js', 'js/creation.js', 'js/store.js', 'js/ui.js',
   'js/sheet.js', 'js/createpage.js', 'js/refpage.js', 'js/dicepage.js', 'js/combat.js', 'js/diary.js', 'js/datapage.js', 'js/app.js'];

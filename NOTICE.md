@@ -7,7 +7,7 @@ Il codice è sotto licenza MIT (vedi `LICENSE`).
 `js/data.js` contiene i valori necessari ai calcoli (bonus alle caratteristiche, bonus ai gradi,
 modifiche dei popoli, tabella dell'esperienza, tabella di guarigione, modificatori all'attacco,
 modificatori ai colpi critici). Sono stati ricavati a mano dal compendio **«Istaro Quettar»** di
-**Filduin**, basato su GIRSA 2ª/3ª edizione. Il compendio è distribuito per uso personale o
+**Filduin** (sito: <https://www.istaroquettar.it>), basato su GIRSA 2ª/3ª edizione. Il compendio è distribuito per uso personale o
 distribuzione gratuita, non per la vendita, e il suo contenuto non va modificato.
 
 Di conseguenza:

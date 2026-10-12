@@ -68,9 +68,15 @@
       '<div class="row"><button class="danger" data-act="wipe">Cancella tutti i dati</button></div></section>';
   }
 
+  function creditsCard() {
+    return '<section class="card"><h2>Crediti</h2><p class="hint">Regole, tabelle e dati dal compendio <b>«Istaro Quettar»</b> di Filduin, basato su GIRSA (Gioco di Ruolo del Signore degli Anelli): ' +
+      '<a href="https://www.istaroquettar.it" target="_blank" rel="noopener">www.istaroquettar.it</a>. Il compendio è per uso personale o distribuzione gratuita: questa app non è in vendita. ' +
+      'GIRSA e «Il Signore degli Anelli» appartengono ai rispettivi titolari; il progetto non è affiliato a nessuno di loro.</p></section>';
+  }
+
   function render() {
     var st = S.get();
-    return tablesCard(st) + settingsCard(st) + healCard() + backupCard();
+    return tablesCard(st) + settingsCard(st) + healCard() + backupCard() + creditsCard();
   }
   G.pages.data = { render: render };
 })(typeof window !== 'undefined' ? window : globalThis);

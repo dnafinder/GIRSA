@@ -49,6 +49,10 @@ scegli l'arma: tabella di attacco, colpo maldestro, tabella e tipo massimo dei c
 - **PF per livello ed esperienza** non sono nei documenti caricati: non sono calcolati.
 - Le tabelle dei popoli, delle professioni, del background e della TB-6/TGP-4 sono in immagini nei PDF e sono state trascritte a mano e controllate con somme e confronti incrociati, non cella per cella da una macchina: se trovi un valore dubbio, controlla il PDF.
 
+## Crediti
+
+Regole, tabelle e dati vengono dal compendio **«Istaro Quettar»** di Filduin: <https://www.istaroquettar.it>. Vedi `NOTICE.md`.
+
 ## Copia di sicurezza
 
 I dati stanno nel browser del dispositivo e svuotare i dati del sito li cancella. Ogni tanto usa
