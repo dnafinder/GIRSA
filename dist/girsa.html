@@ -5820,7 +5820,7 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
       var d = D.DEFENSES.filter(function (x) { return x[0] === b.dataset.k; })[0];
       openRoll(d[1], R.defenseTotal(S.cur(), d[0], d[2], R.ctx(S.get().settings)));
     },
-    d100o: function () { openRoll('d100 aperto', 0); },
+    d100o: function () { openRoll('d100 aperto', 0); render(); },
     d100c: function () { var r = dice.closed(); U.showRoll('d100 chiuso', '', r.total); render(); },
     die: function (b) { var n = +b.dataset.d.slice(1), v = dice.d(n); U.showRoll(b.dataset.d, '', v); render(); },
     rollexpr: function () {
