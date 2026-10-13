@@ -5813,8 +5813,8 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
     return '<section class="card"><h2>Copia di sicurezza</h2><p class="hint">I dati stanno nel browser di questo dispositivo. Esporta ogni tanto un file: è l\'unica protezione contro la cancellazione dei dati del sito.</p>' +
       '<div class="row"><button data-act="export">Esporta tutto (JSON)</button><label class="btn ghost">Importa file<input type="file" accept=".json,application/json" data-act-file="1" hidden></label></div>' +
       '<p class="hint">Importando un backup completo, i dati attuali vengono sostituiti. Un file di tabella singola viene invece aggiunto all\'elenco.</p>' +
-      '<h3>Azzeramento</h3><p class="hint"><b>Elimina tutte le schede</b> cancella i personaggi, gli avversari del Combattimento e le cronologie, e lascia un personaggio vuoto; le tabelle importate e le impostazioni restano. <b>Cancella tutti i dati</b> azzera invece anche quelle.</p>' +
-      '<div class="row"><button class="danger" data-act="wipechars">Elimina tutte le schede</button><button class="danger" data-act="wipe">Cancella tutti i dati</button></div></section>';
+      '<h3>Azzeramento</h3><p class="hint"><b>Elimina tutte le schede</b> cancella i personaggi, gli avversari del Combattimento e le cronologie, e lascia un personaggio vuoto. Le tabelle importate e le impostazioni non si toccano.</p>' +
+      '<div class="row"><button class="danger" data-act="wipechars">Elimina tutte le schede</button></div></section>';
   }
 
   function creditsCard() {
@@ -6044,10 +6044,6 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
       st.chars = b.chars; st.cur = b.cur; st.enemies = []; st.clog = []; st.dlog = [];
       Object.keys(U.tmp).forEach(function (k) { delete U.tmp[k]; });
       S.save(); render(); U.toast('Schede eliminate: ora c\'è un personaggio vuoto.');
-    },
-    wipe: function () {
-      if (!confirm('Cancellare TUTTI i personaggi, le tabelle e le impostazioni di questo dispositivo?')) return;
-      S.replaceAll(S.blank()); render(); U.toast('Dati cancellati.');
     }
   };
 

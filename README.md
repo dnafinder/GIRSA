@@ -32,7 +32,7 @@ nel browser e funziona anche senza rete.
 - **Mondo**: **Punti Esperienza** (TE-0…TE-7 e semplificati, con un calcolatore che somma i PE alla Scheda), **manovre in movimento** (TM-1) e **statiche** (TM-2) con tiro, **meteo** (TS-8, TS-8.2), **incontri** (TS-10), **rischio degli incantesimi** (TS-12), **freddo e caldo** (TRR-2, con tiro: la TR viene dalla Scheda), le liste **Pirocinesi** e **Potenziamento Corporeo** (con «+ Incantesimo» verso la Scheda), **tesori** (TS-6, con generatore) e **prezzi degli oggetti magici** (TS-7), **animali e mostri** (TS-2: 147 animali, 92 creature speciali, cavalcature; «+ Avv.» li porta tra gli avversari del Combattimento) e le regole del **Mutaforma**.
 - **Diario**: paragrafo attuale, registro delle scelte e segnalini per il librogame.
 - **Dati**: impostazioni di calcolo, aiuto per la guarigione (TFC-2), tabelle aggiuntive tue,
-  esportazione e importazione di una copia di sicurezza, e due azzeramenti: «Elimina tutte le schede» (personaggi, avversari e cronologie; restano tabelle e impostazioni, due conferme) e «Cancella tutti i dati» (tutto).
+  esportazione e importazione di una copia di sicurezza, e «Elimina tutte le schede» (personaggi, avversari e cronologie; restano tabelle e impostazioni; due conferme). Non c'è un pulsante che cancelli anche tabelle e impostazioni.
 
 ## Tabelle incluse
 

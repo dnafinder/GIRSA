@@ -210,10 +210,6 @@
       st.chars = b.chars; st.cur = b.cur; st.enemies = []; st.clog = []; st.dlog = [];
       Object.keys(U.tmp).forEach(function (k) { delete U.tmp[k]; });
       S.save(); render(); U.toast('Schede eliminate: ora c\'è un personaggio vuoto.');
-    },
-    wipe: function () {
-      if (!confirm('Cancellare TUTTI i personaggi, le tabelle e le impostazioni di questo dispositivo?')) return;
-      S.replaceAll(S.blank()); render(); U.toast('Dati cancellati.');
     }
   };
 
