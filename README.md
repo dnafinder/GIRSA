@@ -15,7 +15,7 @@ nel browser e funziona anche senza rete.
 ## Che cosa fa
 
 - **Scheda**: caratteristiche con bonus TB-1 e distribuzione dei 400 punti, popoli con modifiche TB-3,
-  abilità con bonus ai gradi (TB-4), difese e tiri resistenza, PF con soglia di morte, inventario,
+  abilità con bonus ai gradi (TB-4), difese e tiri resistenza, PF calcolati (dadi di Resistenza fisica + bonus speciale; morte con il bonus di Costituzione), inventario,
   incantesimi, note. I totali si aggiornano mentre scrivi e ogni voce ha il suo pulsante 🎲.
 - **PF sempre in vista** in alto, con pulsanti −10 −5 −1 +1 +5 +10; l'ultimo tiro resta in basso.
 - **Crea** (creazione guidata in sei passi): popolo (applica le modifiche TB-3, lingue e scheda completa), nome (con nomi di personaggi di Tolkien per popolo), professione consentita
@@ -65,7 +65,7 @@ scegli l'arma: tabella di attacco, colpo maldestro, tabella e tipo massimo dei c
 - **Númenóreani Neri**: il TB-3 non ha una riga per loro; l'app usa «Uomini» (cambiabile in Scheda → Popolo).
 - **Incrementi di caratteristica**: le righe «1/2» e «2/4» della tabella si sovrappongono nel PDF (probabile refuso); si usa la prima.
 - **Applicare una professione** sostituisce i valori già scritti nella colonna «Prof» delle abilità.
-- **PF per livello** non sono nei documenti caricati: non sono calcolati. L'esperienza (TE-0…TE-7) è invece nella pagina Mondo; i PE necessari per livello (TE-5) sono nella Scheda.
+- **PF**: la regola (un d10 per grado di Resistenza fisica, più il bonus speciale della riga; si sviene a quel valore e si muore con in più il bonus totale di Costituzione) non è nei PDF del compendio: me l'ha dettata l'utente. Oltre il grado 10 l'app usa la progressione a dadi della TB-4 (d4 dal grado 11), la stessa del bonus della riga. L'esperienza (TE-0…TE-7) è invece nella pagina Mondo; i PE necessari per livello (TE-5) sono nella Scheda.
 - Le tabelle dei popoli, delle professioni, del background e della TB-6/TGP-4 sono in immagini nei PDF e sono state trascritte a mano e controllate con somme e confronti incrociati, non cella per cella da una macchina: se trovi un valore dubbio, controlla il PDF.
 
 ## Oggetti: scelte dell'app

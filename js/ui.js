@@ -43,28 +43,32 @@
       case 'rk': return R.fmt(R.rankPart(c, +arg, cx));
       case 'df': var d = D.DEFENSES.filter(function (x) { return x[0] === arg; })[0]; return R.fmt(R.defenseTotal(c, arg, d[2], cx));
       case 'pts': return R.pointsSpent(c) + ' / ' + R.num(c.pool);
-      case 'pf': var p = R.pfInfo(c); return pfText(p);
+      case 'pf': var p = R.pfInfo(c, cx); return pfText(p);
+      case 'pfd': return pfDetail(R.pfInfo(c, cx));
       case 'lvl': return c.livello === '' ? '' : String(R.xpForLevel(+c.livello));
     }
     return '';
   }
   function pfText(p) {
-    if (p.state === 'nd') return 'PF massimi non impostati';
-    var s = p.cur + ' / ' + p.max + ' PF';
-    if (p.state === 'zero') s += ' · a zero';
-    if (p.state === 'sotto') s += ' · sotto zero (morte a ' + p.deathAt + ' di danno)';
-    if (p.state === 'morte') s += ' · MORTO';
+    if (p.state === 'nd') return 'PF non calcolabili: manca la Resistenza fisica';
+    var s = Math.max(0, p.cur) + ' / ' + p.max + ' PF';
+    if (p.state === 'svenuto') s = 'SVENUTO · danno ' + p.dmg + ' su ' + p.max + ' (morte a ' + p.deathAt + ')';
+    if (p.state === 'morte') s = 'MORTO · danno ' + p.dmg + ' su ' + p.deathAt;
     return s;
+  }
+  function pfDetail(p) {
+    return 'Svieni a ' + p.max + ' PF = dadi di Resistenza fisica ' + p.dadi + ' + bonus speciale ' + p.spec + ' + altri ' + p.extra +
+      '. Muori a ' + p.deathAt + ' = ' + p.max + ' + bonus di Costituzione ' + R.fmt(p.co) + '.';
   }
   function updateCalc() {
     var nodes = document.querySelectorAll('[data-calc]');
     for (var i = 0; i < nodes.length; i++) {
       var n = nodes[i], a = n.getAttribute('data-calc').split(':');
       n.textContent = calcText(a[0], a[1]);
-      if (a[0] === 'pf') n.setAttribute('data-state', R.pfInfo(S.cur()).state);
+      if (a[0] === 'pf') n.setAttribute('data-state', R.pfInfo(S.cur(), R.ctx(S.get().settings)).state);
     }
     var ph = document.getElementById('pfstrip');
-    if (ph) { var p = R.pfInfo(S.cur()); ph.textContent = pfText(p); ph.setAttribute('data-state', p.state); }
+    if (ph) { var p = R.pfInfo(S.cur(), R.ctx(S.get().settings)); ph.textContent = pfText(p); ph.setAttribute('data-state', p.state); }
     var bonusPh = document.querySelectorAll('[data-bph]');
     for (var j = 0; j < bonusPh.length; j++) {
       var k = bonusPh[j].getAttribute('data-bph'), b = R.tableBonus(S.cur().stats[k].score, R.ctx(S.get().settings).tb1);

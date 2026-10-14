@@ -21,7 +21,7 @@ header#top{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:
 .pfbar{justify-content:space-between}
 #pfstrip{font-weight:700;font-size:.95rem}
 #pfstrip[data-state=morte],.pfbig[data-state=morte]{color:var(--bad)}
-#pfstrip[data-state=sotto],.pfbig[data-state=sotto],#pfstrip[data-state=zero]{color:var(--gold)}
+#pfstrip[data-state=svenuto],.pfbig[data-state=svenuto]{color:var(--gold)}
 .pfbtns{display:flex;gap:4px}
 nav#nav{display:flex;gap:2px;overflow-x:auto}
 nav#nav a{flex:1;text-align:center;padding:8px 6px;text-decoration:none;color:var(--dim);border-bottom:3px solid transparent;white-space:nowrap;font-weight:600}
@@ -357,11 +357,16 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
   }
 
   /* ---- ferite, guarigione, esperienza ---- */
-  function pfInfo(c) {
-    var max = num(c.pf && c.pf.max), dmg = num(c.pf && c.pf.dmg), co = num(c.stats.CO.score);
-    var cur = max - dmg, deathAt = max + co;
-    var state = !max ? 'nd' : dmg >= deathAt ? 'morte' : cur < 0 ? 'sotto' : cur === 0 ? 'zero' : 'ok';
-    return { max: max, dmg: dmg, cur: cur, deathAt: deathAt, state: state };
+  /* PF: somma dei dadi tirati per i gradi di Resistenza fisica (la «bonus» a mano della riga) + il bonus speciale della riga
+     (+5 per tutti) + altri bonus. È il limite prima di svenire. Si muore a quel limite più il bonus totale di Costituzione
+     (bonus di caratteristica + bonus di popolo, non il punteggio). */
+  function pfInfo(c, cx) {
+    cx = cx || ctx();
+    var s = null; (c.skills || []).forEach(function (x) { if (x.k === 'res_fis') s = x; });
+    var dadi = s ? num(s.rbm) : 0, spec = s ? num(s.spec) : 0, extra = num(c.pf && c.pf.extra), dmg = num(c.pf && c.pf.dmg);
+    var max = dadi + spec + extra, co = c.stats && c.stats.CO ? statTotal(c, 'CO', cx) : 0, deathAt = max + co;
+    var state = !max ? 'nd' : dmg >= deathAt ? 'morte' : dmg >= max ? 'svenuto' : 'ok';
+    return { max: max, dadi: dadi, spec: spec, extra: extra, co: co, dmg: dmg, cur: max - dmg, deathAt: deathAt, state: state };
   }
   /* giorni di guarigione: colonna 0..5, gravità 'lieve'|'media'|'grave', total = tiro d100 + bonus CO */
   function healDays(total, col, severity) {
@@ -391,7 +396,7 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
     var c = {
       id: uid(), name: name || 'Nuovo personaggio', prof: '', regno: '', razza: '', popolo: '', sesso: '', livello: '', px: '', pm: '',
       altezza: '', capelli: '', occhi: '', lingue: '', temperamento: '', segni: '',
-      pool: 400, stats: {}, skills: [], ps: {}, defs: {}, pf: { max: '', dmg: 0 },
+      pool: 400, stats: {}, skills: [], ps: {}, defs: {}, pf: { extra: '', dmg: 0 },
       prot: { armatura: '', res: '', scudo: '', elmo: '', bracciali: '', schinieri: '', modbd: '', ingombro: '', mov: '' },
       bonusVari: '', note: '', corruzione: '', spells: [], inv: [], erbario: [], weapons: [], reputazione: '', denaro: '', classi: '',
       diary: { book: '', par: '', log: [], flags: [] }, creation: {}
@@ -3598,28 +3603,32 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
       case 'rk': return R.fmt(R.rankPart(c, +arg, cx));
       case 'df': var d = D.DEFENSES.filter(function (x) { return x[0] === arg; })[0]; return R.fmt(R.defenseTotal(c, arg, d[2], cx));
       case 'pts': return R.pointsSpent(c) + ' / ' + R.num(c.pool);
-      case 'pf': var p = R.pfInfo(c); return pfText(p);
+      case 'pf': var p = R.pfInfo(c, cx); return pfText(p);
+      case 'pfd': return pfDetail(R.pfInfo(c, cx));
       case 'lvl': return c.livello === '' ? '' : String(R.xpForLevel(+c.livello));
     }
     return '';
   }
   function pfText(p) {
-    if (p.state === 'nd') return 'PF massimi non impostati';
-    var s = p.cur + ' / ' + p.max + ' PF';
-    if (p.state === 'zero') s += ' · a zero';
-    if (p.state === 'sotto') s += ' · sotto zero (morte a ' + p.deathAt + ' di danno)';
-    if (p.state === 'morte') s += ' · MORTO';
+    if (p.state === 'nd') return 'PF non calcolabili: manca la Resistenza fisica';
+    var s = Math.max(0, p.cur) + ' / ' + p.max + ' PF';
+    if (p.state === 'svenuto') s = 'SVENUTO · danno ' + p.dmg + ' su ' + p.max + ' (morte a ' + p.deathAt + ')';
+    if (p.state === 'morte') s = 'MORTO · danno ' + p.dmg + ' su ' + p.deathAt;
     return s;
+  }
+  function pfDetail(p) {
+    return 'Svieni a ' + p.max + ' PF = dadi di Resistenza fisica ' + p.dadi + ' + bonus speciale ' + p.spec + ' + altri ' + p.extra +
+      '. Muori a ' + p.deathAt + ' = ' + p.max + ' + bonus di Costituzione ' + R.fmt(p.co) + '.';
   }
   function updateCalc() {
     var nodes = document.querySelectorAll('[data-calc]');
     for (var i = 0; i < nodes.length; i++) {
       var n = nodes[i], a = n.getAttribute('data-calc').split(':');
       n.textContent = calcText(a[0], a[1]);
-      if (a[0] === 'pf') n.setAttribute('data-state', R.pfInfo(S.cur()).state);
+      if (a[0] === 'pf') n.setAttribute('data-state', R.pfInfo(S.cur(), R.ctx(S.get().settings)).state);
     }
     var ph = document.getElementById('pfstrip');
-    if (ph) { var p = R.pfInfo(S.cur()); ph.textContent = pfText(p); ph.setAttribute('data-state', p.state); }
+    if (ph) { var p = R.pfInfo(S.cur(), R.ctx(S.get().settings)); ph.textContent = pfText(p); ph.setAttribute('data-state', p.state); }
     var bonusPh = document.querySelectorAll('[data-bph]');
     for (var j = 0; j < bonusPh.length; j++) {
       var k = bonusPh[j].getAttribute('data-bph'), b = R.tableBonus(S.cur().stats[k].score, R.ctx(S.get().settings).tb1);
@@ -3717,10 +3726,11 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
 
   function pf(c) {
     return '<section class="card"><h2>Punti ferita</h2><div class="grid g3">' +
-      U.field('PF massimi', U.inp('data-p', 'pf.max', c.pf.max, { type: 'number' })) +
+      U.field('Altri bonus ai PF', U.inp('data-p', 'pf.extra', c.pf.extra, { type: 'number' })) +
       U.field('Danno subito', U.inp('data-p', 'pf.dmg', c.pf.dmg, { type: 'number' })) +
-      '<div class="fld"><span>Stato</span><b class="pfbig" data-calc="pf" data-state="' + R.pfInfo(c).state + '">' + esc(U.calcText('pf')) + '</b></div></div>' +
-      '<p class="hint">Morte quando il danno raggiunge i PF massimi più il punteggio di Costituzione. I pulsanti PF in alto modificano il danno subito.</p></section>';
+      '<div class="fld"><span>Stato</span><b class="pfbig" data-calc="pf" data-state="' + R.pfInfo(c, R.ctx(S.get().settings)).state + '">' + esc(U.calcText('pf')) + '</b></div></div>' +
+      '<p class="hint" data-calc="pfd">' + esc(U.calcText('pfd')) + '</p>' +
+      '<p class="hint">I PF si calcolano da soli: un d10 per ogni grado di Resistenza fisica (li tira l\'app quando alzi i gradi), più il bonus speciale della riga. I pulsanti PF in alto modificano il danno subito.</p></section>';
   }
 
   function skillRow(c, i) {
@@ -4470,7 +4480,7 @@ tr.hit td{background:var(--hit,rgba(200,150,40,.28))}.res{border-left:3px solid 
       '<div class="row"><button class="ghost" data-act="cr_transfer">Trasferisci</button></div>';
     var man = X.profManualBonuses(f, Math.max(1, Math.floor(R.num(c.livello)) || 1));
     h += '<div class="row"><button data-act="cr_newlevel">Passa al livello ' + ((Math.floor(R.num(c.livello)) || 0) + 1) + '</button></div>' +
-      '<p class="hint">Il passaggio di livello azzera la spesa dei punti sviluppo e ricalcola i bonus di professione (TB-4.2). I PF del nuovo livello e l\'esperienza non sono nei documenti: aggiornali a mano.' +
+      '<p class="hint">Il passaggio di livello azzera la spesa dei punti sviluppo e ricalcola i bonus di professione (TB-4.2). I PF si aggiornano da soli con i gradi di Resistenza fisica; l\'esperienza non è nei documenti: aggiornala a mano.' +
       (man.length ? ' Da aggiornare a mano: ' + esc(man.join('; ')) + '.' : '') + '</p>';
     return h + '</section>';
   }

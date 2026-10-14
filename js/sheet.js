@@ -39,10 +39,11 @@
 
   function pf(c) {
     return '<section class="card"><h2>Punti ferita</h2><div class="grid g3">' +
-      U.field('PF massimi', U.inp('data-p', 'pf.max', c.pf.max, { type: 'number' })) +
+      U.field('Altri bonus ai PF', U.inp('data-p', 'pf.extra', c.pf.extra, { type: 'number' })) +
       U.field('Danno subito', U.inp('data-p', 'pf.dmg', c.pf.dmg, { type: 'number' })) +
-      '<div class="fld"><span>Stato</span><b class="pfbig" data-calc="pf" data-state="' + R.pfInfo(c).state + '">' + esc(U.calcText('pf')) + '</b></div></div>' +
-      '<p class="hint">Morte quando il danno raggiunge i PF massimi più il punteggio di Costituzione. I pulsanti PF in alto modificano il danno subito.</p></section>';
+      '<div class="fld"><span>Stato</span><b class="pfbig" data-calc="pf" data-state="' + R.pfInfo(c, R.ctx(S.get().settings)).state + '">' + esc(U.calcText('pf')) + '</b></div></div>' +
+      '<p class="hint" data-calc="pfd">' + esc(U.calcText('pfd')) + '</p>' +
+      '<p class="hint">I PF si calcolano da soli: un d10 per ogni grado di Resistenza fisica (li tira l\'app quando alzi i gradi), più il bonus speciale della riga. I pulsanti PF in alto modificano il danno subito.</p></section>';
   }
 
   function skillRow(c, i) {

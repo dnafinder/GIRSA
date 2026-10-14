@@ -84,15 +84,22 @@ test('manovre in armatura: speciale negativo precompilato', () => {
   assert.strictEqual(c.skills[i].spec, -60);
 });
 
-test('PF e morte: soglia = massimo + punteggio CO', () => {
+test('PF: dadi di Resistenza fisica + bonus speciale; si muore con il bonus totale di Costituzione', () => {
+  // Esempio dell'utente: Hobbit, 5 gradi di Resistenza fisica, ogni d10 = 5 → 25, +5 speciale = 30 per svenire.
+  // CO 85: +5 di caratteristica e +15 di popolo = +20 → 50 per morire.
   const c = R.newChar('Prova');
-  c.stats.CO.score = 70; c.pf.max = 40; c.pf.dmg = 0;
-  assert.strictEqual(R.pfInfo(c).state, 'ok');
-  c.pf.dmg = 40; assert.strictEqual(R.pfInfo(c).state, 'zero');
-  c.pf.dmg = 41; assert.strictEqual(R.pfInfo(c).state, 'sotto');
-  c.pf.dmg = 109; assert.strictEqual(R.pfInfo(c).state, 'sotto');
-  c.pf.dmg = 110; assert.strictEqual(R.pfInfo(c).state, 'morte');
-  c.pf.max = ''; assert.strictEqual(R.pfInfo(c).state, 'nd');
+  const rf = c.skills.find((s) => s.k === 'res_fis');
+  rf.ranks = 5; rf.rbm = 25; rf.rbmN = 5;
+  c.stats.CO.score = 85; c.stats.CO.razza = 15;
+  let p = R.pfInfo(c);
+  assert.strictEqual(rf.spec, 5);
+  assert.deepStrictEqual([p.max, p.co, p.deathAt, p.state], [30, 20, 50, 'ok']);
+  c.pf.dmg = 29; assert.strictEqual(R.pfInfo(c).state, 'ok');
+  c.pf.dmg = 30; assert.strictEqual(R.pfInfo(c).state, 'svenuto');
+  c.pf.dmg = 49; assert.strictEqual(R.pfInfo(c).state, 'svenuto');
+  c.pf.dmg = 50; assert.strictEqual(R.pfInfo(c).state, 'morte');
+  c.pf.dmg = 0; c.pf.extra = 3; assert.strictEqual(R.pfInfo(c).max, 33);   // altri bonus
+  rf.spec = ''; rf.rbm = ''; c.pf.extra = ''; assert.strictEqual(R.pfInfo(c).state, 'nd');
 });
 
 test('guarigione (TFC-2) con moltiplicatori', () => {

@@ -417,7 +417,7 @@
       '<div class="row"><button class="ghost" data-act="cr_transfer">Trasferisci</button></div>';
     var man = X.profManualBonuses(f, Math.max(1, Math.floor(R.num(c.livello)) || 1));
     h += '<div class="row"><button data-act="cr_newlevel">Passa al livello ' + ((Math.floor(R.num(c.livello)) || 0) + 1) + '</button></div>' +
-      '<p class="hint">Il passaggio di livello azzera la spesa dei punti sviluppo e ricalcola i bonus di professione (TB-4.2). I PF del nuovo livello e l\'esperienza non sono nei documenti: aggiornali a mano.' +
+      '<p class="hint">Il passaggio di livello azzera la spesa dei punti sviluppo e ricalcola i bonus di professione (TB-4.2). I PF si aggiornano da soli con i gradi di Resistenza fisica; l\'esperienza non è nei documenti: aggiornala a mano.' +
       (man.length ? ' Da aggiornare a mano: ' + esc(man.join('; ')) + '.' : '') + '</p>';
     return h + '</section>';
   }

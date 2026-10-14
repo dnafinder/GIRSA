@@ -87,11 +87,16 @@
   }
 
   /* ---- ferite, guarigione, esperienza ---- */
-  function pfInfo(c) {
-    var max = num(c.pf && c.pf.max), dmg = num(c.pf && c.pf.dmg), co = num(c.stats.CO.score);
-    var cur = max - dmg, deathAt = max + co;
-    var state = !max ? 'nd' : dmg >= deathAt ? 'morte' : cur < 0 ? 'sotto' : cur === 0 ? 'zero' : 'ok';
-    return { max: max, dmg: dmg, cur: cur, deathAt: deathAt, state: state };
+  /* PF: somma dei dadi tirati per i gradi di Resistenza fisica (la «bonus» a mano della riga) + il bonus speciale della riga
+     (+5 per tutti) + altri bonus. È il limite prima di svenire. Si muore a quel limite più il bonus totale di Costituzione
+     (bonus di caratteristica + bonus di popolo, non il punteggio). */
+  function pfInfo(c, cx) {
+    cx = cx || ctx();
+    var s = null; (c.skills || []).forEach(function (x) { if (x.k === 'res_fis') s = x; });
+    var dadi = s ? num(s.rbm) : 0, spec = s ? num(s.spec) : 0, extra = num(c.pf && c.pf.extra), dmg = num(c.pf && c.pf.dmg);
+    var max = dadi + spec + extra, co = c.stats && c.stats.CO ? statTotal(c, 'CO', cx) : 0, deathAt = max + co;
+    var state = !max ? 'nd' : dmg >= deathAt ? 'morte' : dmg >= max ? 'svenuto' : 'ok';
+    return { max: max, dadi: dadi, spec: spec, extra: extra, co: co, dmg: dmg, cur: max - dmg, deathAt: deathAt, state: state };
   }
   /* giorni di guarigione: colonna 0..5, gravità 'lieve'|'media'|'grave', total = tiro d100 + bonus CO */
   function healDays(total, col, severity) {
@@ -121,7 +126,7 @@
     var c = {
       id: uid(), name: name || 'Nuovo personaggio', prof: '', regno: '', razza: '', popolo: '', sesso: '', livello: '', px: '', pm: '',
       altezza: '', capelli: '', occhi: '', lingue: '', temperamento: '', segni: '',
-      pool: 400, stats: {}, skills: [], ps: {}, defs: {}, pf: { max: '', dmg: 0 },
+      pool: 400, stats: {}, skills: [], ps: {}, defs: {}, pf: { extra: '', dmg: 0 },
       prot: { armatura: '', res: '', scudo: '', elmo: '', bracciali: '', schinieri: '', modbd: '', ingombro: '', mov: '' },
       bonusVari: '', note: '', corruzione: '', spells: [], inv: [], erbario: [], weapons: [], reputazione: '', denaro: '', classi: '',
       diary: { book: '', par: '', log: [], flags: [] }, creation: {}

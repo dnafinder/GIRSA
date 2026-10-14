@@ -11,7 +11,7 @@ header#top{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:
 .pfbar{justify-content:space-between}
 #pfstrip{font-weight:700;font-size:.95rem}
 #pfstrip[data-state=morte],.pfbig[data-state=morte]{color:var(--bad)}
-#pfstrip[data-state=sotto],.pfbig[data-state=sotto],#pfstrip[data-state=zero]{color:var(--gold)}
+#pfstrip[data-state=svenuto],.pfbig[data-state=svenuto]{color:var(--gold)}
 .pfbtns{display:flex;gap:4px}
 nav#nav{display:flex;gap:2px;overflow-x:auto}
 nav#nav a{flex:1;text-align:center;padding:8px 6px;text-decoration:none;color:var(--dim);border-bottom:3px solid transparent;white-space:nowrap;font-weight:600}
