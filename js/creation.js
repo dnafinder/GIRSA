@@ -234,8 +234,31 @@
     return c.livello;
   }
 
+  /* Altezza media del popolo per il sesso scelto. Il compendio la dà come «1,95m (maschi), 1,85m (femmine)»,
+     a volte per varietà («Paloidi 1,10m (maschi), 1,05m (femmine); Pelopiedi …»). Con più varietà restano tutte,
+     ciascuna col valore del sesso scelto: quale sia la propria lo decide chi gioca. */
+  function metri(n) {
+    n = n.replace(/\s+/g, '').replace(/m$/, '').replace('.', ',');
+    if (/^\d{3}$/.test(n)) n = n.charAt(0) + ',' + n.slice(1);   // il compendio stampa «200m» per 2,00m (Haradrim del Sud)
+    return n + 'm';
+  }
+  function heightFor(alt, sesso) {
+    alt = String(alt || '').trim();
+    if (!alt) return { text: '', multi: false };
+    var parts = alt.split(/;\s*/), out = [];
+    parts.forEach(function (seg) {
+      var m = seg.match(/^(.*?)\s*(\d+(?:[.,]\d+)?\s*m)\s*\(maschi\)\s*,\s*(\d+(?:[.,]\d+)?\s*m)\s*\(femmine\)\s*$/);
+      if (m) { out.push((m[1] ? m[1] + ' ' : '') + metri(sesso === 'f' ? m[3] : m[2])); return; }
+      var one = seg.match(/^(.*?)\s*(\d+(?:[.,]\d+)?\s*m)\s*$/);
+      out.push(one ? (one[1] ? one[1] + ' ' : '') + metri(one[2]) : seg);
+    });
+    var sexed = /\(maschi\)/.test(alt);
+    if (sexed && sesso !== 'm' && sesso !== 'f') return { text: '', multi: false };
+    return { text: out.join('; '), multi: parts.length > 1 };
+  }
+
   var X = {
-    personById: personById, profByName: profByName, ensure: ensure, allowedProfs: allowedProfs, profsIn: profsIn,
+    personById: personById, heightFor: heightFor, profByName: profByName, ensure: ensure, allowedProfs: allowedProfs, profsIn: profsIn,
     profBonus: profBonus, applyProfession: applyProfession, profManualBonuses: profManualBonuses,
     statRolls: statRolls, statIncrease: statIncrease, aspectValue: aspectValue, statChecks: statChecks,
     adolescenceOf: adolescenceOf, adolescencePlan: adolescencePlan, resRolls: resRolls, addRanks: addRanks, applyAdolescence: applyAdolescence,

@@ -9,7 +9,7 @@
     return '<section class="card"><h2>Personaggio</h2><div class="grid g2">' +
       f('Nome', 'name') + f('Professione', 'prof') +
       U.field('Popolo', U.sel('data-act-change', 'popolo', c.popolo, [['', '(scegli)']].concat(D.POPOLI.map(function (p) { return p.n; })), { label: 'Popolo' })) +
-      U.field('Sesso', U.sel('data-p', 'sesso', c.sesso || '', [['', '—'], ['m', 'Maschile'], ['f', 'Femminile']], { label: 'Sesso' })) + f('Regno / origine', 'regno') + f('Livello', 'livello', { type: 'number' }) + f('Punti esperienza', 'px', { type: 'number' }) +
+      U.field('Sesso', U.sel('data-act-change', 'cr_sesso', c.sesso || '', [['', '—'], ['m', 'Maschile'], ['f', 'Femminile']], { label: 'Sesso' })) + f('Regno / origine', 'regno') + f('Livello', 'livello', { type: 'number' }) + f('Punti esperienza', 'px', { type: 'number' }) +
       f('Altezza e corporatura', 'altezza') + f('Capelli', 'capelli') + f('Occhi', 'occhi') + f('Lingue', 'lingue') +
       f('Temperamento', 'temperamento') + f('Segni particolari', 'segni') + f('Reputazione', 'reputazione') + f('Denaro', 'denaro') +
       '</div><p class="hint">Soglia PE del livello indicato (tabella TE-5): <b data-calc="lvl">' + esc(U.calcText('lvl')) +

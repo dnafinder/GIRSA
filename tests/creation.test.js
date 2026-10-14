@@ -99,3 +99,16 @@ test('punti sviluppo: trasferimento e spesa', () => {
   assert.strictEqual(X.transferRate(c, 'perc'), 1);
   assert.strictEqual(X.transferRate(c, 'ama'), 2);
 });
+
+test('altezza: il valore giusto per il sesso scelto, per ogni popolo', () => {
+  const alt = (id, s) => X.heightFor(X.personById(id).alt, s);
+  assert.strictEqual(alt('beorniani', 'm').text, '1,95m');
+  assert.strictEqual(alt('beorniani', 'f').text, '1,70m');
+  assert.strictEqual(alt('sindar', 'f').text, '1,85m');
+  assert.strictEqual(alt('olog', 'f').text, '3,00m');           // «3,00 m» col blank nel compendio
+  assert.strictEqual(alt('uruk', '').text, '1,67m');             // valore unico: nessun sesso da scegliere
+  assert.strictEqual(alt('nani', '').text, '');                  // sesso non scelto: nulla da inventare
+  const h = alt('hobbit', 'f'); assert.ok(h.multi && h.text === 'Paloidi 1,05m; Pelopiedi 0,98m; Sturoi 1,02m');
+  assert.ok(alt('haradrim', 'm').text.endsWith('Haradrim del Sud 2,00m'));   // «200m» stampato nel compendio
+  C.PEOPLE.forEach((p) => ['m', 'f'].forEach((s) => assert.ok(/^(.+ )?\d,\d\dm(; .+)*$/.test(X.heightFor(p.alt, s).text), p.id + ' ' + s)));
+});

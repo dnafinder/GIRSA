@@ -54,8 +54,21 @@
     c.razza = p.n;
     var fs = p.lingue.match(/^[^]*?\)\./);
     c.lingue = p.id === 'silvani' ? 'Silvano/Bethteur (5), Ovestron (4), Quenya (2).' : (fs ? fs[0] : p.lingue);
-    if (!c.altezza) c.altezza = p.alt;
-    S.save(); render(); say('Popolo applicato: ' + p.n + '.');
+    var multi = setHeight(c);
+    S.save(); render(); say('Popolo applicato: ' + p.n + '.' + (multi ? ' L\'altezza dipende dalla varietà: le ho messe tutte, tieni la tua.' : ''));
+  };
+  /* L'altezza segue popolo e sesso, ma solo se il campo è vuoto o è ancora quella messa dall'app: un valore scritto a mano non si tocca. */
+  function setHeight(c) {
+    var k = cr(c), p = X.personById(k.people); if (!p) return false;
+    var cur = c.altezza || '';
+    if (cur && cur !== k.altAuto && !C.PEOPLE.some(function (x) { return x.alt === cur; })) return false;
+    var h = X.heightFor(p.alt, c.sesso || '');
+    c.altezza = h.text; k.altAuto = h.text;
+    return h.multi && !!h.text;
+  }
+  G.changes.cr_sesso = function (v) {
+    var c = S.cur(), multi; c.sesso = v; multi = setHeight(c);
+    S.save(); render(); if (multi) say('L\'altezza dipende dalla varietà: le ho messe tutte, tieni la tua.');
   };
 
 
@@ -67,7 +80,7 @@
     if (!pid) return h + '<p class="hint">Scegli prima il popolo: i nomi si propongono in base a quello.</p></section>';
     var sx = c.sesso || '', canon = ND.canon(pid, sx), fan = ND.fan(pid, sx), cg = ND.cognomi(pid), fcg = ND.fanCognomi(pid), tot = canon.length + fan.length;
     h += '<p class="hint">Scegli prima il sesso: i nomi proposti seguono quello.</p><div class="grid g2">' +
-      U.field('Sesso', U.sel('data-p', 'sesso', sx, [['', '—'], ['m', 'Maschile'], ['f', 'Femminile']], { re: 1, label: 'Sesso' })) +
+      U.field('Sesso', U.sel('data-act-change', 'cr_sesso', sx, [['', '—'], ['m', 'Maschile'], ['f', 'Femminile']], { label: 'Sesso' })) +
       U.field('Nome del personaggio', U.inp('data-p', 'name', c.name, { label: 'Nome del personaggio' })) + '</div>';
     if (!sx) return h + '<p class="hint">Con il sesso non scelto i nomi non vengono proposti.</p></section>';
     if (!tot) return h + '<p class="hint">Per questo popolo non ho trovato nomi (né in Tolkien Gateway né nell\'elenco di Chapman): scrivilo tu.</p></section>';
@@ -240,6 +253,11 @@
       if (fx === 'sec15') h += U.sel('data-t', 'cr.bgsk', t.bgsk, secSkillOpts(c), { label: 'Abilità secondaria' });
       if (fx === 'tr10') h += U.sel('data-t', 'cr.bgdef', t.bgdef, [['ess', 'TR Essenza'], ['fls', 'TR Flusso'], ['men', 'TR Mentalismo'], ['vel', 'TR Veleni'], ['mal', 'TR Malattie']], { label: 'Tiro resistenza' });
       h += '<button class="mini" data-act="cr_bgapply" data-i="' + i + '">Applica alla scheda</button></div>';
+    } else if (e.kind === 'spec') {
+      /* abilità senza un effetto numerico: non c'è nulla da sommare, la si registra nelle note (e l'animale nell'inventario) */
+      h += '<div class="row">';
+      if (/^Empatia verso/.test(e.title)) h += U.inp('data-t', 'cr.bgspecie', t.bgspecie, { ph: 'specie dell\'animale, es. falco', label: 'Specie dell\'animale' });
+      h += '<button class="mini" data-act="cr_bgapply" data-i="' + i + '">' + (/^Empatia verso/.test(e.title) ? 'Aggiungi animale e note' : 'Metti nelle note') + '</button></div>';
     } else if (e.kind === 'den' && !e.applied) {
       h += '<div class="row"><button class="mini" data-act="cr_bgapply" data-i="' + i + '">Aggiungi al denaro</button></div>';
     } else if (e.kind === 'ogg' && !e.applied) {
@@ -321,7 +339,13 @@
     else if (e.kind === 'ogg') { c.inv.push({ n: e.title, q: '1', note: e.text.slice(0, 160) }); e.applied = 'nell\'inventario'; }
     else {
       var fx = SPEC_FX[e.title];
-      if (fx === 'skill5' || fx === 'sec15') {
+      if (!fx) {
+        if (/^Empatia verso/.test(e.title)) {
+          var sp = (t.bgspecie || '').trim(); if (!sp) { say('Scrivi la specie dell\'animale.'); return; }
+          c.inv.push({ n: 'Compagno animale: ' + sp, q: '1', note: 'Bonus speciale +25 a ogni manovra in sua compagnia.' });
+          note(c, 'Background: ' + e.title + ' (' + sp + '). ' + e.text); e.applied = 'animale (' + sp + ') nell\'inventario e nelle note';
+        } else { note(c, 'Background: ' + e.title + '. ' + e.text); e.applied = 'nelle note del personaggio'; }
+      } else if (fx === 'skill5' || fx === 'sec15') {
         if (!t.bgsk) { say('Scegli l\'abilità.'); return; }
         var i = +t.bgsk; bump(i, fx === 'skill5' ? 5 : 15); e.applied = '+' + (fx === 'skill5' ? 5 : 15) + ' a ' + c.skills[i].name;
       } else if (fx === 'mov10') { c.skills.forEach(function (s, i) { if (s.cat === 'mov') bump(i, 10); }); e.applied = '+10 a tutte le manovre in movimento'; }
